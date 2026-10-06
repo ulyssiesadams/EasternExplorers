@@ -151,6 +151,88 @@
     if (p) p.remove();
   }
 
+  function addDecisionTrace(trace, resultType) {
+    var messages = getEl('cmReturnsMessages');
+    if (!messages || !trace) return;
+
+    var wrapper = document.createElement('div');
+    wrapper.className = 'cm-trace-wrapper';
+
+    var details = document.createElement('details');
+    details.className = 'cm-trace-details';
+
+    var summary = document.createElement('summary');
+    summary.className = 'cm-trace-summary';
+    var badge = resultType === 'escalation' ? '<span class="cm-trace-badge escalated">Escalated</span>' : '<span class="cm-trace-badge resolved">Resolved</span>';
+    summary.innerHTML = '<span class="cm-trace-label"><span class="cm-trace-icon">🔍</span> AI Decision Trace</span>' + badge;
+    details.appendChild(summary);
+
+    var body = document.createElement('div');
+    body.className = 'cm-trace-body';
+
+    // Eligibility section
+    if (trace.eligibility) {
+      var elig = trace.eligibility;
+      var checks = elig.checks_passed || [];
+      var allPassed = checks.every(function(c) { return c.passed; });
+      var eligSec = document.createElement('div');
+      eligSec.className = 'cm-trace-section';
+
+      var eligHeader = document.createElement('div');
+      eligHeader.className = 'cm-trace-section-header';
+      eligHeader.innerHTML = '<span class="cm-trace-agent-name">Eligibility Checker</span>' +
+        '<span class="cm-trace-result ' + (allPassed ? 'pass' : 'fail') + '">' + (allPassed ? '✓ Eligible' : '✗ Ineligible') + '</span>';
+      eligSec.appendChild(eligHeader);
+
+      var checkList = document.createElement('div');
+      checkList.className = 'cm-trace-checks';
+      checks.forEach(function(check) {
+        var row = document.createElement('div');
+        row.className = 'cm-trace-check ' + (check.passed ? 'passed' : 'failed');
+        row.innerHTML = '<span class="cm-trace-check-icon">' + (check.passed ? '✓' : '✗') + '</span>' +
+          '<span class="cm-trace-check-name">' + check.check.replace(/_/g, ' ') + '</span>' +
+          '<span class="cm-trace-check-detail">' + (check.detail || '') + '</span>';
+        checkList.appendChild(row);
+      });
+      eligSec.appendChild(checkList);
+      body.appendChild(eligSec);
+    }
+
+    // Classification section (resolution only)
+    if (trace.classification) {
+      var cls = trace.classification;
+      var clsSec = document.createElement('div');
+      clsSec.className = 'cm-trace-section';
+      clsSec.innerHTML = '<div class="cm-trace-section-header">' +
+        '<span class="cm-trace-agent-name">Return Classifier</span>' +
+        '<span class="cm-trace-result pass">' + cls.return_category + '</span></div>' +
+        '<div class="cm-trace-row"><span>Confidence</span><span class="cm-trace-confidence ' + cls.confidence + '">' + cls.confidence.toUpperCase() + '</span></div>' +
+        '<div class="cm-trace-row"><span>Operational flag</span><span>' + (cls.operational_flag || '—') + '</span></div>';
+      body.appendChild(clsSec);
+    }
+
+    // Resolution section
+    if (trace.resolution) {
+      var res = trace.resolution;
+      var resSec = document.createElement('div');
+      resSec.className = 'cm-trace-section';
+      var tierBadge = res.tier_upgrade_applied ? '<div class="cm-trace-tier-badge">⭐ Loyalty Tier Upgrade Applied</div>' : '';
+      resSec.innerHTML = '<div class="cm-trace-section-header">' +
+        '<span class="cm-trace-agent-name">Resolution Generator</span>' +
+        '<span class="cm-trace-result pass">' + (res.resolution_type || 'Approved') + '</span></div>' +
+        tierBadge +
+        '<div class="cm-trace-row"><span>Refund amount</span><span>$' + (res.amount || '—') + '</span></div>' +
+        '<div class="cm-trace-row"><span>Timeline</span><span>' + (res.timeline || '—') + '</span></div>' +
+        '<div class="cm-trace-row"><span>Return label</span><span>' + (res.label_provided ? 'Prepaid label included' : 'Not required') + '</span></div>';
+      body.appendChild(resSec);
+    }
+
+    details.appendChild(body);
+    wrapper.appendChild(details);
+    messages.appendChild(wrapper);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
   function addQuickReplies(replies) {
     const messages = getEl('cmReturnsMessages');
     if (!messages) return;
@@ -407,6 +489,7 @@
 
         removeProgress();
         addMessage(result.message, 'agent');
+        addDecisionTrace(result.trace, result.type);
 
         const caseRef = result.caseRef || (result.resolution && result.resolution.case_ref);
         if (caseRef) {

@@ -263,7 +263,7 @@ async function runReturnsAgent(customerMessage, orderData, progressCallback) {
     if (progressCallback) progressCallback('escalation', 'active');
     const escalation = await runEscalationAgent(context, eligibility);
     if (progressCallback) progressCallback('escalation', 'done');
-    return { type: 'escalation', message: escalation.message, caseRef: escalation.caseRef };
+    return { type: 'escalation', message: escalation.message, caseRef: escalation.caseRef, trace: { context: context, eligibility: eligibility } };
   }
 
   if (progressCallback) progressCallback('classifier', 'active');
@@ -278,5 +278,11 @@ async function runReturnsAgent(customerMessage, orderData, progressCallback) {
   const message = await runCommunicationAgent(context, classification, resolution);
   if (progressCallback) progressCallback('communication', 'done');
 
-  return { type: 'resolution', message: message, resolution: resolution, caseRef: resolution.case_ref };
+  return {
+    type: 'resolution',
+    message: message,
+    resolution: resolution,
+    caseRef: resolution.case_ref,
+    trace: { context: context, eligibility: eligibility, classification: classification, resolution: resolution }
+  };
 }
