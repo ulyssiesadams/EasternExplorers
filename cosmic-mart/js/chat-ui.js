@@ -4,6 +4,7 @@
   let clarificationCount = 0;
   let currentCaseRef = null;
   let currentResult = null;
+  let chatHistory = [];
 
   const SUBSTEP_MAP = {
     'sub-sentiment': 'cmSubSentiment',
@@ -122,60 +123,129 @@
     if (t) t.remove();
   }
 
-  function showProgress() {
-    const messages = getEl('cmReturnsMessages');
+  // ── Live case draft panel (replaces static progress overlay) ──
+
+  function createCaseDraftPanel() {
+    var messages = getEl('cmReturnsMessages');
     if (!messages) return;
-
-    const progressDiv = document.createElement('div');
-    progressDiv.id = 'cmAgentProgress';
-    progressDiv.className = 'cm-bubble-system';
-    progressDiv.style.cssText = 'max-width:100%;display:flex;flex-direction:column;gap:6px;padding:16px 20px;';
-    progressDiv.innerHTML = '<div style="font-weight:600;color:#c084fc;margin-bottom:8px;font-size:13px;">🤖 Nova is working on your request...</div>';
-
-    agentSteps.forEach(function (step) {
-      const row = document.createElement('div');
-      row.id = 'step-' + step.id;
-      row.style.cssText = 'display:flex;align-items:center;gap:10px;font-size:12px;color:#94a3b8;padding:3px 0;';
-      row.innerHTML = '<div style="width:14px;height:14px;border-radius:50%;background:rgba(147,51,234,0.15);border:1px solid rgba(147,51,234,0.3);flex-shrink:0;"></div><span>' + step.label + '</span>';
-      progressDiv.appendChild(row);
-    });
-
-    messages.appendChild(progressDiv);
+    var panel = document.createElement('div');
+    panel.className = 'cm-case-draft';
+    panel.id = 'cmCaseDraft';
+    panel.innerHTML =
+      '<div class="cm-case-draft-header">' +
+        '<span class="cm-case-draft-icon">📋</span>' +
+        '<span class="cm-case-draft-title" id="cmCaseDraftTitle">Nova is building your case file...</span>' +
+        '<span class="cm-case-draft-spinner" id="cmCaseDraftSpinner"></span>' +
+      '</div>' +
+      '<div class="cm-case-draft-body" id="cmCaseDraftBody"></div>';
+    messages.appendChild(panel);
     messages.scrollTop = messages.scrollHeight;
   }
 
-  function updateProgress(stepId, state) {
-    const row = getEl('step-' + stepId);
-    if (!row) return;
-
-    const indicator = row.querySelector('div');
-    const label = row.querySelector('span');
-
-    if (state === 'active') {
-      indicator.style.background = '#9333ea';
-      indicator.style.border = '1px solid #9333ea';
-      indicator.style.animation = 'step-pulse 1s infinite';
-      row.style.color = '#c084fc';
-    } else if (state === 'done') {
-      indicator.style.background = '#10b981';
-      indicator.style.border = '1px solid #10b981';
-      indicator.style.animation = 'none';
-      indicator.textContent = '✓';
-      indicator.style.color = 'white';
-      indicator.style.fontSize = '9px';
-      indicator.style.display = 'flex';
-      indicator.style.alignItems = 'center';
-      indicator.style.justifyContent = 'center';
-      row.style.color = '#10b981';
-    }
-
-    const messages = getEl('cmReturnsMessages');
-    if (messages) messages.scrollTop = messages.scrollHeight;
+  function caseDraftSectionHeader(label) {
+    var body = getEl('cmCaseDraftBody');
+    if (!body) return;
+    var el = document.createElement('div');
+    el.className = 'cm-case-section-hdr';
+    el.textContent = '▸ ' + label;
+    body.appendChild(el);
+    var msgs = getEl('cmReturnsMessages');
+    if (msgs) msgs.scrollTop = msgs.scrollHeight;
   }
 
-  function removeProgress() {
-    const p = getEl('cmAgentProgress');
-    if (p) p.remove();
+  function caseDraftLine(label, value, variant) {
+    var body = getEl('cmCaseDraftBody');
+    if (!body) return;
+    var row = document.createElement('div');
+    row.className = 'cm-case-line' + (variant ? ' cm-case-line--' + variant : '');
+    var lEl = document.createElement('span');
+    lEl.className = 'cm-case-line-label';
+    lEl.textContent = label;
+    var vEl = document.createElement('span');
+    vEl.className = 'cm-case-line-value';
+    row.appendChild(lEl);
+    row.appendChild(vEl);
+    body.appendChild(row);
+    // Fast typewriter into the value cell
+    var str = String(value || '—');
+    var i = 0;
+    function tick() {
+      if (i < str.length) {
+        vEl.textContent = str.slice(0, ++i);
+        var msgs = getEl('cmReturnsMessages');
+        if (msgs) msgs.scrollTop = msgs.scrollHeight;
+        setTimeout(tick, 14);
+      }
+    }
+    setTimeout(tick, 40);
+  }
+
+  function handleCaseData(section, data) {
+    if (!data) return;
+    if (section === 'customer') {
+      caseDraftSectionHeader('CUSTOMER & ORDER');
+      caseDraftLine('Name', data.name);
+      caseDraftLine('Loyalty tier', data.tier);
+      caseDraftLine('Market', data.market);
+      caseDraftLine('Order ID', data.order_id);
+      caseDraftLine('Product', data.product);
+      caseDraftLine('Category', data.category);
+      caseDraftLine('Price', '$' + (data.price || '—'));
+      caseDraftLine('Days since purchase', (data.days || '—') + ' days');
+    } else if (section === 'issue') {
+      caseDraftSectionHeader('ISSUE ANALYSIS');
+      caseDraftLine('Description', data.description);
+      caseDraftLine('Priority', (data.priority || 'standard').toUpperCase());
+      caseDraftLine('Frustrated', data.frustrated ? '⚡ Yes — elevated care' : 'No');
+      if (data.signals && data.signals.length) {
+        caseDraftLine('Signals', data.signals.join(', '));
+      }
+    } else if (section === 'eligibility') {
+      caseDraftSectionHeader('ELIGIBILITY');
+      var checks = data.checks_passed || [];
+      checks.forEach(function(c) {
+        caseDraftLine(
+          (c.passed ? '✓ ' : '✗ ') + c.check.replace(/_/g, ' '),
+          c.detail || '',
+          c.passed ? 'pass' : 'fail'
+        );
+      });
+      caseDraftLine('Status', data.eligible ? '✓ ELIGIBLE' : '✗ INELIGIBLE', data.eligible ? 'pass' : 'fail');
+    } else if (section === 'classification') {
+      caseDraftSectionHeader('CLASSIFICATION');
+      caseDraftLine('Category', data.return_category || '—');
+      caseDraftLine('Confidence', (data.confidence || '—').toUpperCase());
+      caseDraftLine('Operational flag', data.operational_flag || '—');
+    } else if (section === 'resolution') {
+      caseDraftSectionHeader('RESOLUTION');
+      caseDraftLine('Type', data.resolution_type || '—');
+      caseDraftLine('Amount', '$' + (data.amount || '—') + ' ' + (data.currency || 'USD'));
+      caseDraftLine('Timeline', data.timeline || '—');
+      caseDraftLine('Return label', data.label_provided ? 'Prepaid label emailed' : 'Not required');
+      caseDraftLine('Tier upgrade', data.tier_upgrade_applied ? '⭐ Applied' : 'None');
+      caseDraftLine('Case reference', data.case_ref || '—', 'highlight');
+      // Update header and stop spinner after a brief delay
+      setTimeout(function() {
+        var titleEl = getEl('cmCaseDraftTitle');
+        if (titleEl) titleEl.textContent = 'Case file — ' + (data.case_ref || '');
+        var spinner = getEl('cmCaseDraftSpinner');
+        if (spinner) spinner.style.display = 'none';
+        caseDraftSectionHeader('STATUS');
+        caseDraftLine('Resolution', '✓ CASE COMPLETE', 'pass');
+      }, 1800);
+    } else if (section === 'escalation') {
+      caseDraftSectionHeader('ESCALATION');
+      caseDraftLine('Case reference', data.caseRef || '—', 'highlight');
+      caseDraftLine('Reason', data.reason || 'Specialist review required', 'fail');
+      setTimeout(function() {
+        var titleEl = getEl('cmCaseDraftTitle');
+        if (titleEl) titleEl.textContent = 'Case file — ' + (data.caseRef || 'escalated');
+        var spinner = getEl('cmCaseDraftSpinner');
+        if (spinner) spinner.style.display = 'none';
+        caseDraftSectionHeader('STATUS');
+        caseDraftLine('Resolution', '→ ESCALATED TO SPECIALIST', 'highlight');
+      }, 800);
+    }
   }
 
   function typeMessage(text, type) {
@@ -775,7 +845,9 @@
     if (orderInput) orderInput.value = orderId;
 
     if (!chatActive) {
-      addMessage('Order found: ' + order.product_name + ' (' + order.order_id + '). Hi ' + order.customer_name + ', I\'m Nova. How can I help you today?', 'agent');
+      var greeting = 'Order found: ' + order.product_name + ' (' + order.order_id + '). Hi ' + order.customer_name + ', I\'m Nova. How can I help you today?';
+      addMessage(greeting, 'agent');
+      chatHistory.push({ role: 'assistant', content: greeting });
       addQuickReplies(['How do I start a return?', 'What info do I need?', 'How long does a return take?', 'I\'m ready to return this']);
       chatActive = true;
 
@@ -807,6 +879,9 @@
     sendBtn.disabled = true;
 
     addMessage(text, 'user');
+    // Capture history before pushing this message (prior context for agents)
+    var historySnapshot = chatHistory.slice();
+    chatHistory.push({ role: 'user', content: text });
     showTyping();
 
     try {
@@ -815,48 +890,52 @@
       var classifierInput = currentOrder
         ? text + ' [Context: returning ' + currentOrder.product_name + ', ' + currentOrder.product_category + ' category, order ' + currentOrder.order_id + ']'
         : text;
-      const intentResult = await runIntentClassifier(classifierInput);
+      const intentResult = await runIntentClassifier(classifierInput, historySnapshot);
       hideTyping();
 
       if (intentResult.intent === 'FAQ') {
         showTyping();
-        const faqResult = await runFAQAgent(text);
+        const faqResult = await runFAQAgent(text, historySnapshot);
         hideTyping();
         addMessage(faqResult.text, 'agent');
+        chatHistory.push({ role: 'assistant', content: faqResult.text });
         if (faqResult.quickReplies && faqResult.quickReplies.length) {
           addQuickReplies(faqResult.quickReplies);
         }
 
       } else if (intentResult.intent === 'NEEDS_CLARIFICATION') {
         clarificationCount++;
+        var clarifyMsg;
         if (clarificationCount >= 2) {
           clarificationCount = 0;
-          addMessage("I want to make sure I get this right. You can send a photo of the item for our team to inspect, or I can connect you with a specialist right now.", 'agent');
+          clarifyMsg = "I want to make sure I get this right. You can send a photo of the item for our team to inspect, or I can connect you with a specialist right now.";
+          addMessage(clarifyMsg, 'agent');
           addQuickReplies(['Send a photo', 'Connect me to a specialist']);
         } else {
-          addMessage(intentResult.clarifying_question || "Could you give me a bit more detail about what's happening with the product?", 'agent');
+          clarifyMsg = intentResult.clarifying_question || "Could you give me a bit more detail about what's happening with the product?";
+          addMessage(clarifyMsg, 'agent');
         }
+        chatHistory.push({ role: 'assistant', content: clarifyMsg });
 
       } else {
         // RETURN_INITIATION — run the full pipeline
         clarificationCount = 0;
-        showProgress();
+        createCaseDraftPanel();
         setStage('issue', 'done', 'Issue described', text.length > 48 ? text.slice(0, 48) + '…' : text);
         setStage('resolution', 'working', 'Working on it…', 'Nova is processing your return');
 
-        const result = await runReturnsAgent(text, currentOrder, function (stepId, state) {
-          if (SUBSTEP_MAP[stepId]) {
+        const result = await runReturnsAgent(text, currentOrder, function (stepId, state, data) {
+          if (stepId.startsWith('case:')) {
+            handleCaseData(stepId.replace('case:', ''), data);
+          } else if (SUBSTEP_MAP[stepId]) {
             setSubstep(SUBSTEP_MAP[stepId], state);
           } else {
-            updateProgress(stepId, state);
             if (stepId === 'eligibility') {
               if (state === 'active') setStage('eligibility', 'working', 'Checking eligibility…', 'Validating return window');
               else if (state === 'done') setStage('eligibility', 'done', 'Eligibility verified', 'All checks passed');
             }
           }
         });
-
-        removeProgress();
 
         if (result.sentiment && result.sentiment.frustrated) {
           var priorityBanner = document.createElement('div');
@@ -907,7 +986,6 @@
 
     } catch (err) {
       hideTyping();
-      removeProgress();
       console.error('Agent error:', err);
       addMessage('Something went wrong while processing your request. Please try again or contact our support team.', 'system');
       addQuickReplies(['Contact Support']);
@@ -931,6 +1009,7 @@
     clarificationCount = 0;
     currentCaseRef = null;
     currentResult = null;
+    chatHistory = [];
 
     const orderInput = getEl('cmOrderInput');
     if (orderInput) orderInput.value = '';

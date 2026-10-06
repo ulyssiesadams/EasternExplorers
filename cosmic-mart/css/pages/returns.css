@@ -1724,6 +1724,95 @@
   display: inline-block;
 }
 
+/* ---- Live case draft panel ---- */
+.cm-case-draft {
+  background: rgba(6, 8, 20, 0.92);
+  border: 1px solid rgba(147, 51, 234, 0.35);
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 8px 0 6px;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.cm-case-draft-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: rgba(147, 51, 234, 0.12);
+  border-bottom: 1px solid rgba(147, 51, 234, 0.2);
+}
+
+.cm-case-draft-icon { font-size: 14px; flex-shrink: 0; }
+
+.cm-case-draft-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent-glow);
+  letter-spacing: 0.5px;
+  flex: 1;
+}
+
+.cm-case-draft-spinner {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-glow);
+  animation: cm-dot-pulse 1.2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+.cm-case-draft-body {
+  padding: 12px 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  max-height: 300px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(147, 51, 234, 0.2) transparent;
+}
+
+.cm-case-section-hdr {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  color: var(--accent-glow);
+  margin-top: 10px;
+  margin-bottom: 3px;
+  opacity: 0.75;
+}
+
+.cm-case-section-hdr:first-child { margin-top: 0; }
+
+.cm-case-line {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 8px;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.cm-case-line-label {
+  color: rgba(148, 163, 184, 0.55);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cm-case-line-value {
+  color: var(--text-primary);
+  min-height: 1.2em;
+}
+
+.cm-case-line--pass .cm-case-line-value    { color: var(--success); }
+.cm-case-line--fail .cm-case-line-value    { color: var(--danger); }
+.cm-case-line--highlight .cm-case-line-value {
+  color: var(--accent-glow);
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
 /* ---- View Case Report button in chat ---- */
 .cm-report-open-btn {
   display: inline-flex;

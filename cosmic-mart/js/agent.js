@@ -1,10 +1,13 @@
-async function callClaude(systemPrompt, userMessage, maxTokensOverride) {
+async function callClaude(systemPrompt, userMessage, maxTokensOverride, history) {
+  var prior = (history && history.length) ? history.slice(-8) : [];
+  var messages = prior.concat([{ role: 'user', content: userMessage }]);
+
   const response = await fetch(API_ENDPOINT, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       system: systemPrompt,
-      messages: [{ role: 'user', content: userMessage }],
+      messages: messages,
       maxTokens: maxTokensOverride || MAX_TOKENS
     })
   });
@@ -18,7 +21,7 @@ async function callClaude(systemPrompt, userMessage, maxTokensOverride) {
   return data.text;
 }
 
-async function runIntentClassifier(customerMessage) {
+async function runIntentClassifier(customerMessage, history) {
   const systemPrompt = `You are an intent classifier for Cosmic Mart's returns portal. Classify the customer message into exactly one intent.
 
 Intents:
@@ -31,13 +34,13 @@ Output ONLY valid JSON, no other text:
 
 For NEEDS_CLARIFICATION: write a short specific follow-up question. For others: null.`;
 
-  const raw = await callClaude(systemPrompt, 'Customer message: "' + customerMessage + '"', 256);
+  const raw = await callClaude(systemPrompt, 'Customer message: "' + customerMessage + '"', 256, history);
   const cleaned = raw.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '').trim();
   return JSON.parse(cleaned);
 }
 
-async function runFAQAgent(question) {
-  const systemPrompt = `You are Nova, Cosmic Mart's returns assistant. Answer the customer's question clearly and concisely.
+async function runFAQAgent(question, history) {
+  const systemPrompt = `You are Nova, Cosmic Mart's returns assistant. Answer the customer's question clearly and concisely. Use prior conversation context if relevant.
 
 Return policy facts:
 - Gadgets: 30-day return window | Fashion: 14-day | Home & Lifestyle: 21-day
@@ -53,7 +56,7 @@ Output ONLY valid JSON, no other text:
 
 "Contact Support" must always be the last quickReply.`;
 
-  const raw = await callClaude(systemPrompt, 'Customer question: "' + question + '"', 512);
+  const raw = await callClaude(systemPrompt, 'Customer question: "' + question + '"', 512, history);
   const cleaned = raw.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '').trim();
   return JSON.parse(cleaned);
 }
@@ -115,11 +118,12 @@ Output ONLY valid JSON:
 }
 
 async function runOrchestrator(customerMessage, orderData) {
-  const systemPrompt = `You are the Returns Orchestrator for Cosmic Mart. Your job is to classify a customer's message as a return request and extract the relevant context from the provided order data.
+  const systemPrompt = `You are the Returns Orchestrator for Cosmic Mart. Extract the relevant context from the provided order data and customer message.
 
 Output ONLY valid JSON with this exact structure, no other text:
 {
   "customer_id": string,
+  "customer_name": string,
   "order_id": string,
   "product": string,
   "issue_description": string,
@@ -131,7 +135,8 @@ Output ONLY valid JSON with this exact structure, no other text:
   "is_return_request": boolean
 }
 
-Extract issue_description from the customer's natural language message. Keep it short (under 20 words).`;
+customer_name: copy exactly from the order data's customer_name field.
+issue_description: extract from the customer's natural language message, under 20 words.`;
 
   const userMessage = `Customer message: "${customerMessage}"
 
@@ -252,7 +257,7 @@ async function runCommunicationAgent(context, classification, resolution, sentim
   const systemPrompt = `You are the Communication Agent for Cosmic Mart. Write a warm, punchy resolution message.
 
 Rules:
-- Address the customer by first name
+- Address the customer by their first name (provided below — use it exactly, never write "[Customer Name]")
 - ONE sentence of genuine empathy (no clichés like "we apologize for the inconvenience")
 - ONE sentence stating what was approved and why
 - ONE sentence on what happens next (timeline, no action needed, etc.)
@@ -265,7 +270,9 @@ Tone: Warm and direct. Like a real person, not a script.
 Format: 2 short paragraphs max.
 Length: 50-70 words MAXIMUM. Shorter is better.` + priorityNote;
 
-  const userMessage = `Product: ${context.product}
+  var firstName = (context.customer_name || 'there').split(' ')[0];
+  const userMessage = `Customer first name: ${firstName}
+Product: ${context.product}
 Customer tier: ${context.customer_tier}
 Return category: ${classification.return_category}
 Resolution: ${JSON.stringify(resolution, null, 2)}
@@ -291,7 +298,7 @@ Length: 80-120 words. Plain text.`;
   const failedCheck = eligibility.checks_passed ? eligibility.checks_passed.find(c => !c.passed) : null;
   const caseRef = 'CM-' + new Date().getFullYear() + '-' + context.order_id.split('-').pop();
 
-  const userMessage = `Customer: ${context.customer_name}
+  const userMessage = `Customer: ${context.customer_name || 'Customer'}
 Product: ${context.product}
 Days since purchase: ${context.days_since_purchase}
 Failed check: ${failedCheck ? failedCheck.check + ' - ' + failedCheck.detail : eligibility.reason}
@@ -302,24 +309,43 @@ Case reference to use: ${caseRef}`;
 }
 
 async function runReturnsAgent(customerMessage, orderData, progressCallback) {
-  var cb = function(id, state) { if (progressCallback) progressCallback(id, state); };
+  var cb = function(id, state, data) { if (progressCallback) progressCallback(id, state, data); };
   var pause = function(ms) { return new Promise(function(r) { setTimeout(r, ms); }); };
 
-  // ── Sentiment (sub-sentiment substep, under Issue step) ──
+  // ── Sentiment ──
   cb('sub-sentiment', 'active');
   var [sentiment] = await Promise.all([runSentimentAnalyzer(customerMessage), pause(1400)]);
   cb('sub-sentiment', 'done');
   await pause(350);
 
-  // ── Orchestrator (sub-context substep, under Issue step) ──
+  // ── Orchestrator ──
   cb('orchestrator', 'active');
   cb('sub-context', 'active');
   var [context] = await Promise.all([runOrchestrator(customerMessage, orderData), pause(2000)]);
   cb('sub-context', 'done');
   cb('orchestrator', 'done');
+
+  // Emit customer profile + issue data now that we have both sentiment and context
+  cb('case:customer', null, {
+    name: context.customer_name || orderData.customer_name || 'Customer',
+    tier: context.customer_tier,
+    market: context.market,
+    order_id: context.order_id,
+    product: context.product,
+    category: context.product_category,
+    price: context.purchase_price,
+    days: context.days_since_purchase
+  });
+  await pause(200);
+  cb('case:issue', null, {
+    description: context.issue_description || customerMessage.slice(0, 80),
+    priority: sentiment.priority,
+    frustrated: sentiment.frustrated,
+    signals: sentiment.signals || []
+  });
   await pause(400);
 
-  // ── Eligibility (sub-window + sub-tier substeps) ──
+  // ── Eligibility ──
   cb('eligibility', 'active');
   cb('sub-window', 'active');
   var [eligibility] = await Promise.all([runEligibilityChecker(context), pause(1800)]);
@@ -329,12 +355,14 @@ async function runReturnsAgent(customerMessage, orderData, progressCallback) {
   await pause(900);
   cb('sub-tier', 'done');
   cb('eligibility', 'done');
+  cb('case:eligibility', null, eligibility);
   await pause(350);
 
   if (!eligibility.eligible) {
     cb('escalation', 'active');
     const escalation = await runEscalationAgent(context, eligibility);
     cb('escalation', 'done');
+    cb('case:escalation', null, { caseRef: escalation.caseRef, reason: eligibility.reason });
     return { type: 'escalation', message: escalation.message, caseRef: escalation.caseRef, sentiment: sentiment, trace: { context: context, eligibility: eligibility } };
   }
 
@@ -342,9 +370,10 @@ async function runReturnsAgent(customerMessage, orderData, progressCallback) {
   cb('classifier', 'active');
   var [classification] = await Promise.all([runReturnClassifier(context, customerMessage), pause(1600)]);
   cb('classifier', 'done');
+  cb('case:classification', null, classification);
   await pause(350);
 
-  // ── Resolution (sub-restype + sub-caseref substeps) ──
+  // ── Resolution ──
   cb('resolution', 'active');
   cb('sub-restype', 'active');
   var [resolution] = await Promise.all([runResolutionGenerator(context, classification), pause(2000)]);
@@ -354,6 +383,7 @@ async function runReturnsAgent(customerMessage, orderData, progressCallback) {
   await pause(800);
   cb('sub-caseref', 'done');
   cb('resolution', 'done');
+  cb('case:resolution', null, resolution);
   await pause(350);
 
   // ── Retention offer (CHANGED_MIND only) ──
