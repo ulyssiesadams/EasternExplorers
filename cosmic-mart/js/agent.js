@@ -18,6 +18,59 @@ async function callClaude(systemPrompt, userMessage, maxTokensOverride) {
   return data.text;
 }
 
+async function runIntentClassifier(customerMessage) {
+  const systemPrompt = `You are an intent classifier for Cosmic Mart's returns portal. Classify the customer message into exactly one intent.
+
+Intents:
+- FAQ: a general question about returns (policy, timeline, required info, how it works, eligibility)
+- RETURN_INITIATION: customer describes a specific product problem or clearly states they want to return something
+- NEEDS_CLARIFICATION: message is too vague — no specific issue or product problem is described
+
+Output ONLY valid JSON, no other text:
+{"intent": "FAQ" | "RETURN_INITIATION" | "NEEDS_CLARIFICATION", "clarifying_question": "string or null"}
+
+For NEEDS_CLARIFICATION: write a short specific follow-up question. For others: null.`;
+
+  const raw = await callClaude(systemPrompt, 'Customer message: "' + customerMessage + '"', 256);
+  const cleaned = raw.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '').trim();
+  return JSON.parse(cleaned);
+}
+
+async function runFAQAgent(question) {
+  const systemPrompt = `You are Nova, Cosmic Mart's returns assistant. Answer the customer's question clearly and concisely.
+
+Return policy facts:
+- Gadgets: 30-day return window | Fashion: 14-day | Home & Lifestyle: 21-day
+- Cosmic Rewards Tier 1 & 2 members get +7 extra days on all windows
+- Refunds: 3–5 business days to original payment method
+- Replacements: ship within 2 business days (priority for Tier 2 members)
+- Prepaid return label is emailed immediately on approval
+- No documents needed — orders in the system are auto-verified
+- To start a return: just describe what happened with your product in the chat
+
+Output ONLY valid JSON, no other text:
+{"text": "2–3 sentence answer", "quickReplies": ["follow-up 1", "follow-up 2", "Contact Support"]}
+
+"Contact Support" must always be the last quickReply.`;
+
+  const raw = await callClaude(systemPrompt, 'Customer question: "' + question + '"', 512);
+  const cleaned = raw.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '').trim();
+  return JSON.parse(cleaned);
+}
+
+async function runManualEscalation(orderData) {
+  const caseRef = 'CM-' + new Date().getFullYear() + '-' + orderData.order_id.split('-').pop();
+  const systemPrompt = `You are the Escalation Agent for Cosmic Mart. Connect the customer to a specialist in a warm, reassuring message.
+
+Include: acknowledgment that a specialist is being assigned, confirmation they have full order details, the case reference as Case ` + caseRef + `, and a 4-hour expected response time.
+
+Tone: Warm and reassuring. Length: 60–80 words. Plain text only.`;
+
+  const userMessage = 'Customer: ' + orderData.customer_name + '\nProduct: ' + orderData.product_name + '\nOrder: ' + orderData.order_id;
+  const reply = await callClaude(systemPrompt, userMessage, 512);
+  return { message: reply, caseRef: caseRef };
+}
+
 async function runOrchestrator(customerMessage, orderData) {
   const systemPrompt = `You are the Returns Orchestrator for Cosmic Mart. Your job is to classify a customer's message as a return request and extract the relevant context from the provided order data.
 
@@ -194,7 +247,7 @@ Failed check: ${failedCheck ? failedCheck.check + ' - ' + failedCheck.detail : e
 Case reference to use: ${caseRef}`;
 
   const reply = await callClaude(systemPrompt, userMessage);
-  return reply;
+  return { message: reply, caseRef: caseRef };
 }
 
 async function runReturnsAgent(customerMessage, orderData, progressCallback) {
@@ -208,9 +261,9 @@ async function runReturnsAgent(customerMessage, orderData, progressCallback) {
 
   if (!eligibility.eligible) {
     if (progressCallback) progressCallback('escalation', 'active');
-    const escalationMessage = await runEscalationAgent(context, eligibility);
+    const escalation = await runEscalationAgent(context, eligibility);
     if (progressCallback) progressCallback('escalation', 'done');
-    return { type: 'escalation', message: escalationMessage };
+    return { type: 'escalation', message: escalation.message, caseRef: escalation.caseRef };
   }
 
   if (progressCallback) progressCallback('classifier', 'active');
@@ -225,5 +278,5 @@ async function runReturnsAgent(customerMessage, orderData, progressCallback) {
   const message = await runCommunicationAgent(context, classification, resolution);
   if (progressCallback) progressCallback('communication', 'done');
 
-  return { type: 'resolution', message: message, resolution: resolution };
+  return { type: 'resolution', message: message, resolution: resolution, caseRef: resolution.case_ref };
 }

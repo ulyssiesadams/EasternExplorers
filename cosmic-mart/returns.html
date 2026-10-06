@@ -308,6 +308,22 @@
   </div>
 </footer>
 
+<!-- Case number modal -->
+<div class="cm-case-modal-overlay" id="cmCaseModal" hidden>
+  <div class="cm-case-modal">
+    <button class="cm-case-modal-close" id="cmCaseModalClose" aria-label="Close">&#x2715;</button>
+    <div class="cm-case-modal-icon">&#x1F4CB;</div>
+    <h3 class="cm-case-modal-title">Your Case Number</h3>
+    <div class="cm-case-modal-number" id="cmCaseModalNumber">CM-2026-XXXX</div>
+    <p class="cm-case-modal-hint">Include this in your email subject for faster support.</p>
+    <p class="cm-case-modal-subject" id="cmCaseModalSubject"></p>
+    <div class="cm-case-modal-actions">
+      <button class="cm-btn cm-btn-primary" id="cmCaseModalCopy">Copy Case Number</button>
+      <a class="cm-btn cm-btn-secondary" id="cmCaseModalEmail" href="mailto:cosmomart@support.com">Email Support</a>
+    </div>
+  </div>
+</div>
+
 <script src="js/config.js"></script>
 <script src="js/mock-data.js"></script>
 <script src="js/global.js"></script>

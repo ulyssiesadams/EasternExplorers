@@ -711,6 +711,62 @@
   color: white;
 }
 
+/* Nova — product link cards inside chat bubble */
+.cm-nova-links {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.cm-nova-link-card {
+  display: block;
+  padding: 8px 12px;
+  background: rgba(147, 51, 234, 0.12);
+  border: 1px solid rgba(147, 51, 234, 0.35);
+  border-radius: 8px;
+  color: var(--accent-glow);
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  text-decoration: none;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.cm-nova-link-card:hover {
+  background: rgba(147, 51, 234, 0.24);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* Nova — quick reply chips */
+.cm-nova-quick-replies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 2px 0 6px;
+  align-self: flex-start;
+  max-width: 88%;
+}
+
+.cm-nova-quick-reply-btn {
+  background: none;
+  border: 1px solid rgba(147, 51, 234, 0.45);
+  border-radius: 16px;
+  color: var(--accent-glow);
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  padding: 5px 13px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.cm-nova-quick-reply-btn:hover {
+  background: rgba(147, 51, 234, 0.2);
+  border-color: var(--accent);
+  color: #fff;
+}
+
 /* ===== HOW IT WORKS ===== */
 .cm-how-it-works {
   display: grid;

@@ -114,7 +114,7 @@
       expandedView.classList.add('visible');
       generalChatOpen = true;
       if (generalChatHistory.length === 0) {
-        addGlobalAgentMessage("Hi! I'm Nova, Cosmic Mart's AI assistant. I can help you with product questions, order info, store policies, and more. What would you like to know?");
+        addGlobalAgentMessage('{"text":"Hi! I\'m Nova, your Cosmic Mart assistant. How can I help you today?","quickReplies":["Cool tech under $200","Return policy","Browse gadgets","Start a return"]}');
       }
       globalInput.focus();
     });
@@ -132,13 +132,66 @@
       globalMessages.scrollTop = globalMessages.scrollHeight;
     }
 
-    function addGlobalAgentMessage(text) {
-      const div = document.createElement('div');
+    function addGlobalAgentMessage(raw) {
+      var parsed;
+      try {
+        var cleaned = raw.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '').trim();
+        parsed = JSON.parse(cleaned);
+      } catch (e) {
+        parsed = { text: raw };
+      }
+
+      var div = document.createElement('div');
       div.className = 'cm-global-bubble-agent';
-      div.textContent = text;
+
+      var textEl = document.createElement('p');
+      textEl.style.margin = '0';
+      textEl.textContent = parsed.text || raw;
+      div.appendChild(textEl);
+
+      if (parsed.links && parsed.links.length) {
+        var linksDiv = document.createElement('div');
+        linksDiv.className = 'cm-nova-links';
+        parsed.links.forEach(function (link) {
+          var a = document.createElement('a');
+          a.href = link.url;
+          a.className = 'cm-nova-link-card';
+          a.textContent = link.label;
+          linksDiv.appendChild(a);
+        });
+        div.appendChild(linksDiv);
+      }
+
       globalMessages.appendChild(div);
-      generalChatHistory.push({ role: 'assistant', content: text });
+      generalChatHistory.push({ role: 'assistant', content: parsed.text || raw });
+
+      if (parsed.quickReplies && parsed.quickReplies.length) {
+        showQuickReplies(parsed.quickReplies);
+      }
+
       globalMessages.scrollTop = globalMessages.scrollHeight;
+    }
+
+    function showQuickReplies(replies) {
+      var container = document.createElement('div');
+      container.className = 'cm-nova-quick-replies';
+      replies.forEach(function (reply) {
+        var btn = document.createElement('button');
+        btn.className = 'cm-nova-quick-reply-btn';
+        btn.textContent = reply;
+        btn.addEventListener('click', function () {
+          globalInput.value = reply;
+          sendGeneralMessage();
+        });
+        container.appendChild(btn);
+      });
+      globalMessages.appendChild(container);
+      globalMessages.scrollTop = globalMessages.scrollHeight;
+    }
+
+    function removeQuickReplies() {
+      var chips = globalMessages.querySelectorAll('.cm-nova-quick-replies');
+      chips.forEach(function (el) { el.remove(); });
     }
 
     function showGlobalTyping() {
@@ -156,9 +209,10 @@
     }
 
     async function sendGeneralMessage() {
-      const text = globalInput.value.trim();
+      var text = globalInput.value.trim();
       if (!text) return;
 
+      removeQuickReplies();
       globalInput.value = '';
       globalSend.disabled = true;
 
@@ -167,26 +221,36 @@
 
       showGlobalTyping();
 
-      const systemPrompt = 'You are Nova, Cosmic Mart\'s friendly AI assistant. You help customers with general questions about shopping, products, orders, and store information. Keep responses concise and helpful. Cosmic Mart sells Gadgets & Electronics, Fashion & Apparel, and Home & Lifestyle products. Return windows: Gadgets 30 days, Fashion 14 days, Home & Lifestyle 21 days.';
+      var products = window.mockData ? window.mockData.products : [];
+      var catalog = products.map(function (p) {
+        return p.emoji + ' ' + p.name + ' — $' + p.price.toFixed(2) + ' (' + p.category + ')';
+      }).join('\n');
+
+      var systemPrompt =
+        'You are Nova, Cosmic Mart\'s professional and friendly AI assistant. ' +
+        'Respond ONLY with valid JSON — no extra text, no markdown fences — in this exact shape:\n' +
+        '{"text":"1-3 sentence response","links":[{"label":"Product Name — $price","url":"/category"}],"quickReplies":["option 1","option 2","option 3"]}\n' +
+        'Rules: Be concise and direct. No bullet lists in "text". ' +
+        '"links" is optional — only include when recommending specific products. ' +
+        'Category page URLs: gadgets → "/gadgets", fashion → "/fashion", home → "/home". ' +
+        '"quickReplies" must always include 2-3 short contextual follow-up options the user can tap. ' +
+        'Return policy: Gadgets 30 days, Fashion 14 days, Home & Lifestyle 21 days. ' +
+        'Product catalog:\n' + catalog;
 
       try {
-        const messages = generalChatHistory.slice(0, -1).concat([{ role: 'user', content: text }]);
-        const response = await fetch(API_ENDPOINT, {
+        var messages = generalChatHistory.slice(0, -1).concat([{ role: 'user', content: text }]);
+        var response = await fetch(API_ENDPOINT, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            system: systemPrompt,
-            messages: messages,
-            maxTokens: MAX_TOKENS
-          })
+          body: JSON.stringify({ system: systemPrompt, messages: messages, maxTokens: MAX_TOKENS })
         });
-        const data = await response.json();
+        var data = await response.json();
         hideGlobalTyping();
-        const reply = data.text || 'I\'m having trouble connecting right now. Please try again.';
+        var reply = data.text || '{"text":"I\'m having trouble connecting right now. Please try again.","quickReplies":["Try again","Browse gadgets","Start a return"]}';
         addGlobalAgentMessage(reply);
       } catch (err) {
         hideGlobalTyping();
-        addGlobalAgentMessage('I\'m having trouble connecting right now. Please try again shortly.');
+        addGlobalAgentMessage('{"text":"I\'m having trouble connecting right now. Please try again shortly.","quickReplies":["Try again","Browse products"]}');
       }
 
       globalSend.disabled = false;
