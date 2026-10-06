@@ -1,0 +1,104 @@
+/* ===== CATEGORY PAGE LAYOUT ===== */
+.cm-category-hero {
+  padding: 40px 24px 32px;
+  border-bottom: 1px solid var(--border-purple);
+  background: linear-gradient(180deg, rgba(45, 27, 105, 0.2) 0%, transparent 100%);
+}
+
+.cm-category-hero-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.cm-category-hero-icon {
+  font-size: 48px;
+  line-height: 1;
+}
+
+.cm-category-hero h1 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--text-primary);
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.cm-category-hero p {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.cm-return-policy-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(147, 51, 234, 0.15);
+  border: 1px solid var(--border-purple);
+  color: var(--accent-glow);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-left: 12px;
+}
+
+.cm-category-layout {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 32px;
+}
+
+.cm-category-results {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cm-results-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-purple);
+}
+
+.cm-results-count {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.cm-results-count strong {
+  color: var(--text-primary);
+}
+
+.cm-sort-select {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-purple);
+  color: var(--text-primary);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  outline: none;
+}
+
+.cm-sort-select option {
+  background: var(--bg-secondary);
+}
+
+@media (max-width: 768px) {
+  .cm-category-layout {
+    grid-template-columns: 1fr;
+  }
+  .cm-filter-sidebar {
+    display: none;
+  }
+}

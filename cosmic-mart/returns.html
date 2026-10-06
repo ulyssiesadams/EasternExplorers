@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Returns Center — Cosmic Mart</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages/returns.css">
+</head>
+<body>
+
+<nav class="cm-nav">
+  <div class="cm-nav-main">
+    <a href="index.html" class="cm-nav-logo">
+      <img src="assets/logo.png" alt="Cosmic Mart" class="cm-logo-img">
+    </a>
+    <button type="button" class="cm-nav-location">
+      <span class="cm-nav-location-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </span>
+      <span class="cm-nav-location-text">
+        <strong>Pickup or delivery?</strong>
+        <small>Earth &middot; Sector 7 &mdash; Orbital Hub</small>
+      </span>
+      <svg class="cm-nav-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <form class="cm-nav-search" role="search" onsubmit="return false;">
+      <input type="search" class="cm-nav-search-input" placeholder="Search everything across the cosmos" aria-label="Search Cosmic Mart">
+      <button type="button" class="cm-nav-search-btn" aria-label="Search">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+    </form>
+    <div class="cm-nav-actions">
+      <a href="#" class="cm-nav-action cm-nav-action-reorder">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <span class="cm-nav-action-text">
+          <small>Reorder</small>
+          <strong>My Items</strong>
+        </span>
+      </a>
+      <a href="account.html" class="cm-nav-action">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span class="cm-nav-action-text">
+          <small>Sign In</small>
+          <strong>Account</strong>
+        </span>
+      </a>
+      <a href="#" class="cm-nav-cart">
+        <span class="cm-nav-cart-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          <span class="cm-cart-badge">0</span>
+        </span>
+        <strong class="cm-nav-cart-total">$0.00</strong>
+      </a>
+    </div>
+  </div>
+  <div class="cm-nav-sub">
+    <button type="button" class="cm-nav-pill cm-nav-pill-solid">
+      Departments
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <button type="button" class="cm-nav-pill cm-nav-pill-solid">
+      Services
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <ul class="cm-nav-links">
+      <li><a href="index.html">Shop</a></li>
+      <li><a href="gadgets.html">Gadgets</a></li>
+      <li><a href="fashion.html">Fashion</a></li>
+      <li><a href="home.html">Home &amp; Lifestyle</a></li>
+    </ul>
+    <div class="cm-nav-end">
+      <a href="account.html" class="cm-nav-account">Account</a>
+      <div class="cm-nav-more" id="cmNavMore">
+        <button type="button" class="cm-nav-pill cm-nav-pill-more" id="cmMoreBtn" aria-haspopup="true" aria-expanded="false" aria-controls="cmMoreMenu">
+          More
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="cm-nav-more-menu" id="cmMoreMenu" role="menu" hidden>
+          <a href="returns.html" role="menuitem">Returns</a>
+          <a href="#" role="menuitem">New Arrivals</a>
+          <a href="#" role="menuitem">Cosmic Rewards</a>
+          <a href="#" role="menuitem">Track Order</a>
+          <a href="#" role="menuitem">Help</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main class="cm-returns-page">
+
+  <!-- Top band -->
+  <section class="cm-returns-head">
+    <div class="cm-returns-head-text">
+      <a href="account.html" class="cm-returns-back">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Back to Account
+      </a>
+      <h1>Returns</h1>
+      <p>Resolve your return with Nova in a few minutes.</p>
+    </div>
+
+    <div class="cm-returns-features">
+      <div class="cm-returns-feature">
+        <span class="cm-returns-feature-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </span>
+        <span class="cm-returns-feature-text">
+          <strong>AI-Powered</strong>
+          <small>Most returns in under 10 minutes</small>
+        </span>
+      </div>
+      <div class="cm-returns-feature">
+        <span class="cm-returns-feature-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+        </span>
+        <span class="cm-returns-feature-text">
+          <strong>Secure &amp; Simple</strong>
+          <small>No forms, no hassle</small>
+        </span>
+      </div>
+      <div class="cm-returns-feature">
+        <span class="cm-returns-feature-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+        </span>
+        <span class="cm-returns-feature-text">
+          <strong>Multiple Options</strong>
+          <small>Refund, replacement, or store credit</small>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Two-column layout -->
+  <div class="cm-returns-layout">
+
+    <div class="cm-returns-main">
+
+      <!-- Nova chat card -->
+      <section class="cm-nova-card">
+        <header class="cm-nova-head">
+          <img class="cm-nova-avatar" src="assets/logo.png" alt="">
+          <h2 class="cm-nova-title">Nova &mdash; Returns Agent</h2>
+          <span class="cm-nova-pill">AI-Powered</span>
+          <button type="button" class="cm-nova-clear" id="cmClearChat">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            Clear chat
+          </button>
+        </header>
+        <p class="cm-nova-sub">Let's get your return sorted out. Start by finding your order.</p>
+
+        <!-- 3-step strip -->
+        <ol class="cm-step-strip">
+          <li class="cm-step cm-step-active" id="cmStepFind">
+            <span class="cm-step-num">1</span>
+            <span class="cm-step-text"><strong>Find Order</strong><small>Enter your order ID</small></span>
+          </li>
+          <li class="cm-step-sep" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </li>
+          <li class="cm-step" id="cmStepDescribe">
+            <span class="cm-step-num">2</span>
+            <span class="cm-step-text"><strong>Describe Issue</strong><small>Tell Nova what happened</small></span>
+          </li>
+          <li class="cm-step-sep" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </li>
+          <li class="cm-step" id="cmStepResolve">
+            <span class="cm-step-num">3</span>
+            <span class="cm-step-text"><strong>Get Resolution</strong><small>Refund, replacement, or credit</small></span>
+          </li>
+        </ol>
+
+        <!-- Chat transcript (chat-ui.js appends bubbles, typing + progress here) -->
+        <div class="cm-chat-messages" id="cmReturnsMessages"></div>
+
+        <!-- Order lookup -->
+        <div class="cm-order-panel">
+          <span class="cm-order-panel-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          </span>
+          <div class="cm-order-panel-body">
+            <label class="cm-order-panel-label" for="cmOrderInput">Order ID</label>
+            <div class="cm-order-panel-row">
+              <input type="text" id="cmOrderInput" placeholder="Enter Order ID (e.g. ORD-2026-4471)" autocomplete="off"/>
+              <button type="button" class="cm-lookup-btn" id="cmLookupBtn">
+                Look Up Order
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </button>
+            </div>
+            <p class="cm-order-try">Try:
+              <button type="button" class="cm-order-sample" data-order="ORD-2026-4471">ORD-2026-4471</button>,
+              <button type="button" class="cm-order-sample" data-order="ORD-2026-3892">ORD-2026-3892</button>,
+              <button type="button" class="cm-order-sample" data-order="ORD-2026-2744">ORD-2026-2744</button>
+            </p>
+          </div>
+        </div>
+
+        <!-- Message composer -->
+        <div class="cm-chat-input">
+          <span class="cm-chat-attach" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+          </span>
+          <input type="text" id="cmReturnsInput" placeholder="Describe your issue (or enter an order first)..." disabled autocomplete="off"/>
+          <button type="button" id="cmReturnsSend" disabled>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Send
+          </button>
+        </div>
+      </section>
+
+      <!-- How it works -->
+      <section class="cm-howto">
+        <div class="cm-howto-intro">
+          <span class="cm-howto-spark">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.6L19.5 10l-5.6 1.4L12 17l-1.9-5.6L4.5 10l5.6-1.4L12 3z"/></svg>
+          </span>
+          <span class="cm-howto-intro-text">
+            <strong>How It Works</strong>
+            <small>Three simple steps to a resolved return</small>
+          </span>
+        </div>
+        <ol class="cm-howto-steps">
+          <li class="cm-howto-step">
+            <span class="cm-step-num">1</span>
+            <span class="cm-step-text"><strong>Find Your Order</strong><small>Enter your order ID (or let Nova help)</small></span>
+          </li>
+          <li class="cm-step-sep" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </li>
+          <li class="cm-howto-step">
+            <span class="cm-step-num">2</span>
+            <span class="cm-step-text"><strong>Tell Us What Happened</strong><small>Describe the issue or choose from common options</small></span>
+          </li>
+          <li class="cm-step-sep" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </li>
+          <li class="cm-howto-step">
+            <span class="cm-step-num">3</span>
+            <span class="cm-step-text"><strong>Get Your Resolution</strong><small>Receive a refund, replacement, or store credit</small></span>
+          </li>
+        </ol>
+      </section>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="cm-returns-side">
+
+      <section class="cm-side-card">
+        <h3 class="cm-side-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          Your Return
+        </h3>
+        <p class="cm-side-lead">Order details and eligibility will appear here once you enter your Order ID.</p>
+        <div class="cm-order-info" id="cmOrderInfo"></div>
+        <div class="cm-return-skeleton" id="cmReturnSkeleton">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          <span class="cm-skeleton-bar"></span>
+          <span class="cm-skeleton-bar cm-skeleton-bar-short"></span>
+        </div>
+      </section>
+
+      <section class="cm-side-card">
+        <h3 class="cm-side-title">Return Progress</h3>
+        <ol class="cm-progress-list">
+          <li class="cm-progress-row is-active" id="cmProgOrder">
+            <span class="cm-step-num">1</span>
+            <span class="cm-step-text"><strong>Order not found</strong><small>Enter your order ID to begin</small></span>
+          </li>
+          <li class="cm-progress-row" id="cmProgIssue">
+            <span class="cm-step-num">2</span>
+            <span class="cm-step-text"><strong>Issue not selected</strong><small>Tell us what happened</small></span>
+          </li>
+          <li class="cm-progress-row" id="cmProgResolution">
+            <span class="cm-step-num">3</span>
+            <span class="cm-step-text"><strong>Resolution pending</strong><small>Get your refund, replacement, or credit</small></span>
+          </li>
+        </ol>
+      </section>
+
+      <section class="cm-side-card">
+        <h3 class="cm-side-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Need Help?
+        </h3>
+        <ul class="cm-help-list">
+          <li><a href="#">Return Policy<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></a></li>
+          <li><a href="#">What Qualifies for a Return<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></a></li>
+          <li><a href="#">Refund &amp; Shipping Timeline<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></a></li>
+        </ul>
+      </section>
+
+    </aside>
+  </div>
+</main>
+
+<footer class="cm-footer">
+  <div class="cm-footer-inner">
+    <div class="cm-footer-bottom">
+      <p>© 2026 Cosmic Mart. All rights reserved.</p>
+      <p class="cm-footer-meta"><a href="index.html">← Back to Home</a></p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/mock-data.js"></script>
+<script src="js/global.js"></script>
+<script src="js/agent.js"></script>
+<script src="js/chat-ui.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // "Try:" shortcuts fill the order field and run the lookup
+    document.querySelectorAll('.cm-order-sample').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const input = document.getElementById('cmOrderInput');
+        const lookup = document.getElementById('cmLookupBtn');
+        if (!input || !lookup) return;
+        input.value = btn.getAttribute('data-order');
+        lookup.click();
+      });
+    });
+
+    // Clear the visible transcript. chat-ui.js keeps its own loaded-order
+    // state, so this clears the conversation only, not the looked-up order.
+    const clearBtn = document.getElementById('cmClearChat');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', function () {
+        const messages = document.getElementById('cmReturnsMessages');
+        if (!messages) return;
+        messages.textContent = '';
+        const greeting = document.createElement('div');
+        greeting.className = 'cm-bubble-agent';
+        greeting.textContent = 'Hi! I can help you with your return. Please enter your order ID to get started.';
+        messages.appendChild(greeting);
+      });
+    }
+  });
+</script>
+</body>
+</html>

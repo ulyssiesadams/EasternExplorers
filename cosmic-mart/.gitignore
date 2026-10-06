@@ -1,0 +1,14 @@
+# The repo-root .gitignore carries the full rules; this file mirrors the ones
+# that matter inside cosmic-mart/ so they still apply if this folder is ever
+# used as its own repo.
+
+# Secret: the Vocareum API key. js/config.js is NOT ignored - it holds no
+# secret and the site breaks without it.
+.env
+.env.*
+!.env.example
+
+CLAUDE.local.md
+.DS_Store
+Thumbs.db
+*.log

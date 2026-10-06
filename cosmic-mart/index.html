@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cosmic Mart — Shop the Cosmos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages/home.css">
+</head>
+<body>
+
+<nav class="cm-nav">
+  <div class="cm-nav-main">
+    <a href="index.html" class="cm-nav-logo">
+      <img src="assets/logo.png" alt="Cosmic Mart" class="cm-logo-img">
+    </a>
+    <button type="button" class="cm-nav-location">
+      <span class="cm-nav-location-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </span>
+      <span class="cm-nav-location-text">
+        <strong>Pickup or delivery?</strong>
+        <small>Earth &middot; Sector 7 &mdash; Orbital Hub</small>
+      </span>
+      <svg class="cm-nav-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <form class="cm-nav-search" role="search" onsubmit="return false;">
+      <input type="search" class="cm-nav-search-input" placeholder="Search everything across the cosmos" aria-label="Search Cosmic Mart">
+      <button type="button" class="cm-nav-search-btn" aria-label="Search">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+    </form>
+    <div class="cm-nav-actions">
+      <a href="#" class="cm-nav-action cm-nav-action-reorder">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <span class="cm-nav-action-text">
+          <small>Reorder</small>
+          <strong>My Items</strong>
+        </span>
+      </a>
+      <a href="account.html" class="cm-nav-action">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span class="cm-nav-action-text">
+          <small>Sign In</small>
+          <strong>Account</strong>
+        </span>
+      </a>
+      <a href="#" class="cm-nav-cart">
+        <span class="cm-nav-cart-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          <span class="cm-cart-badge">0</span>
+        </span>
+        <strong class="cm-nav-cart-total">$0.00</strong>
+      </a>
+    </div>
+  </div>
+  <div class="cm-nav-sub">
+    <button type="button" class="cm-nav-pill cm-nav-pill-solid">
+      Departments
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <button type="button" class="cm-nav-pill cm-nav-pill-solid">
+      Services
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <ul class="cm-nav-links">
+      <li><a href="index.html">Shop</a></li>
+      <li><a href="gadgets.html">Gadgets</a></li>
+      <li><a href="fashion.html">Fashion</a></li>
+      <li><a href="home.html">Home &amp; Lifestyle</a></li>
+    </ul>
+    <div class="cm-nav-end">
+      <a href="account.html" class="cm-nav-account">Account</a>
+      <div class="cm-nav-more" id="cmNavMore">
+        <button type="button" class="cm-nav-pill cm-nav-pill-more" id="cmMoreBtn" aria-haspopup="true" aria-expanded="false" aria-controls="cmMoreMenu">
+          More
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="cm-nav-more-menu" id="cmMoreMenu" role="menu" hidden>
+          <a href="returns.html" role="menuitem">Returns</a>
+          <a href="#" role="menuitem">New Arrivals</a>
+          <a href="#" role="menuitem">Cosmic Rewards</a>
+          <a href="#" role="menuitem">Track Order</a>
+          <a href="#" role="menuitem">Help</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <!-- Promo Carousel -->
+  <section class="cm-carousel">
+    <div class="cm-carousel-viewport" id="cmCarousel">
+      <div class="cm-carousel-slide cm-carousel-slide-1 active">
+        <span class="cm-carousel-eyebrow">Cosmic Deals · Oct 5–11 Only</span>
+        <h2 class="cm-carousel-headline">Deals on gear from across the galaxy</h2>
+        <p class="cm-carousel-sub">Save up to 25% on top-rated tech, apparel and home essentials.</p>
+        <a href="gadgets.html" class="cm-btn cm-carousel-cta">Shop Deals</a>
+        <div class="cm-carousel-planet cm-carousel-planet--asteroid">
+          <img src="assets/planets/cosmic_planet_asteroid.png" alt="" aria-hidden="true" draggable="false">
+        </div>
+      </div>
+      <div class="cm-carousel-slide cm-carousel-slide-2">
+        <span class="cm-carousel-eyebrow">New Arrivals</span>
+        <h2 class="cm-carousel-headline">Fresh drops from three star systems</h2>
+        <p class="cm-carousel-sub">Just landed — the latest in cosmic fashion and lifestyle.</p>
+        <a href="fashion.html" class="cm-btn cm-carousel-cta">Shop New</a>
+        <div class="cm-carousel-planet cm-carousel-planet--ringed">
+          <img src="assets/planets/cosmic_planet_ringed.png" alt="" aria-hidden="true" draggable="false">
+        </div>
+      </div>
+      <div class="cm-carousel-slide cm-carousel-slide-3">
+        <span class="cm-carousel-eyebrow">Cosmic Rewards</span>
+        <h2 class="cm-carousel-headline">Free priority shipping on every order</h2>
+        <p class="cm-carousel-sub">Join free and earn stars on everything you buy.</p>
+        <a href="#rewards" class="cm-btn cm-carousel-cta">Join Free</a>
+        <div class="cm-carousel-planet cm-carousel-planet--earthlike">
+          <img src="assets/planets/cosmic_planet_earthlike.png" alt="" aria-hidden="true" draggable="false">
+        </div>
+      </div>
+
+      <div class="cm-carousel-controls">
+        <button type="button" class="cm-carousel-btn" id="cmCarouselPrev" aria-label="Previous slide">&#8249;</button>
+        <div class="cm-carousel-progress" id="cmCarouselProgress" role="progressbar" aria-label="Time until the next advertisement">
+          <svg viewBox="0 0 40 40" aria-hidden="true" focusable="false">
+            <circle class="cm-progress-track" cx="20" cy="20" r="17"></circle>
+            <circle class="cm-progress-bar" cx="20" cy="20" r="17"></circle>
+          </svg>
+        </div>
+        <button type="button" class="cm-carousel-btn" id="cmCarouselNext" aria-label="Next slide">&#8250;</button>
+      </div>
+
+      <div class="cm-carousel-dots" id="cmCarouselDots">
+        <button type="button" class="cm-carousel-dot active" aria-label="Go to slide 1"></button>
+        <button type="button" class="cm-carousel-dot" aria-label="Go to slide 2"></button>
+        <button type="button" class="cm-carousel-dot" aria-label="Go to slide 3"></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Top Deals -->
+  <section class="cm-section">
+    <div class="cm-section-head">
+      <h2 class="cm-section-title">Top Deals</h2>
+      <a href="gadgets.html" class="cm-view-all">View all</a>
+    </div>
+    <p class="cm-section-subtitle">So many ways to save across the galaxy.</p>
+    <div class="cm-deals-grid" id="dealsGrid"></div>
+  </section>
+
+  <!-- Popular Products -->
+  <section class="cm-section cm-section-tight" id="popular">
+    <h2 class="cm-section-title">Popular Right Now</h2>
+    <p class="cm-section-subtitle">What customers across 10 markets are buying.</p>
+    <div class="cm-product-grid" id="popularGrid"></div>
+  </section>
+
+  <!-- Cosmic Rewards Banner -->
+  <section class="cm-section cm-section-tight" id="rewards">
+    <div class="cm-rewards-banner">
+      <div class="cm-rewards-banner-content">
+        <h2>Join Cosmic Rewards.</h2>
+        <p>Earn stars with every purchase. Unlock free shipping, early access to deals, and exclusive members-only pricing across all 10 markets.</p>
+        <div class="cm-rewards-perks">
+          <span class="cm-rewards-perk">Free 2-day galactic shipping</span>
+          <span class="cm-rewards-perk">Early access to new drops</span>
+          <span class="cm-rewards-perk">Members-only deals</span>
+        </div>
+      </div>
+      <div class="cm-rewards-cta">
+        <a href="#" class="cm-btn cm-btn-primary">Join Free</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="cm-footer">
+  <div class="cm-footer-inner">
+    <div class="cm-footer-top">
+      <div class="cm-footer-brand">
+        <img src="assets/logo.png" alt="Cosmic Mart" class="cm-footer-logo">
+        <p>Shopping from beyond the stars since 2001. Serving 144 million customers across 10 Earth markets.</p>
+      </div>
+      <div class="cm-footer-col">
+        <h4>Shop</h4>
+        <ul>
+          <li><a href="gadgets.html">Gadgets &amp; Electronics</a></li>
+          <li><a href="fashion.html">Fashion &amp; Apparel</a></li>
+          <li><a href="home.html">Home &amp; Lifestyle</a></li>
+          <li><a href="#">New Arrivals</a></li>
+          <li><a href="#">Deals</a></li>
+        </ul>
+      </div>
+      <div class="cm-footer-col">
+        <h4>Customer Service</h4>
+        <ul>
+          <li><a href="returns.html">Returns Center</a></li>
+          <li><a href="#">Track Order</a></li>
+          <li><a href="#">Contact Us</a></li>
+          <li><a href="#">FAQs</a></li>
+        </ul>
+      </div>
+      <div class="cm-footer-col">
+        <h4>About</h4>
+        <ul>
+          <li><a href="#">About Cosmic Mart</a></li>
+          <li><a href="#">Cosmic Rewards</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="cm-footer-bottom">
+      <p>© 2026 Cosmic Mart. All rights reserved.</p>
+      <p class="cm-footer-meta">Founded 2001 · 10 Markets · 144M Customers</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/mock-data.js"></script>
+<script src="js/global.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+
+    /* ----- Product cards ----- */
+    const DEALS = ['CM-G001','CM-G002','CM-G004','CM-F004','CM-H001','CM-H003'];
+    const POPULAR = ['CM-G003','CM-G006','CM-G008','CM-F001','CM-F005','CM-H004','CM-H006','CM-G005'];
+
+    function buildCard(p, isDeal) {
+      const stars = Math.round(p.rating);
+      const card = document.createElement('div');
+      card.className = 'cm-product-card' + (isDeal ? ' cm-has-deal' : '');
+
+      const badge = isDeal ? '<span class="cm-deal-badge">Deal</span>' : '';
+      const price = isDeal && p.listPrice
+        ? '<div class="cm-price-row"><span class="cm-price-now">Now $' + p.price.toFixed(2) + '</span>' +
+          '<span class="cm-price-was">$' + p.listPrice.toFixed(2) + '</span></div>'
+        : '<div class="cm-price-row"><span class="cm-price-now">$' + p.price.toFixed(2) + '</span></div>';
+
+      card.innerHTML =
+        '<div class="cm-product-img">' + badge +
+          '<img src="assets/products/' + p.id + '.jpg" alt="' + p.name + '" loading="lazy">' +
+        '</div>' +
+        '<div class="cm-product-body">' +
+          '<div class="cm-product-sku">' + p.id + '</div>' +
+          '<div class="cm-product-name">' + p.name + '</div>' +
+          '<div class="cm-rating"><span class="cm-stars">' + '★'.repeat(stars) + '☆'.repeat(5 - stars) + '</span><span class="cm-rating-num">' + p.rating + '</span></div>' +
+          price +
+          '<div class="cm-product-actions"><button class="cm-btn cm-btn-primary cm-btn-sm" onclick="alert(\'Added to cart!\')">Add to Cart</button></div>' +
+        '</div>';
+      return card;
+    }
+
+    function fillGrid(gridId, ids, isDeal) {
+      const grid = document.getElementById(gridId);
+      if (!grid || !window.mockData) return;
+      ids.forEach(function (id) {
+        const p = window.mockData.products.find(function (x) { return x.id === id; });
+        if (p) grid.appendChild(buildCard(p, isDeal));
+      });
+    }
+
+    fillGrid('dealsGrid', DEALS, true);
+    fillGrid('popularGrid', POPULAR, false);
+
+    /* ----- Promo carousel ----- */
+    const root = document.getElementById('cmCarousel');
+    if (!root) return;
+
+    const slides = root.querySelectorAll('.cm-carousel-slide');
+    const dots = Array.prototype.slice.call(document.querySelectorAll('#cmCarouselDots .cm-carousel-dot'));
+    const progress = document.getElementById('cmCarouselProgress');
+    const INTERVAL = 5000;
+    let current = 0;
+    let timer = null;
+
+    // Replay the ring animation from zero. Removing the class alone is not
+    // enough - the reflow is what makes the browser restart it.
+    function restartCountdown() {
+      if (!progress) return;
+      progress.classList.remove('is-running');
+      void progress.offsetWidth;
+      progress.classList.add('is-running');
+    }
+
+    function show(i) {
+      current = (i + slides.length) % slides.length;
+      slides.forEach(function (s, n) { s.classList.toggle('active', n === current); });
+      dots.forEach(function (d, n) { d.classList.toggle('active', n === current); });
+      restartCountdown();
+    }
+
+    function start() {
+      stop();
+      timer = setInterval(function () { show(current + 1); }, INTERVAL);
+    }
+
+    function stop() {
+      if (timer) { clearInterval(timer); timer = null; }
+    }
+
+    // Advancing manually restarts the timer so the new slide gets a full interval
+    function go(i) {
+      show(i);
+      start();
+    }
+
+    document.getElementById('cmCarouselPrev').addEventListener('click', function () { go(current - 1); });
+    document.getElementById('cmCarouselNext').addEventListener('click', function () { go(current + 1); });
+    dots.forEach(function (d, n) { d.addEventListener('click', function () { go(n); }); });
+
+    show(0);
+    start();
+  });
+</script>
+</body>
+</html>

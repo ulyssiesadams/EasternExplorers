@@ -1,0 +1,475 @@
+/* ===== PROMO CAROUSEL ===== */
+.cm-carousel {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px 24px 0;
+}
+
+.cm-carousel-viewport {
+  position: relative;
+  height: 340px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border-purple);
+}
+
+.cm-carousel-slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 48px 56px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.cm-carousel-slide.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.cm-carousel-slide-1 {
+  background: linear-gradient(120deg, #4c1d95 0%, #7c3aed 55%, #9333ea 100%);
+}
+
+.cm-carousel-slide-2 {
+  background: linear-gradient(120deg, #2d1b69 0%, #9333ea 60%, #c026d3 100%);
+}
+
+.cm-carousel-slide-3 {
+  background: linear-gradient(120deg, #0d4f5c 0%, #1e3a8a 55%, #6d28d9 100%);
+}
+
+.cm-carousel-eyebrow {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(10, 10, 26, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 6px 12px;
+  border-radius: 999px;
+  margin-bottom: 18px;
+}
+
+.cm-carousel-headline {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(24px, 3.2vw, 40px);
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: -0.5px;
+  color: var(--text-primary);
+  max-width: 620px;
+  margin-bottom: 12px;
+}
+
+.cm-carousel-sub {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.82);
+  max-width: 460px;
+  margin-bottom: 24px;
+}
+
+.cm-carousel-cta {
+  background: var(--surface-white);
+  color: var(--bg-primary);
+  border: none;
+  font-weight: 600;
+}
+
+.cm-carousel-cta:hover {
+  background: #e9e9f5;
+  color: var(--bg-primary);
+}
+
+.cm-carousel-controls {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 2;
+}
+
+/* ---- Slide artwork ----
+   The planet lives inside its slide, so it inherits the slide's
+   active/inactive visibility - only one is ever shown. z-index 1 keeps it
+   above the gradient but below the controls and dots (both z-index 2). */
+.cm-carousel-planet {
+  position: absolute;
+  z-index: 1;
+  line-height: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+.cm-carousel-planet img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* The panel is a fixed 340px tall with overflow hidden, so these are scaled
+   down from the brief's figures - at its sizes the planets would be taller
+   than the panel. Relative order (ringed largest) and tilt are preserved. */
+.cm-carousel-planet--ringed {
+  width: 460px;
+  right: -30px;
+  bottom: -80px;
+  transform: rotate(-5deg);
+}
+
+.cm-carousel-planet--asteroid {
+  width: 410px;
+  right: 28px;
+  bottom: -65px;
+  transform: rotate(5deg);
+}
+
+.cm-carousel-planet--earthlike {
+  width: 390px;
+  right: 40px;
+  bottom: -55px;
+  transform: rotate(-3deg);
+}
+
+/* Keep the copy clear of the artwork */
+.cm-carousel-headline,
+.cm-carousel-sub {
+  max-width: 58%;
+}
+
+/* ---- Countdown ring (replaces the old play/pause button) ---- */
+.cm-carousel-progress {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+}
+
+.cm-carousel-progress svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.cm-progress-track,
+.cm-progress-bar {
+  fill: none;
+  stroke-width: 3;
+}
+
+.cm-progress-track {
+  stroke: rgba(255, 255, 255, 0.25);
+}
+
+.cm-progress-bar {
+  stroke: var(--text-primary);
+  stroke-linecap: round;
+  stroke-dasharray: 106.8;
+  stroke-dashoffset: 106.8;
+}
+
+.cm-carousel-progress.is-running .cm-progress-bar {
+  animation: cm-carousel-countdown 5000ms linear forwards;
+}
+
+@keyframes cm-carousel-countdown {
+  from { stroke-dashoffset: 106.8; }
+  to   { stroke-dashoffset: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cm-carousel-progress.is-running .cm-progress-bar {
+    animation: none;
+    stroke-dashoffset: 53.4;
+  }
+}
+
+@media (max-width: 1200px) {
+  .cm-carousel-planet--ringed    { width: 360px; right: -24px; bottom: -62px; }
+  .cm-carousel-planet--asteroid  { width: 320px; right: 18px;  bottom: -50px; }
+  .cm-carousel-planet--earthlike { width: 300px; right: 26px;  bottom: -42px; }
+}
+
+@media (max-width: 860px) {
+  .cm-carousel-planet { display: none; }
+
+  .cm-carousel-headline,
+  .cm-carousel-sub { max-width: 100%; }
+}
+
+.cm-carousel-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(10, 10, 26, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: var(--text-primary);
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.cm-carousel-btn:hover {
+  background: rgba(10, 10, 26, 0.7);
+  border-color: var(--surface-white);
+}
+
+.cm-carousel-dots {
+  position: absolute;
+  bottom: 18px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  z-index: 2;
+}
+
+.cm-carousel-dot {
+  width: 9px;
+  height: 9px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  transition: background 0.2s, width 0.2s;
+}
+
+.cm-carousel-dot.active {
+  width: 26px;
+  background: var(--surface-white);
+}
+
+/* ===== SECTION HEADER ROW (title + View all) ===== */
+.cm-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.cm-section-head .cm-section-title {
+  margin-bottom: 0;
+}
+
+.cm-view-all {
+  flex-shrink: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--accent-glow);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.cm-view-all:hover {
+  color: var(--text-primary);
+}
+
+/* Section that follows another with no double padding */
+.cm-section-tight {
+  padding-top: 0;
+}
+
+/* ===== DEALS ===== */
+.cm-deals-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+}
+
+.cm-deal-badge {
+  display: inline-flex;
+  background: linear-gradient(135deg, #f59e0b, #ef4444);
+  color: var(--text-primary);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 4px;
+  letter-spacing: 0.3px;
+}
+
+.cm-product-card.cm-has-deal .cm-product-img {
+  position: relative;
+}
+
+.cm-product-card.cm-has-deal .cm-deal-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1;
+}
+
+.cm-price-row {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.cm-price-now {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.cm-price-was {
+  font-size: 13px;
+  color: var(--text-secondary);
+  text-decoration: line-through;
+}
+
+/* ===== REWARDS BANNER ===== */
+.cm-rewards-banner {
+  background: linear-gradient(135deg, rgba(45, 27, 105, 0.8), rgba(13, 79, 92, 0.6));
+  border: 1px solid rgba(192, 132, 252, 0.3);
+  border-radius: 16px;
+  padding: 48px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.cm-rewards-banner::before {
+  content: '✦';
+  position: absolute;
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 180px;
+  color: rgba(147, 51, 234, 0.08);
+  line-height: 1;
+  pointer-events: none;
+}
+
+.cm-rewards-banner-content h2 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+}
+
+.cm-rewards-banner-content p {
+  font-size: 15px;
+  color: var(--text-secondary);
+  max-width: 480px;
+}
+
+.cm-rewards-perks {
+  display: flex;
+  gap: 24px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.cm-rewards-perk {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.cm-rewards-perk::before {
+  content: '✓';
+  color: var(--success);
+  font-weight: 700;
+}
+
+.cm-rewards-cta {
+  flex-shrink: 0;
+}
+
+.cm-rewards-cta .cm-btn {
+  font-size: 16px;
+  padding: 16px 36px;
+}
+
+/* ===== FOOTER LOGO ===== */
+.cm-footer-logo {
+  width: 80px;
+  height: auto;
+  display: block;
+  margin-bottom: 14px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1280px) {
+  .cm-deals-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  .cm-carousel-viewport {
+    height: 300px;
+  }
+  .cm-carousel-slide {
+    padding: 36px 40px;
+  }
+  .cm-rewards-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 36px 28px;
+  }
+}
+
+@media (max-width: 900px) {
+  .cm-deals-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .cm-carousel {
+    padding: 16px 16px 0;
+  }
+  .cm-carousel-viewport {
+    height: 270px;
+  }
+  .cm-carousel-slide {
+    padding: 28px 24px;
+  }
+  .cm-carousel-sub {
+    font-size: 14px;
+    margin-bottom: 18px;
+  }
+  .cm-carousel-controls {
+    top: 12px;
+    right: 12px;
+  }
+  .cm-carousel-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 13px;
+  }
+  .cm-section-head {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 600px) {
+  .cm-deals-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

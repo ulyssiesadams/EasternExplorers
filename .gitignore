@@ -1,0 +1,59 @@
+# =====================================================================
+#  SECRETS - never commit these
+# =====================================================================
+# The Vocareum API key lives in cosmic-mart/.env and is attached
+# server-side by server.js. cosmic-mart/js/config.js is client-side
+# only and holds no secret, so it IS committed - the site breaks
+# without it.
+.env
+.env.*
+!.env.example
+
+# Credentials / keys of any kind
+*.pem
+*.key
+*.p12
+*.pfx
+secrets.json
+credentials.json
+
+# =====================================================================
+#  CONFIDENTIAL - withheld because the GitHub repo is PUBLIC
+# =====================================================================
+# COSMIC_MART_PROJECT_CONTEXT.md is stamped "APEX Cohort 2 | Accenture
+# Internal" and contains the client financials and sentiment analysis
+# from the brief. It stays on local disk and is shared out-of-band.
+# If the repo is ever switched to Private, delete this line and commit
+# the file so teammates get the full brief.
+/COSMIC_MART_PROJECT_CONTEXT.md
+
+# =====================================================================
+#  Local-only, per-machine files
+# =====================================================================
+**/CLAUDE.local.md
+.claude/settings.local.json
+**/.server.log
+*.log
+
+# Editor / IDE personal settings
+.vscode/
+.idea/
+
+# =====================================================================
+#  Duplicated source art
+# =====================================================================
+# These three were dropped at the repo root, then copied into
+# cosmic-mart/assets/planets/ which is what the site actually loads.
+# Ignoring the root copies avoids committing ~3.9 MB twice. The files
+# stay on disk locally.
+/cosmic_planet_ringed.png
+/cosmic_planet_earthlike.png
+/cosmic_planet_asteroid.png
+
+# =====================================================================
+#  Dependencies & OS cruft
+# =====================================================================
+node_modules/
+.DS_Store
+Thumbs.db
+desktop.ini

@@ -1,0 +1,83 @@
+window.mockData = {
+  products: [
+    { id: 'CM-G001', name: 'StarBud Pro Wireless Headphones', category: 'gadgets', price: 189.00, listPrice: 249.00, returnDays: 30, rating: 4.5, emoji: '🎧' },
+    { id: 'CM-G002', name: 'NovaPad X Tablet', category: 'gadgets', price: 449.00, listPrice: 599.00, returnDays: 30, rating: 4.3, emoji: '📱' },
+    { id: 'CM-G003', name: 'CosmicCam 4K Action Camera', category: 'gadgets', price: 299.00, returnDays: 30, rating: 4.7, emoji: '📷' },
+    { id: 'CM-G004', name: 'OrbitWatch Smartwatch', category: 'gadgets', price: 249.00, listPrice: 329.00, returnDays: 30, rating: 4.4, emoji: '⌚' },
+    { id: 'CM-G005', name: 'QuantumCharge 100W Charging Hub', category: 'gadgets', price: 79.00, returnDays: 30, rating: 4.6, emoji: '🔌' },
+    { id: 'CM-G006', name: 'AstroSound Portable Speaker', category: 'gadgets', price: 129.00, returnDays: 30, rating: 4.5, emoji: '🔊' },
+    { id: 'CM-G007', name: 'StarLink Gaming Headset', category: 'gadgets', price: 159.00, returnDays: 30, rating: 4.2, emoji: '🎮' },
+    { id: 'CM-G008', name: 'NebulaKey Mechanical Keyboard', category: 'gadgets', price: 199.00, returnDays: 30, rating: 4.8, emoji: '⌨️' },
+    { id: 'CM-F001', name: 'Nebula Zip Hoodie', category: 'fashion', price: 89.00, returnDays: 14, rating: 4.3, emoji: '🌌' },
+    { id: 'CM-F002', name: 'StarField Cargo Pants', category: 'fashion', price: 69.00, returnDays: 14, rating: 4.1, emoji: '👖' },
+    { id: 'CM-F003', name: 'Cosmic Classic Tee (3-pack)', category: 'fashion', price: 45.00, returnDays: 14, rating: 4.5, emoji: '👕' },
+    { id: 'CM-F004', name: 'AstroRunner Sneakers', category: 'fashion', price: 149.00, listPrice: 199.00, returnDays: 14, rating: 4.6, emoji: '👟' },
+    { id: 'CM-F005', name: 'Orbital Puffer Jacket', category: 'fashion', price: 199.00, returnDays: 14, rating: 4.4, emoji: '🧥' },
+    { id: 'CM-F006', name: 'GalaxyGrip Athletic Set', category: 'fashion', price: 79.00, returnDays: 14, rating: 4.2, emoji: '🏃' },
+    { id: 'CM-H001', name: 'NebulaBlend Pro Blender', category: 'home', price: 129.00, listPrice: 179.00, returnDays: 21, rating: 4.5, emoji: '🥤' },
+    { id: 'CM-H002', name: 'AstroCast Diffuser Set', category: 'home', price: 49.00, returnDays: 21, rating: 4.3, emoji: '✨' },
+    { id: 'CM-H003', name: 'CosmicComfort Weighted Blanket', category: 'home', price: 89.00, listPrice: 129.00, returnDays: 21, rating: 4.7, emoji: '🛏️' },
+    { id: 'CM-H004', name: 'StarLight Desk Lamp', category: 'home', price: 69.00, returnDays: 21, rating: 4.4, emoji: '💡' },
+    { id: 'CM-H005', name: 'OrbitPillow Memory Foam Set', category: 'home', price: 119.00, returnDays: 21, rating: 4.6, emoji: '😴' },
+    { id: 'CM-H006', name: 'GalaxyGrow Indoor Planter Kit', category: 'home', price: 59.00, returnDays: 21, rating: 4.2, emoji: '🌱' }
+  ],
+
+  orders: {
+    'ORD-2026-4471': {
+      order_id: 'ORD-2026-4471',
+      customer_id: 'CST-88821',
+      customer_name: 'Alex Chen',
+      customer_tier: 'Cosmic Rewards Tier 1',
+      market: 'US',
+      product_id: 'CM-G001',
+      product_name: 'StarBud Pro Wireless Headphones',
+      product_category: 'gadgets',
+      purchase_price: 189.00,
+      purchase_date: '2026-09-17',
+      days_since_purchase: 18,
+      order_status: 'Delivered'
+    },
+    'ORD-2026-3892': {
+      order_id: 'ORD-2026-3892',
+      customer_id: 'CST-44103',
+      customer_name: 'Jordan Rivera',
+      customer_tier: 'Standard',
+      market: 'US',
+      product_id: 'CM-F004',
+      product_name: 'AstroRunner Sneakers',
+      product_category: 'fashion',
+      purchase_price: 149.00,
+      purchase_date: '2026-09-28',
+      days_since_purchase: 7,
+      order_status: 'Delivered'
+    },
+    'ORD-2026-3201': {
+      order_id: 'ORD-2026-3201',
+      customer_id: 'CST-12554',
+      customer_name: 'Morgan Patel',
+      customer_tier: 'Cosmic Rewards Tier 2',
+      market: 'UK',
+      product_id: 'CM-H001',
+      product_name: 'NebulaBlend Pro Blender',
+      product_category: 'home',
+      purchase_price: 129.00,
+      purchase_date: '2026-09-10',
+      days_since_purchase: 25,
+      order_status: 'Delivered'
+    },
+    'ORD-2026-2744': {
+      order_id: 'ORD-2026-2744',
+      customer_id: 'CST-77230',
+      customer_name: 'Sam Okonkwo',
+      customer_tier: 'Standard',
+      market: 'Brazil',
+      product_id: 'CM-G002',
+      product_name: 'NovaPad X Tablet',
+      purchase_price: 449.00,
+      product_category: 'gadgets',
+      purchase_date: '2026-08-25',
+      days_since_purchase: 41,
+      order_status: 'Delivered'
+    }
+  }
+};
