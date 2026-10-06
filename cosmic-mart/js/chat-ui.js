@@ -125,6 +125,18 @@
 
   // ── Live case draft panel (replaces static progress overlay) ──
 
+  function delay(ms) { return new Promise(function(r) { setTimeout(r, ms); }); }
+
+  function addThinkingMessage(text) {
+    var messages = getEl('cmReturnsMessages');
+    if (!messages) return;
+    var div = document.createElement('div');
+    div.className = 'cm-bubble-thinking';
+    div.textContent = text;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
   function createCaseDraftPanel() {
     var messages = getEl('cmReturnsMessages');
     if (!messages) return;
@@ -166,7 +178,6 @@
     row.appendChild(lEl);
     row.appendChild(vEl);
     body.appendChild(row);
-    // Fast typewriter into the value cell
     var str = String(value || '—');
     var i = 0;
     function tick() {
@@ -180,51 +191,82 @@
     setTimeout(tick, 40);
   }
 
+  // Stagger each line 150ms apart so the report visibly fills in row by row.
+  // Each entry is [label, value] or [label, value, variant].
+  function staggerLines(lines) {
+    lines.forEach(function(args, i) {
+      setTimeout(function() {
+        caseDraftLine(args[0], args[1], args[2]);
+      }, i * 150);
+    });
+  }
+
   function handleCaseData(section, data) {
     if (!data) return;
+
     if (section === 'customer') {
+      addThinkingMessage('Found it — ' + (data.product || 'your item') + ', $' + (data.price || '—') + '. Purchased ' + (data.days || '—') + ' days ago.');
       caseDraftSectionHeader('CUSTOMER & ORDER');
-      caseDraftLine('Name', data.name);
-      caseDraftLine('Loyalty tier', data.tier);
-      caseDraftLine('Market', data.market);
-      caseDraftLine('Order ID', data.order_id);
-      caseDraftLine('Product', data.product);
-      caseDraftLine('Category', data.category);
-      caseDraftLine('Price', '$' + (data.price || '—'));
-      caseDraftLine('Days since purchase', (data.days || '—') + ' days');
+      staggerLines([
+        ['Name',               data.name],
+        ['Loyalty tier',       data.tier],
+        ['Market',             data.market],
+        ['Order ID',           data.order_id],
+        ['Product',            data.product],
+        ['Category',           data.category],
+        ['Price',              '$' + (data.price || '—')],
+        ['Days since purchase', (data.days || '—') + ' days']
+      ]);
+
     } else if (section === 'issue') {
+      var issueThought = data.frustrated
+        ? '⚡ I can tell you\'re frustrated with this. I\'m flagging your case for elevated care.'
+        : 'Got it — I\'ve mapped your issue. ' + (data.priority === 'high' ? 'This is a high priority case.' : 'Processing now.');
+      addThinkingMessage(issueThought);
       caseDraftSectionHeader('ISSUE ANALYSIS');
-      caseDraftLine('Description', data.description);
-      caseDraftLine('Priority', (data.priority || 'standard').toUpperCase());
-      caseDraftLine('Frustrated', data.frustrated ? '⚡ Yes — elevated care' : 'No');
-      if (data.signals && data.signals.length) {
-        caseDraftLine('Signals', data.signals.join(', '));
-      }
+      var issueLines = [
+        ['Description', data.description],
+        ['Priority',    (data.priority || 'standard').toUpperCase()],
+        ['Frustrated',  data.frustrated ? '⚡ Yes — elevated care' : 'No']
+      ];
+      if (data.signals && data.signals.length) issueLines.push(['Signals', data.signals.join(', ')]);
+      staggerLines(issueLines);
+
     } else if (section === 'eligibility') {
-      caseDraftSectionHeader('ELIGIBILITY');
       var checks = data.checks_passed || [];
-      checks.forEach(function(c) {
-        caseDraftLine(
-          (c.passed ? '✓ ' : '✗ ') + c.check.replace(/_/g, ' '),
-          c.detail || '',
-          c.passed ? 'pass' : 'fail'
-        );
+      var passed = checks.filter(function(c) { return c.passed; }).length;
+      var eligThought = data.eligible
+        ? 'Good news — all ' + passed + ' eligibility checks passed. You\'re within your return window.'
+        : 'Hmm — ' + (checks.length - passed) + ' check(s) failed. I\'ll need to escalate this.';
+      addThinkingMessage(eligThought);
+      caseDraftSectionHeader('ELIGIBILITY');
+      var eligLines = checks.map(function(c) {
+        return [(c.passed ? '✓ ' : '✗ ') + c.check.replace(/_/g, ' '), c.detail || '', c.passed ? 'pass' : 'fail'];
       });
-      caseDraftLine('Status', data.eligible ? '✓ ELIGIBLE' : '✗ INELIGIBLE', data.eligible ? 'pass' : 'fail');
+      eligLines.push(['Status', data.eligible ? '✓ ELIGIBLE' : '✗ INELIGIBLE', data.eligible ? 'pass' : 'fail']);
+      staggerLines(eligLines);
+
     } else if (section === 'classification') {
+      addThinkingMessage('This looks like a ' + (data.return_category || 'standard') + ' case — ' + (data.confidence || 'medium') + ' confidence. ' + (data.operational_flag && data.operational_flag !== 'none' ? 'Flagging: ' + data.operational_flag + '.' : ''));
       caseDraftSectionHeader('CLASSIFICATION');
-      caseDraftLine('Category', data.return_category || '—');
-      caseDraftLine('Confidence', (data.confidence || '—').toUpperCase());
-      caseDraftLine('Operational flag', data.operational_flag || '—');
+      staggerLines([
+        ['Category',         data.return_category || '—'],
+        ['Confidence',       (data.confidence || '—').toUpperCase()],
+        ['Operational flag', data.operational_flag || '—']
+      ]);
+
     } else if (section === 'resolution') {
+      addThinkingMessage('Resolution determined: ' + (data.resolution_type || 'refund') + ' approved — $' + (data.amount || '—') + ' ' + (data.currency || 'USD') + '. ' + (data.timeline || '') + '.');
       caseDraftSectionHeader('RESOLUTION');
-      caseDraftLine('Type', data.resolution_type || '—');
-      caseDraftLine('Amount', '$' + (data.amount || '—') + ' ' + (data.currency || 'USD'));
-      caseDraftLine('Timeline', data.timeline || '—');
-      caseDraftLine('Return label', data.label_provided ? 'Prepaid label emailed' : 'Not required');
-      caseDraftLine('Tier upgrade', data.tier_upgrade_applied ? '⭐ Applied' : 'None');
-      caseDraftLine('Case reference', data.case_ref || '—', 'highlight');
-      // Update header and stop spinner after a brief delay
+      var resLines = [
+        ['Type',          data.resolution_type || '—'],
+        ['Amount',        '$' + (data.amount || '—') + ' ' + (data.currency || 'USD')],
+        ['Timeline',      data.timeline || '—'],
+        ['Return label',  data.label_provided ? 'Prepaid label emailed' : 'Not required'],
+        ['Tier upgrade',  data.tier_upgrade_applied ? '⭐ Applied' : 'None'],
+        ['Case reference', data.case_ref || '—', 'highlight']
+      ];
+      staggerLines(resLines);
       setTimeout(function() {
         var titleEl = getEl('cmCaseDraftTitle');
         if (titleEl) titleEl.textContent = 'Case file — ' + (data.case_ref || '');
@@ -232,11 +274,15 @@
         if (spinner) spinner.style.display = 'none';
         caseDraftSectionHeader('STATUS');
         caseDraftLine('Resolution', '✓ CASE COMPLETE', 'pass');
-      }, 1800);
+      }, resLines.length * 150 + 1200);
+
     } else if (section === 'escalation') {
+      addThinkingMessage('This case needs specialist review. Escalating now — I\'ll make sure your details are passed along.');
       caseDraftSectionHeader('ESCALATION');
-      caseDraftLine('Case reference', data.caseRef || '—', 'highlight');
-      caseDraftLine('Reason', data.reason || 'Specialist review required', 'fail');
+      staggerLines([
+        ['Case reference', data.caseRef || '—', 'highlight'],
+        ['Reason',         data.reason || 'Specialist review required', 'fail']
+      ]);
       setTimeout(function() {
         var titleEl = getEl('cmCaseDraftTitle');
         if (titleEl) titleEl.textContent = 'Case file — ' + (data.caseRef || 'escalated');
@@ -945,6 +991,8 @@
           if (msgs) { msgs.appendChild(priorityBanner); msgs.scrollTop = msgs.scrollHeight; }
         }
 
+        // Let all staggered case draft animations finish before Nova speaks
+        await delay(2500);
         await typeMessage(result.message, 'agent');
 
         if (result.resolution && result.resolution.tier_upgrade_applied && currentOrder) {

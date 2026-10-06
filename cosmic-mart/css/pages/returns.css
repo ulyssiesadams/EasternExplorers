@@ -1724,6 +1724,23 @@
   display: inline-block;
 }
 
+/* ---- Nova thinking messages ---- */
+.cm-bubble-thinking {
+  align-self: flex-start;
+  background: rgba(147, 51, 234, 0.08);
+  border: 1px solid rgba(147, 51, 234, 0.22);
+  border-radius: 10px 10px 10px 3px;
+  color: #c084fc;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-style: italic;
+  line-height: 1.5;
+  max-width: 82%;
+  padding: 6px 12px;
+  margin: 3px 0;
+  opacity: 0.9;
+}
+
 /* ---- Live case draft panel ---- */
 .cm-case-draft {
   background: rgba(6, 8, 20, 0.92);
