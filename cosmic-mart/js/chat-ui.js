@@ -241,6 +241,7 @@
 
     var details = document.createElement('details');
     details.className = 'cm-trace-details';
+    details.open = true;
 
     var summary = document.createElement('summary');
     summary.className = 'cm-trace-summary';
@@ -535,7 +536,12 @@
     showTyping();
 
     try {
-      const intentResult = await runIntentClassifier(text);
+      // Enrich classifier input with order context so chips like
+      // "It stopped working" aren't mistaken for vague messages
+      var classifierInput = currentOrder
+        ? text + ' [Context: returning ' + currentOrder.product_name + ', ' + currentOrder.product_category + ' category, order ' + currentOrder.order_id + ']'
+        : text;
+      const intentResult = await runIntentClassifier(classifierInput);
       hideTyping();
 
       if (intentResult.intent === 'FAQ') {
