@@ -716,41 +716,126 @@
   .cm-progress-row.is-working .cm-step-num { animation: none; }
 }
 
-/* ---- Need help ---- */
-.cm-help-list {
-  list-style: none;
+/* ---- Need Help accordion ---- */
+.cm-help-accordion {
   display: flex;
   flex-direction: column;
 }
 
-.cm-help-list a {
+.cm-help-item {
+  border-bottom: 1px solid rgba(147, 51, 234, 0.12);
+}
+
+.cm-help-item:last-child {
+  border-bottom: none;
+}
+
+.cm-help-item summary {
+  list-style: none;
+}
+.cm-help-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.cm-help-summary {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   padding: 14px 2px;
   color: var(--text-primary);
-  text-decoration: none;
   font-size: 14px;
-  border-bottom: 1px solid rgba(147, 51, 234, 0.12);
+  font-weight: 500;
+  cursor: pointer;
+  user-select: none;
   transition: color 0.2s;
 }
 
-.cm-help-list li:last-child a {
-  border-bottom: none;
+.cm-help-summary:hover {
+  color: var(--accent-glow);
 }
 
-.cm-help-list a svg {
+.cm-help-summary:hover .cm-help-chevron {
+  color: var(--accent-glow);
+}
+
+.cm-help-chevron {
   color: var(--text-secondary);
   flex-shrink: 0;
+  transition: transform 0.2s ease, color 0.2s;
 }
 
-.cm-help-list a:hover {
+.cm-help-item[open] .cm-help-chevron {
+  transform: rotate(90deg);
   color: var(--accent-glow);
 }
 
-.cm-help-list a:hover svg {
+.cm-help-item[open] > .cm-help-summary {
   color: var(--accent-glow);
+}
+
+.cm-help-body {
+  padding: 0 2px 14px;
+}
+
+/* Two-column key/value rows (policy + timeline) */
+.cm-help-policy-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 10px;
+}
+
+.cm-help-policy-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+}
+
+.cm-help-policy-list li span {
+  color: var(--text-secondary);
+}
+
+.cm-help-policy-list li strong {
+  color: var(--accent-glow);
+  font-weight: 600;
+}
+
+/* Bullet list (qualifies section) */
+.cm-help-check-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.cm-help-check-list li {
+  font-size: 12px;
+  color: var(--text-secondary);
+  padding-left: 16px;
+  position: relative;
+  line-height: 1.5;
+}
+
+.cm-help-check-list li::before {
+  content: '\2713';
+  position: absolute;
+  left: 0;
+  color: var(--success);
+  font-size: 11px;
+}
+
+/* Fine-print note at bottom of each panel */
+.cm-help-note {
+  font-size: 11px;
+  color: rgba(148, 163, 184, 0.6);
+  line-height: 1.55;
+  border-top: 1px solid rgba(147, 51, 234, 0.1);
+  padding-top: 8px;
+  margin: 0;
 }
 
 /* ---- Responsive ---- */
