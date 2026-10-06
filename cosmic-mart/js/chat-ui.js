@@ -151,6 +151,62 @@
     if (p) p.remove();
   }
 
+  function addRetentionOffer(retention) {
+    var messages = getEl('cmReturnsMessages');
+    if (!messages || !retention) return;
+
+    var bubble = document.createElement('div');
+    bubble.className = 'cm-bubble-agent cm-retention-offer';
+
+    var header = document.createElement('div');
+    header.className = 'cm-retention-header';
+    header.innerHTML = '<span class="cm-retention-icon">💡</span><strong>Before we finalize your return…</strong>';
+    bubble.appendChild(header);
+
+    var text = document.createElement('p');
+    text.className = 'cm-retention-text';
+    text.textContent = retention.offer_text;
+    bubble.appendChild(text);
+
+    var amounts = document.createElement('div');
+    amounts.className = 'cm-retention-amounts';
+    amounts.innerHTML =
+      '<div class="cm-retention-amount highlight"><span>Store Credit</span><strong>$' + retention.store_credit_amount + '</strong><small>+15% more value</small></div>' +
+      '<div class="cm-retention-divider">vs</div>' +
+      '<div class="cm-retention-amount"><span>Cash Refund</span><strong>$' + retention.refund_amount + '</strong><small>3–5 business days</small></div>';
+    bubble.appendChild(amounts);
+
+    var chips = document.createElement('div');
+    chips.className = 'cm-retention-chips';
+
+    var acceptBtn = document.createElement('button');
+    acceptBtn.className = 'cm-retention-btn accept';
+    acceptBtn.textContent = 'Accept $' + retention.store_credit_amount + ' Store Credit';
+    acceptBtn.addEventListener('click', function() {
+      bubble.remove();
+      addMessage('I\'ll take the store credit!', 'user');
+      addMessage('Done! $' + retention.store_credit_amount + ' in Cosmic Mart store credit has been applied to your account. It never expires and works on everything. Your return has been closed — no need to ship anything back. Enjoy shopping!', 'agent');
+      addQuickReplies(['Contact Support']);
+    });
+
+    var declineBtn = document.createElement('button');
+    declineBtn.className = 'cm-retention-btn decline';
+    declineBtn.textContent = 'No thanks, proceed with refund';
+    declineBtn.addEventListener('click', function() {
+      bubble.remove();
+      addMessage('Proceed with refund', 'user');
+      addMessage('Understood! Your $' + retention.refund_amount + ' refund has been approved and will be returned to your original payment method within 3–5 business days. Check your email for the prepaid return label.', 'agent');
+      addQuickReplies(['Contact Support']);
+    });
+
+    chips.appendChild(acceptBtn);
+    chips.appendChild(declineBtn);
+    bubble.appendChild(chips);
+
+    messages.appendChild(bubble);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
   function addTierBenefitBanner(tier, resolution) {
     var messages = getEl('cmReturnsMessages');
     if (!messages) return;
@@ -528,6 +584,10 @@
           addTierBenefitBanner(currentOrder.customer_tier, result.resolution);
         }
 
+        if (result.retention) {
+          addRetentionOffer(result.retention);
+        }
+
         addDecisionTrace(result.trace, result.type);
 
         const caseRef = result.caseRef || (result.resolution && result.resolution.case_ref);
@@ -542,7 +602,9 @@
           caseRef ? 'Case #' + caseRef : 'See Nova\'s message above'
         );
 
-        addQuickReplies(['Contact Support']);
+        if (!result.retention) {
+          addQuickReplies(['Contact Support']);
+        }
       }
 
     } catch (err) {

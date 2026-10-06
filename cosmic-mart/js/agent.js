@@ -90,6 +90,30 @@ Only mark "high" for clear, unmistakable frustration. Be conservative.`;
   }
 }
 
+async function runRetentionAgent(context, resolution) {
+  var storeCreditAmount = Math.round(resolution.amount * 1.15);
+  const systemPrompt = `You are the Retention Agent for Cosmic Mart. The customer is returning an item because they changed their mind. Offer them Cosmic Mart store credit as an enticing alternative to a cash refund.
+
+The offer: $${storeCreditAmount} store credit (15% more than their $${resolution.amount} refund). Store credit never expires and works on any item.
+
+Write a short, warm 2-sentence offer. Be specific about both dollar amounts. End with a gentle question asking if they'd like to accept.
+
+Output ONLY valid JSON:
+{"offer_text": "string", "store_credit_amount": ${storeCreditAmount}, "refund_amount": ${resolution.amount}}`;
+
+  try {
+    const raw = await callClaude(systemPrompt, 'Product: ' + context.product + ' | Refund amount: $' + resolution.amount, 256);
+    const cleaned = raw.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '').trim();
+    return JSON.parse(cleaned);
+  } catch (e) {
+    return {
+      offer_text: 'Before we finalize your return, we can offer you $' + storeCreditAmount + ' in Cosmic Mart store credit — that\'s 15% more than your $' + resolution.amount + ' refund, and it never expires. Would you like to accept the store credit instead?',
+      store_credit_amount: storeCreditAmount,
+      refund_amount: resolution.amount
+    };
+  }
+}
+
 async function runOrchestrator(customerMessage, orderData) {
   const systemPrompt = `You are the Returns Orchestrator for Cosmic Mart. Your job is to classify a customer's message as a return request and extract the relevant context from the provided order data.
 
@@ -299,6 +323,12 @@ async function runReturnsAgent(customerMessage, orderData, progressCallback) {
   const resolution = await runResolutionGenerator(context, classification);
   if (progressCallback) progressCallback('resolution', 'done');
 
+  // Retention offer for changed-mind returns before final communication
+  var retention = null;
+  if (classification.return_category === 'CHANGED_MIND') {
+    retention = await runRetentionAgent(context, resolution);
+  }
+
   if (progressCallback) progressCallback('communication', 'active');
   const message = await runCommunicationAgent(context, classification, resolution, sentiment);
   if (progressCallback) progressCallback('communication', 'done');
@@ -309,6 +339,7 @@ async function runReturnsAgent(customerMessage, orderData, progressCallback) {
     resolution: resolution,
     caseRef: resolution.case_ref,
     sentiment: sentiment,
+    retention: retention,
     trace: { context: context, eligibility: eligibility, classification: classification, resolution: resolution }
   };
 }
