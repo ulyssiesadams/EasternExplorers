@@ -3,6 +3,16 @@
   let chatActive = false;
   let clarificationCount = 0;
   let currentCaseRef = null;
+  let currentResult = null;
+
+  const SUBSTEP_MAP = {
+    'sub-sentiment': 'cmSubSentiment',
+    'sub-context':   'cmSubContext',
+    'sub-window':    'cmSubWindow',
+    'sub-tier':      'cmSubTier',
+    'sub-restype':   'cmSubResType',
+    'sub-caseref':   'cmSubCaseRef',
+  };
 
   const agentSteps = [
     { id: 'orchestrator', label: 'Loading your order details...' },
@@ -17,12 +27,12 @@
 
   const WELCOME = 'Welcome to the Cosmic Mart Returns Center. To get started, enter your Order ID above and click "Look Up Order". I\'ll guide you through the rest.';
 
-  // Each stage drives two things at once: a row in the sidebar "Return
-  // Progress" card and the matching step in the in-chat strip.
+  // Each stage drives a sidebar row + optionally an in-chat strip step.
   const STAGES = {
-    order:      { row: 'cmProgOrder',      step: 'cmStepFind' },
-    issue:      { row: 'cmProgIssue',      step: 'cmStepDescribe' },
-    resolution: { row: 'cmProgResolution', step: 'cmStepResolve' }
+    order:       { row: 'cmProgOrder',      step: 'cmStepFind' },
+    issue:       { row: 'cmProgIssue',      step: 'cmStepDescribe' },
+    eligibility: { row: 'cmProgElig',       step: null },
+    resolution:  { row: 'cmProgResolution', step: 'cmStepResolve' }
   };
 
   function setStepNum(el, done) {
@@ -49,19 +59,36 @@
       setStepNum(row, state === 'done');
     }
 
-    const step = getEl(pair.step);
-    if (step) {
-      step.classList.remove('cm-step-active', 'cm-step-done');
-      if (state === 'done') step.classList.add('cm-step-done');
-      else if (state) step.classList.add('cm-step-active');
-      setStepNum(step, state === 'done');
+    if (pair.step) {
+      const step = getEl(pair.step);
+      if (step) {
+        step.classList.remove('cm-step-active', 'cm-step-done');
+        if (state === 'done') step.classList.add('cm-step-done');
+        else if (state) step.classList.add('cm-step-active');
+        setStepNum(step, state === 'done');
+      }
     }
+  }
+
+  function setSubstep(id, state) {
+    var el = getEl(id);
+    if (!el) return;
+    el.classList.remove('is-active', 'is-done');
+    if (state === 'active') el.classList.add('is-active');
+    else if (state === 'done') el.classList.add('is-done');
+    var num = el.querySelector('.cm-substep-num');
+    if (num) num.textContent = (state === 'done') ? '✓' : '';
   }
 
   function resetStages() {
     setStage('order', 'active', 'Order not found', 'Enter your order ID to begin');
     setStage('issue', null, 'Issue not selected', 'Tell us what happened');
+    setStage('eligibility', null, 'Eligibility pending', 'Return window & tier check');
     setStage('resolution', null, 'Resolution pending', 'Get your refund, replacement, or credit');
+    ['cmSubCustomer','cmSubOrderLoad','cmSubSentiment','cmSubContext',
+     'cmSubWindow','cmSubTier','cmSubResType','cmSubCaseRef'].forEach(function(id) {
+      setSubstep(id, null);
+    });
   }
 
   function addMessage(text, type) {
@@ -419,6 +446,144 @@
     messages.scrollTop = messages.scrollHeight;
   }
 
+  function addCaseReportBtn(result, order) {
+    var messages = getEl('cmReturnsMessages');
+    if (!messages) return;
+    var wrapper = document.createElement('div');
+    wrapper.className = 'cm-case-btn-wrapper';
+    var btn = document.createElement('button');
+    btn.className = 'cm-report-open-btn';
+    btn.innerHTML = '📄 View Full Case Report';
+    btn.addEventListener('click', function() { openReportModal(result, order); });
+    wrapper.appendChild(btn);
+    messages.appendChild(wrapper);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function openReportModal(result, order) {
+    var modal = getEl('cmReportModal');
+    var body = getEl('cmReportBody');
+    var refEl = getEl('cmReportCaseRef');
+    var metaEl = getEl('cmReportMeta');
+    var statusEl = getEl('cmReportStatusBadge');
+    if (!modal || !body) return;
+
+    var trace = result.trace || {};
+    var ctx = trace.context || {};
+    var elig = trace.eligibility || {};
+    var cls = trace.classification || {};
+    var res = trace.resolution || {};
+    var sent = result.sentiment || {};
+    var caseRef = result.caseRef || (res.case_ref) || 'N/A';
+    var now = new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    var isEscalation = result.type === 'escalation';
+
+    if (refEl) refEl.textContent = caseRef;
+    if (metaEl) metaEl.textContent = 'Generated: ' + now + '  ·  Processed by Nova AI Returns Agent';
+    if (statusEl) {
+      statusEl.textContent = isEscalation ? 'Escalated' : 'Resolved';
+      statusEl.className = 'cm-report-status-badge ' + (isEscalation ? 'escalated' : 'resolved');
+    }
+
+    var html = '';
+
+    // Customer & Order
+    html += '<div class="cm-report-section">';
+    html += '<div class="cm-report-section-title">Customer &amp; Order</div>';
+    html += '<dl>';
+    if (order) {
+      html += row('Customer', order.customer_name || ctx.customer_id || '—');
+      html += row('Customer ID', order.customer_id || ctx.customer_id || '—');
+      html += row('Loyalty Tier', order.customer_tier || ctx.customer_tier || '—');
+      html += row('Market', order.market || ctx.market || '—');
+      html += row('Order ID', order.order_id || ctx.order_id || '—');
+      html += row('Product', order.product_name || ctx.product || '—');
+      html += row('Category', order.product_category || ctx.product_category || '—');
+      html += row('Purchase Date', order.purchase_date || '—');
+      html += row('Days Since Purchase', (ctx.days_since_purchase || order.days_since_purchase || '—') + ' days');
+      html += row('Purchase Price', '$' + (order.purchase_price || ctx.purchase_price || '—'));
+    } else {
+      html += row('Customer', ctx.customer_id || '—');
+      html += row('Order ID', ctx.order_id || '—');
+      html += row('Product', ctx.product || '—');
+      html += row('Days Since Purchase', (ctx.days_since_purchase || '—') + ' days');
+    }
+    html += '</dl></div>';
+
+    // Issue
+    html += '<div class="cm-report-section">';
+    html += '<div class="cm-report-section-title">Issue Summary</div>';
+    html += '<dl>';
+    html += row('Reported Issue', ctx.issue_description || '—');
+    html += row('Priority Level', sent.priority ? sent.priority.toUpperCase() : 'STANDARD');
+    html += row('Frustrated', sent.frustrated ? '⚡ Yes — elevated care applied' : 'No');
+    if (sent.signals && sent.signals.length) {
+      html += row('Signals Detected', sent.signals.join(', '));
+    }
+    html += '</dl></div>';
+
+    // Eligibility
+    if (elig.checks_passed) {
+      html += '<div class="cm-report-section">';
+      html += '<div class="cm-report-section-title">Eligibility Assessment</div>';
+      elig.checks_passed.forEach(function(c) {
+        html += '<div class="cm-report-check ' + (c.passed ? 'pass' : 'fail') + '">' +
+          '<span class="cm-report-check-icon">' + (c.passed ? '✓' : '✗') + '</span>' +
+          '<span class="cm-report-check-name">' + c.check.replace(/_/g, ' ') + '</span>' +
+          '<span class="cm-report-check-detail">' + (c.detail || '') + '</span>' +
+          '</div>';
+      });
+      html += '</div>';
+    }
+
+    // Classification
+    if (cls.return_category) {
+      html += '<div class="cm-report-section">';
+      html += '<div class="cm-report-section-title">Return Classification</div>';
+      html += '<dl>';
+      html += row('Category', '<span class="cm-report-pill accent">' + cls.return_category + '</span>');
+      html += row('Confidence', '<span class="cm-report-pill ' + (cls.confidence === 'high' ? 'success' : 'warn') + '">' + (cls.confidence || '—').toUpperCase() + '</span>');
+      html += row('Operational Flag', cls.operational_flag || '—');
+      if (cls.reasoning) html += row('Reasoning', cls.reasoning);
+      html += '</dl></div>';
+    }
+
+    // Resolution
+    if (res.resolution_type) {
+      html += '<div class="cm-report-section">';
+      html += '<div class="cm-report-section-title">Resolution Details</div>';
+      html += '<dl>';
+      html += row('Resolution Type', res.resolution_type || '—');
+      html += row('Refund Amount', res.amount ? '$' + res.amount + ' ' + (res.currency || 'USD') : '—');
+      html += row('Timeline', res.timeline || '—');
+      html += row('Return Label', res.label_provided ? 'Prepaid label provided' : 'Not required');
+      html += row('Return Required', res.requires_return ? 'Yes' : 'No');
+      html += row('Tier Upgrade', res.tier_upgrade_applied ? '⭐ Yes — loyalty benefit applied' : 'No');
+      if (res.additional_action) html += row('Additional Action', res.additional_action);
+      html += row('Case Reference', '<strong>' + caseRef + '</strong>');
+      html += '</dl></div>';
+    }
+
+    // Resolution message
+    if (result.message) {
+      html += '<div class="cm-report-section">';
+      html += '<div class="cm-report-section-title">Resolution Message Sent to Customer</div>';
+      html += '<div class="cm-report-message-box">' + escHtml(result.message) + '</div>';
+      html += '</div>';
+    }
+
+    body.innerHTML = html;
+    modal.hidden = false;
+  }
+
+  function row(label, value) {
+    return '<div class="cm-report-row"><dt>' + label + '</dt><dd>' + value + '</dd></div>';
+  }
+
+  function escHtml(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
   function addQuickReplies(replies) {
     const messages = getEl('cmReturnsMessages');
     if (!messages) return;
@@ -581,6 +746,8 @@
 
     currentOrder = order;
     setStage('order', 'done', 'Order found', order.product_name);
+    setSubstep('cmSubCustomer', 'done');
+    setSubstep('cmSubOrderLoad', 'done');
     setStage('issue', 'active', 'Describe your issue', 'Tell Nova what happened');
 
     const info = getEl('cmOrderInfo');
@@ -678,7 +845,15 @@
         setStage('resolution', 'working', 'Working on it…', 'Nova is processing your return');
 
         const result = await runReturnsAgent(text, currentOrder, function (stepId, state) {
-          updateProgress(stepId, state);
+          if (SUBSTEP_MAP[stepId]) {
+            setSubstep(SUBSTEP_MAP[stepId], state);
+          } else {
+            updateProgress(stepId, state);
+            if (stepId === 'eligibility') {
+              if (state === 'active') setStage('eligibility', 'working', 'Checking eligibility…', 'Validating return window');
+              else if (state === 'done') setStage('eligibility', 'done', 'Eligibility verified', 'All checks passed');
+            }
+          }
         });
 
         removeProgress();
@@ -710,6 +885,12 @@
         const caseRef = result.caseRef || (result.resolution && result.resolution.case_ref);
         if (caseRef) {
           addCaseButton(caseRef, currentOrder.product_name);
+        }
+
+        // Store for report modal and add view report button
+        currentResult = result;
+        if (result.trace && result.trace.resolution) {
+          addCaseReportBtn(result, currentOrder);
         }
 
         setStage(
@@ -749,6 +930,7 @@
     chatActive = false;
     clarificationCount = 0;
     currentCaseRef = null;
+    currentResult = null;
 
     const orderInput = getEl('cmOrderInput');
     if (orderInput) orderInput.value = '';
@@ -804,6 +986,63 @@
 
     const clearBtn = getEl('cmClearChat');
     if (clearBtn) clearBtn.addEventListener('click', clearChat);
+
+    // Report modal
+    var reportModal = getEl('cmReportModal');
+    var reportClose = getEl('cmReportModalClose');
+    var reportClose2 = getEl('cmReportClose2');
+    var reportPrint = getEl('cmReportPrint');
+    var reportDownload = getEl('cmReportDownload');
+
+    function closeReportModal() { if (reportModal) reportModal.hidden = true; }
+
+    if (reportClose) reportClose.addEventListener('click', closeReportModal);
+    if (reportClose2) reportClose2.addEventListener('click', closeReportModal);
+    if (reportModal) reportModal.addEventListener('click', function(e) { if (e.target === reportModal) closeReportModal(); });
+    if (reportPrint) reportPrint.addEventListener('click', function() { window.print(); });
+    if (reportDownload) {
+      reportDownload.addEventListener('click', function() {
+        if (!currentResult) return;
+        var trace = currentResult.trace || {};
+        var ctx = trace.context || {};
+        var res = trace.resolution || {};
+        var cls = trace.classification || {};
+        var caseRef = currentResult.caseRef || res.case_ref || 'N/A';
+        var txt = [
+          'COSMIC MART — RETURN CASE REPORT',
+          '================================',
+          'Case: ' + caseRef,
+          'Generated: ' + new Date().toLocaleString(),
+          '',
+          'CUSTOMER',
+          'Customer: ' + (ctx.customer_id || '—'),
+          'Product: ' + (ctx.product || '—'),
+          'Order: ' + (ctx.order_id || '—'),
+          'Days since purchase: ' + (ctx.days_since_purchase || '—'),
+          '',
+          'ISSUE',
+          'Description: ' + (ctx.issue_description || '—'),
+          '',
+          'CLASSIFICATION',
+          'Category: ' + (cls.return_category || '—'),
+          'Confidence: ' + (cls.confidence || '—'),
+          '',
+          'RESOLUTION',
+          'Type: ' + (res.resolution_type || '—'),
+          'Amount: $' + (res.amount || '—'),
+          'Timeline: ' + (res.timeline || '—'),
+          '',
+          'MESSAGE TO CUSTOMER',
+          currentResult.message || '—'
+        ].join('\n');
+        var blob = new Blob([txt], { type: 'text/plain' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = caseRef + '-report.txt';
+        a.click();
+        URL.revokeObjectURL(a.href);
+      });
+    }
 
     const caseModal = getEl('cmCaseModal');
     const caseModalClose = getEl('cmCaseModalClose');

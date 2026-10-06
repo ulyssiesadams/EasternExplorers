@@ -270,16 +270,68 @@
         <h3 class="cm-side-title">Return Progress</h3>
         <ol class="cm-progress-list">
           <li class="cm-progress-row is-active" id="cmProgOrder">
-            <span class="cm-step-num">1</span>
-            <span class="cm-step-text"><strong>Order not found</strong><small>Enter your order ID to begin</small></span>
+            <div class="cm-prog-main">
+              <span class="cm-step-num">1</span>
+              <span class="cm-step-text"><strong>Order not found</strong><small>Enter your order ID to begin</small></span>
+            </div>
+            <ul class="cm-substep-list">
+              <li class="cm-substep" id="cmSubCustomer">
+                <span class="cm-substep-num"></span>
+                <span class="cm-substep-label">Customer verified</span>
+              </li>
+              <li class="cm-substep" id="cmSubOrderLoad">
+                <span class="cm-substep-num"></span>
+                <span class="cm-substep-label">Order details loaded</span>
+              </li>
+            </ul>
           </li>
           <li class="cm-progress-row" id="cmProgIssue">
-            <span class="cm-step-num">2</span>
-            <span class="cm-step-text"><strong>Issue not selected</strong><small>Tell us what happened</small></span>
+            <div class="cm-prog-main">
+              <span class="cm-step-num">2</span>
+              <span class="cm-step-text"><strong>Issue not selected</strong><small>Tell us what happened</small></span>
+            </div>
+            <ul class="cm-substep-list">
+              <li class="cm-substep" id="cmSubSentiment">
+                <span class="cm-substep-num"></span>
+                <span class="cm-substep-label">Sentiment analyzed</span>
+              </li>
+              <li class="cm-substep" id="cmSubContext">
+                <span class="cm-substep-num"></span>
+                <span class="cm-substep-label">Issue context mapped</span>
+              </li>
+            </ul>
+          </li>
+          <li class="cm-progress-row" id="cmProgElig">
+            <div class="cm-prog-main">
+              <span class="cm-step-num">3</span>
+              <span class="cm-step-text"><strong>Eligibility pending</strong><small>Return window &amp; tier check</small></span>
+            </div>
+            <ul class="cm-substep-list">
+              <li class="cm-substep" id="cmSubWindow">
+                <span class="cm-substep-num"></span>
+                <span class="cm-substep-label">Return window validated</span>
+              </li>
+              <li class="cm-substep" id="cmSubTier">
+                <span class="cm-substep-num"></span>
+                <span class="cm-substep-label">Loyalty tier applied</span>
+              </li>
+            </ul>
           </li>
           <li class="cm-progress-row" id="cmProgResolution">
-            <span class="cm-step-num">3</span>
-            <span class="cm-step-text"><strong>Resolution pending</strong><small>Get your refund, replacement, or credit</small></span>
+            <div class="cm-prog-main">
+              <span class="cm-step-num">4</span>
+              <span class="cm-step-text"><strong>Resolution pending</strong><small>Get your refund, replacement, or credit</small></span>
+            </div>
+            <ul class="cm-substep-list">
+              <li class="cm-substep" id="cmSubResType">
+                <span class="cm-substep-num"></span>
+                <span class="cm-substep-label">Resolution path determined</span>
+              </li>
+              <li class="cm-substep" id="cmSubCaseRef">
+                <span class="cm-substep-num"></span>
+                <span class="cm-substep-label">Case ID generated</span>
+              </li>
+            </ul>
           </li>
         </ol>
       </section>
@@ -377,6 +429,30 @@
     <div class="cm-case-modal-actions">
       <button class="cm-btn cm-btn-primary" id="cmCaseModalCopy">Copy Case Number</button>
       <a class="cm-btn cm-btn-secondary" id="cmCaseModalEmail" href="mailto:cosmomart@support.com">Email Support</a>
+    </div>
+  </div>
+</div>
+
+<!-- Case Report Modal -->
+<div class="cm-report-overlay" id="cmReportModal" hidden>
+  <div class="cm-report-modal" role="dialog" aria-modal="true" aria-label="Case Report">
+    <button class="cm-case-modal-close" id="cmReportModalClose" aria-label="Close">&#x2715;</button>
+    <div class="cm-report-header">
+      <div class="cm-report-header-left">
+        <span class="cm-report-icon">📄</span>
+        <div>
+          <h3 class="cm-report-title">Return Case Report</h3>
+          <div class="cm-report-case-ref" id="cmReportCaseRef">CM-2026-XXXX</div>
+        </div>
+      </div>
+      <span class="cm-report-status-badge" id="cmReportStatusBadge"></span>
+    </div>
+    <div class="cm-report-meta" id="cmReportMeta"></div>
+    <div class="cm-report-body" id="cmReportBody"></div>
+    <div class="cm-report-actions">
+      <button class="cm-btn cm-btn-secondary cm-report-download-btn" id="cmReportDownload">⬇ Download .txt</button>
+      <button class="cm-btn cm-btn-primary" id="cmReportPrint">🖨 Print Report</button>
+      <button class="cm-btn cm-btn-secondary" id="cmReportClose2">Close</button>
     </div>
   </div>
 </div>

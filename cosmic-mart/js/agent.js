@@ -302,40 +302,70 @@ Case reference to use: ${caseRef}`;
 }
 
 async function runReturnsAgent(customerMessage, orderData, progressCallback) {
-  const sentiment = await runSentimentAnalyzer(customerMessage);
+  var cb = function(id, state) { if (progressCallback) progressCallback(id, state); };
+  var pause = function(ms) { return new Promise(function(r) { setTimeout(r, ms); }); };
 
-  if (progressCallback) progressCallback('orchestrator', 'active');
-  const context = await runOrchestrator(customerMessage, orderData);
-  if (progressCallback) progressCallback('orchestrator', 'done');
+  // ── Sentiment (sub-sentiment substep, under Issue step) ──
+  cb('sub-sentiment', 'active');
+  var [sentiment] = await Promise.all([runSentimentAnalyzer(customerMessage), pause(1400)]);
+  cb('sub-sentiment', 'done');
+  await pause(350);
 
-  if (progressCallback) progressCallback('eligibility', 'active');
-  const eligibility = await runEligibilityChecker(context);
-  if (progressCallback) progressCallback('eligibility', 'done');
+  // ── Orchestrator (sub-context substep, under Issue step) ──
+  cb('orchestrator', 'active');
+  cb('sub-context', 'active');
+  var [context] = await Promise.all([runOrchestrator(customerMessage, orderData), pause(2000)]);
+  cb('sub-context', 'done');
+  cb('orchestrator', 'done');
+  await pause(400);
+
+  // ── Eligibility (sub-window + sub-tier substeps) ──
+  cb('eligibility', 'active');
+  cb('sub-window', 'active');
+  var [eligibility] = await Promise.all([runEligibilityChecker(context), pause(1800)]);
+  cb('sub-window', 'done');
+  await pause(550);
+  cb('sub-tier', 'active');
+  await pause(900);
+  cb('sub-tier', 'done');
+  cb('eligibility', 'done');
+  await pause(350);
 
   if (!eligibility.eligible) {
-    if (progressCallback) progressCallback('escalation', 'active');
+    cb('escalation', 'active');
     const escalation = await runEscalationAgent(context, eligibility);
-    if (progressCallback) progressCallback('escalation', 'done');
+    cb('escalation', 'done');
     return { type: 'escalation', message: escalation.message, caseRef: escalation.caseRef, sentiment: sentiment, trace: { context: context, eligibility: eligibility } };
   }
 
-  if (progressCallback) progressCallback('classifier', 'active');
-  const classification = await runReturnClassifier(context, customerMessage);
-  if (progressCallback) progressCallback('classifier', 'done');
+  // ── Classifier ──
+  cb('classifier', 'active');
+  var [classification] = await Promise.all([runReturnClassifier(context, customerMessage), pause(1600)]);
+  cb('classifier', 'done');
+  await pause(350);
 
-  if (progressCallback) progressCallback('resolution', 'active');
-  const resolution = await runResolutionGenerator(context, classification);
-  if (progressCallback) progressCallback('resolution', 'done');
+  // ── Resolution (sub-restype + sub-caseref substeps) ──
+  cb('resolution', 'active');
+  cb('sub-restype', 'active');
+  var [resolution] = await Promise.all([runResolutionGenerator(context, classification), pause(2000)]);
+  cb('sub-restype', 'done');
+  await pause(600);
+  cb('sub-caseref', 'active');
+  await pause(800);
+  cb('sub-caseref', 'done');
+  cb('resolution', 'done');
+  await pause(350);
 
-  // Retention offer for changed-mind returns before final communication
+  // ── Retention offer (CHANGED_MIND only) ──
   var retention = null;
   if (classification.return_category === 'CHANGED_MIND') {
     retention = await runRetentionAgent(context, resolution);
   }
 
-  if (progressCallback) progressCallback('communication', 'active');
+  // ── Communication ──
+  cb('communication', 'active');
   const message = await runCommunicationAgent(context, classification, resolution, sentiment);
-  if (progressCallback) progressCallback('communication', 'done');
+  cb('communication', 'done');
 
   return {
     type: 'resolution',
