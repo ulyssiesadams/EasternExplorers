@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Returns Intelligence Dashboard — Cosmic Mart</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages/dashboard.css">
+</head>
+<body>
+
+<nav class="cm-nav">
+  <div class="cm-nav-main">
+    <a href="index.html" class="cm-nav-logo">
+      <img src="assets/logo.png" alt="Cosmic Mart" class="cm-logo-img">
+    </a>
+    <button type="button" class="cm-nav-location">
+      <span class="cm-nav-location-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </span>
+      <span class="cm-nav-location-text">
+        <strong>Pickup or delivery?</strong>
+        <small>Earth &middot; Sector 7 &mdash; Orbital Hub</small>
+      </span>
+      <svg class="cm-nav-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <form class="cm-nav-search" role="search" onsubmit="return false;">
+      <input type="search" class="cm-nav-search-input" placeholder="Search everything across the cosmos" aria-label="Search Cosmic Mart">
+      <button type="button" class="cm-nav-search-btn" aria-label="Search">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+    </form>
+    <div class="cm-nav-actions">
+      <a href="#" class="cm-nav-action cm-nav-action-reorder">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <span class="cm-nav-action-text"><small>Reorder</small><strong>My Items</strong></span>
+      </a>
+      <a href="account.html" class="cm-nav-action">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span class="cm-nav-action-text"><small>Sign In</small><strong>Account</strong></span>
+      </a>
+      <a href="#" class="cm-nav-cart">
+        <span class="cm-nav-cart-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          <span class="cm-cart-badge">0</span>
+        </span>
+        <strong class="cm-nav-cart-total">$0.00</strong>
+      </a>
+    </div>
+  </div>
+  <div class="cm-nav-sub">
+    <button type="button" class="cm-nav-pill cm-nav-pill-solid">Departments <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+    <button type="button" class="cm-nav-pill cm-nav-pill-solid">Services <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+    <ul class="cm-nav-links">
+      <li><a href="index.html">Shop</a></li>
+      <li><a href="gadgets.html">Gadgets</a></li>
+      <li><a href="fashion.html">Fashion</a></li>
+      <li><a href="home.html">Home &amp; Lifestyle</a></li>
+    </ul>
+    <div class="cm-nav-end">
+      <a href="account.html" class="cm-nav-account">Account</a>
+      <div class="cm-nav-more" id="cmNavMore">
+        <button type="button" class="cm-nav-pill cm-nav-pill-more" id="cmMoreBtn" aria-haspopup="true" aria-expanded="false" aria-controls="cmMoreMenu">
+          More <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="cm-nav-more-menu" id="cmMoreMenu" role="menu" hidden>
+          <a href="returns.html" role="menuitem">Returns</a>
+          <a href="dashboard.html" role="menuitem" style="color:#c084fc;font-weight:600;">Returns Dashboard</a>
+          <a href="#" role="menuitem">New Arrivals</a>
+          <a href="#" role="menuitem">Cosmic Rewards</a>
+          <a href="#" role="menuitem">Track Order</a>
+          <a href="#" role="menuitem">Help</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main class="cm-dashboard-page">
+
+  <!-- ── Header ── -->
+  <section class="cm-dash-head">
+    <div class="cm-dash-head-text">
+      <h1>Returns Intelligence</h1>
+      <p>
+        Nova AI &mdash; 30-day performance overview &nbsp;
+        <span class="cm-dash-live"><span class="cm-dash-live-dot"></span>LIVE</span>
+      </p>
+    </div>
+    <span class="cm-dash-date">Sep 7 &ndash; Oct 6, 2026</span>
+  </section>
+
+  <!-- ── KPI Cards ── -->
+  <div class="cm-dash-kpis">
+
+    <div class="cm-kpi-card">
+      <span class="cm-kpi-icon">📦</span>
+      <span class="cm-kpi-value" id="dashReturns">1,847</span>
+      <span class="cm-kpi-label">Total Returns Processed</span>
+      <span class="cm-kpi-delta up">↑ 14% vs prior 30 days</span>
+    </div>
+
+    <div class="cm-kpi-card is-danger">
+      <span class="cm-kpi-icon">🔺</span>
+      <span class="cm-kpi-value">221</span>
+      <span class="cm-kpi-label">Escalations to Specialists</span>
+      <span class="cm-kpi-delta down">12% escalation rate</span>
+    </div>
+
+    <div class="cm-kpi-card is-warning">
+      <span class="cm-kpi-icon">🤖</span>
+      <span class="cm-kpi-value">$342</span>
+      <span class="cm-kpi-label">AI Token Cost (30 days)</span>
+      <span class="cm-kpi-delta flat">~$0.19 per resolved case</span>
+    </div>
+
+    <div class="cm-kpi-card is-success">
+      <span class="cm-kpi-icon">💳</span>
+      <span class="cm-kpi-value">$8,432</span>
+      <span class="cm-kpi-label">Store Credit Issued</span>
+      <span class="cm-kpi-delta up">↑ $3,210 vs prior period</span>
+    </div>
+
+    <div class="cm-kpi-card is-info">
+      <span class="cm-kpi-icon">⚡</span>
+      <span class="cm-kpi-value">88%</span>
+      <span class="cm-kpi-label">Auto-Resolved (no human)</span>
+      <span class="cm-kpi-delta up">↑ 6pp vs manual baseline</span>
+    </div>
+
+  </div>
+
+  <!-- ── 30-Day Trend + Return Reasons ── -->
+  <div class="cm-dash-row cols-3-2">
+
+    <div class="cm-dash-card">
+      <div class="cm-dash-card-title">Daily Return Volume</div>
+      <div class="cm-dash-card-sub">30-day trend — hover bars for exact count</div>
+      <div class="cm-bar-chart">
+        <div class="cm-bar-chart-area">
+          <!-- Heights = (value/82)*150px. Bars ordered Sep 7 → Oct 6 -->
+          <div class="cm-bar is-low"  style="height:88px"  data-value="48" title="Sep 7: 48"></div>
+          <div class="cm-bar"         style="height:113px" data-value="62" title="Sep 8: 62"></div>
+          <div class="cm-bar"         style="height:101px" data-value="55" title="Sep 9: 55"></div>
+          <div class="cm-bar is-low"  style="height:75px"  data-value="41" title="Sep 10: 41"></div>
+          <div class="cm-bar"         style="height:130px" data-value="71" title="Sep 11: 71"></div>
+          <div class="cm-bar is-high" style="height:143px" data-value="78" title="Sep 12: 78"></div>
+          <div class="cm-bar"         style="height:106px" data-value="58" title="Sep 13: 58"></div>
+          <div class="cm-bar"         style="height:91px"  data-value="50" title="Sep 14: 50"></div>
+          <div class="cm-bar is-low"  style="height:80px"  data-value="44" title="Sep 15: 44"></div>
+          <div class="cm-bar"         style="height:119px" data-value="65" title="Sep 16: 65"></div>
+          <div class="cm-bar is-high" style="height:137px" data-value="75" title="Sep 17: 75"></div>
+          <div class="cm-bar is-low"  style="height:86px"  data-value="47" title="Sep 18: 47"></div>
+          <div class="cm-bar"         style="height:113px" data-value="62" title="Sep 19: 62"></div>
+          <div class="cm-bar"         style="height:123px" data-value="67" title="Sep 20: 67"></div>
+          <div class="cm-bar"         style="height:99px"  data-value="54" title="Sep 21: 54"></div>
+          <div class="cm-bar is-low"  style="height:71px"  data-value="39" title="Sep 22: 39"></div>
+          <div class="cm-bar"         style="height:124px" data-value="68" title="Sep 23: 68"></div>
+          <div class="cm-bar is-high" style="height:150px" data-value="82" title="Sep 24: 82"></div>
+          <div class="cm-bar"         style="height:93px"  data-value="51" title="Sep 25: 51"></div>
+          <div class="cm-bar"         style="height:102px" data-value="56" title="Sep 26: 56"></div>
+          <div class="cm-bar"         style="height:115px" data-value="63" title="Sep 27: 63"></div>
+          <div class="cm-bar is-high" style="height:135px" data-value="74" title="Sep 28: 74"></div>
+          <div class="cm-bar is-low"  style="height:90px"  data-value="49" title="Sep 29: 49"></div>
+          <div class="cm-bar"         style="height:110px" data-value="60" title="Sep 30: 60"></div>
+          <div class="cm-bar"         style="height:121px" data-value="66" title="Oct 1: 66"></div>
+          <div class="cm-bar is-low"  style="height:79px"  data-value="43" title="Oct 2: 43"></div>
+          <div class="cm-bar is-high" style="height:144px" data-value="79" title="Oct 3: 79"></div>
+          <div class="cm-bar is-high" style="height:130px" data-value="71" title="Oct 4: 71"></div>
+          <div class="cm-bar"         style="height:104px" data-value="57" title="Oct 5: 57"></div>
+          <div class="cm-bar is-high" style="height:134px" data-value="73" title="Oct 6: 73"></div>
+        </div>
+        <div class="cm-bar-chart-labels">
+          <span>Sep 7</span>
+          <span style="flex:6"></span>
+          <span>Sep 14</span>
+          <span style="flex:6"></span>
+          <span>Sep 21</span>
+          <span style="flex:6"></span>
+          <span>Sep 28</span>
+          <span style="flex:2"></span>
+          <span>Oct 6</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="cm-dash-card">
+      <div class="cm-dash-card-title">Return Reasons</div>
+      <div class="cm-dash-card-sub">Breakdown by classified category</div>
+      <div class="cm-metric-list">
+        <div class="cm-metric-row">
+          <div class="cm-metric-row-header">
+            <span class="cm-metric-row-label">Defective / Malfunctioning</span>
+            <span class="cm-metric-row-value">34%</span>
+          </div>
+          <div class="cm-metric-track"><div class="cm-metric-fill" style="width:34%"></div></div>
+          <span class="cm-metric-sub">628 returns</span>
+        </div>
+        <div class="cm-metric-row">
+          <div class="cm-metric-row-header">
+            <span class="cm-metric-row-label">Changed Mind</span>
+            <span class="cm-metric-row-value">28%</span>
+          </div>
+          <div class="cm-metric-track"><div class="cm-metric-fill warning" style="width:28%"></div></div>
+          <span class="cm-metric-sub">517 returns · 43% accepted retention offer</span>
+        </div>
+        <div class="cm-metric-row">
+          <div class="cm-metric-row-header">
+            <span class="cm-metric-row-label">Wrong Item Received</span>
+            <span class="cm-metric-row-value">15%</span>
+          </div>
+          <div class="cm-metric-track"><div class="cm-metric-fill info" style="width:15%"></div></div>
+          <span class="cm-metric-sub">277 returns</span>
+        </div>
+        <div class="cm-metric-row">
+          <div class="cm-metric-row-header">
+            <span class="cm-metric-row-label">Damaged in Transit</span>
+            <span class="cm-metric-row-value">13%</span>
+          </div>
+          <div class="cm-metric-track"><div class="cm-metric-fill danger" style="width:13%"></div></div>
+          <span class="cm-metric-sub">240 returns · carrier claims auto-filed</span>
+        </div>
+        <div class="cm-metric-row">
+          <div class="cm-metric-row-header">
+            <span class="cm-metric-row-label">Description Mismatch &amp; Other</span>
+            <span class="cm-metric-row-value">10%</span>
+          </div>
+          <div class="cm-metric-track"><div class="cm-metric-fill success" style="width:10%"></div></div>
+          <span class="cm-metric-sub">185 returns</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Resolution Outcomes + Category Performance ── -->
+  <div class="cm-dash-row cols-1-1" style="margin-bottom:20px;">
+
+    <div class="cm-dash-card">
+      <div class="cm-dash-card-title">Resolution Outcomes</div>
+      <div class="cm-dash-card-sub">How Nova resolved each case</div>
+      <div class="cm-resolution-grid">
+        <div class="cm-resolution-item">
+          <span class="cm-resolution-pct" style="color:#c084fc;">52%</span>
+          <span class="cm-resolution-label">Full Refund<br>961 cases</span>
+        </div>
+        <div class="cm-resolution-item">
+          <span class="cm-resolution-pct" style="color:#10b981;">26%</span>
+          <span class="cm-resolution-label">Free Replacement<br>480 cases</span>
+        </div>
+        <div class="cm-resolution-item">
+          <span class="cm-resolution-pct" style="color:#f59e0b;">10%</span>
+          <span class="cm-resolution-label">Store Credit<br>185 cases</span>
+        </div>
+        <div class="cm-resolution-item">
+          <span class="cm-resolution-pct" style="color:#ef4444;">12%</span>
+          <span class="cm-resolution-label">Escalated<br>221 cases</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="cm-dash-card">
+      <div class="cm-dash-card-title">Category Performance</div>
+      <div class="cm-dash-card-sub">Returns volume and auto-resolution rate by product category</div>
+      <div class="cm-metric-list">
+        <div class="cm-metric-row">
+          <div class="cm-metric-row-header">
+            <span class="cm-metric-row-label">Gadgets &amp; Electronics</span>
+            <span class="cm-metric-row-value">1,071</span>
+          </div>
+          <div class="cm-metric-track"><div class="cm-metric-fill" style="width:58%"></div></div>
+          <span class="cm-metric-sub">58% of volume · 91% auto-resolved</span>
+        </div>
+        <div class="cm-metric-row">
+          <div class="cm-metric-row-header">
+            <span class="cm-metric-row-label">Fashion &amp; Apparel</span>
+            <span class="cm-metric-row-value">462</span>
+          </div>
+          <div class="cm-metric-track"><div class="cm-metric-fill warning" style="width:25%"></div></div>
+          <span class="cm-metric-sub">25% of volume · 82% auto-resolved</span>
+        </div>
+        <div class="cm-metric-row">
+          <div class="cm-metric-row-header">
+            <span class="cm-metric-row-label">Home &amp; Lifestyle</span>
+            <span class="cm-metric-row-value">314</span>
+          </div>
+          <div class="cm-metric-track"><div class="cm-metric-fill success" style="width:17%"></div></div>
+          <span class="cm-metric-sub">17% of volume · 86% auto-resolved</span>
+        </div>
+        <div class="cm-metric-row" style="margin-top:8px;padding-top:12px;border-top:1px solid rgba(147,51,234,0.12);">
+          <div class="cm-metric-row-header">
+            <span class="cm-metric-row-label">Avg resolution time</span>
+            <span class="cm-metric-row-value" style="font-family:Inter,sans-serif;color:#10b981;">22 seconds</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Sentiment Analysis + Cost Breakdown ── -->
+  <div class="cm-dash-row cols-3-2">
+
+    <div class="cm-dash-card">
+      <div class="cm-dash-card-title">Customer Sentiment Analysis</div>
+      <div class="cm-dash-card-sub">312 post-return surveys collected via email · AI-processed</div>
+
+      <div class="cm-sentiment-header">
+        <div class="cm-sentiment-score">
+          <span class="cm-sentiment-number">4.1</span>
+          <span class="cm-sentiment-stars">
+            <span class="cm-star-filled">★★★★</span><span class="cm-star-empty">★</span>
+          </span>
+          <span class="cm-sentiment-out-of">out of 5 · 312 reviews</span>
+        </div>
+        <div class="cm-sentiment-breakdown">
+          <div class="cm-sentiment-bar-row">
+            <span class="cm-sentiment-bar-label">5</span>
+            <span class="cm-sentiment-bar-stars">★</span>
+            <div class="cm-sentiment-bar-track"><div class="cm-sentiment-bar-fill" style="width:54%"></div></div>
+            <span class="cm-sentiment-bar-count">169</span>
+          </div>
+          <div class="cm-sentiment-bar-row">
+            <span class="cm-sentiment-bar-label">4</span>
+            <span class="cm-sentiment-bar-stars">★</span>
+            <div class="cm-sentiment-bar-track"><div class="cm-sentiment-bar-fill" style="width:24%"></div></div>
+            <span class="cm-sentiment-bar-count">75</span>
+          </div>
+          <div class="cm-sentiment-bar-row">
+            <span class="cm-sentiment-bar-label">3</span>
+            <span class="cm-sentiment-bar-stars">★</span>
+            <div class="cm-sentiment-bar-track"><div class="cm-sentiment-bar-fill" style="width:10%"></div></div>
+            <span class="cm-sentiment-bar-count">31</span>
+          </div>
+          <div class="cm-sentiment-bar-row">
+            <span class="cm-sentiment-bar-label">2</span>
+            <span class="cm-sentiment-bar-stars">★</span>
+            <div class="cm-sentiment-bar-track"><div class="cm-sentiment-bar-fill" style="width:8%"></div></div>
+            <span class="cm-sentiment-bar-count">25</span>
+          </div>
+          <div class="cm-sentiment-bar-row">
+            <span class="cm-sentiment-bar-label">1</span>
+            <span class="cm-sentiment-bar-stars">★</span>
+            <div class="cm-sentiment-bar-track"><div class="cm-sentiment-bar-fill" style="width:4%"></div></div>
+            <span class="cm-sentiment-bar-count">12</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="cm-reviews-grid">
+
+        <div class="cm-review-card">
+          <div class="cm-review-meta">
+            <span class="cm-review-author">Marcus T.</span>
+            <span class="cm-review-date">Oct 3</span>
+          </div>
+          <div class="cm-review-stars"><span class="cm-star-filled">★★★★★</span></div>
+          <p class="cm-review-text">"Resolved my defective headphone return in under 2 minutes. Didn't call anyone, didn't wait on hold. This is how returns should work."</p>
+        </div>
+
+        <div class="cm-review-card">
+          <div class="cm-review-meta">
+            <span class="cm-review-author">Priya S.</span>
+            <span class="cm-review-date">Oct 1</span>
+          </div>
+          <div class="cm-review-stars"><span class="cm-star-filled">★★★★</span><span class="cm-star-empty">★</span></div>
+          <p class="cm-review-text">"Really smooth overall. Nova explained why my return qualified and what comes next. A little verbose but I got there."</p>
+        </div>
+
+        <div class="cm-review-card">
+          <div class="cm-review-meta">
+            <span class="cm-review-author">Derek W.</span>
+            <span class="cm-review-date">Sep 22</span>
+          </div>
+          <div class="cm-review-stars"><span class="cm-star-filled">★★</span><span class="cm-star-empty">★★★</span></div>
+          <p class="cm-review-text">"The bot kept offering store credit after I clearly said I wanted a cash refund. Had to decline twice. Fix this."</p>
+        </div>
+
+        <div class="cm-review-card">
+          <div class="cm-review-meta">
+            <span class="cm-review-author">Kelsey M.</span>
+            <span class="cm-review-date">Sep 25</span>
+          </div>
+          <div class="cm-review-stars"><span class="cm-star-filled">★★★★★</span></div>
+          <p class="cm-review-text">"Got offered store credit worth more than my refund — didn't know that was even an option. Done in 90 seconds."</p>
+        </div>
+
+        <div class="cm-review-card">
+          <div class="cm-review-meta">
+            <span class="cm-review-author">Sam L.</span>
+            <span class="cm-review-date">Sep 15</span>
+          </div>
+          <div class="cm-review-stars"><span class="cm-star-filled">★★</span><span class="cm-star-empty">★★★</span></div>
+          <p class="cm-review-text">"Told it my item was defective and it asked 'which item?' I had literally just looked up my order. Come on."</p>
+        </div>
+
+        <div class="cm-review-card">
+          <div class="cm-review-meta">
+            <span class="cm-review-author">Nina C.</span>
+            <span class="cm-review-date">Sep 20</span>
+          </div>
+          <div class="cm-review-stars"><span class="cm-star-filled">★★★★★</span></div>
+          <p class="cm-review-text">"Case got escalated and a real person followed up in under 3 hours exactly like promised. Solid."</p>
+        </div>
+
+        <div class="cm-review-card">
+          <div class="cm-review-meta">
+            <span class="cm-review-author">Owen B.</span>
+            <span class="cm-review-date">Sep 18</span>
+          </div>
+          <div class="cm-review-stars"><span class="cm-star-filled">★★★</span><span class="cm-star-empty">★★</span></div>
+          <p class="cm-review-text">"Faster than I expected, but I still had to chase the shipping label separately. Not fully joined up yet."</p>
+        </div>
+
+        <div class="cm-review-card">
+          <div class="cm-review-meta">
+            <span class="cm-review-author">Jamie R.</span>
+            <span class="cm-review-date">Sep 28</span>
+          </div>
+          <div class="cm-review-stars"><span class="cm-star-filled">★★★</span><span class="cm-star-empty">★★</span></div>
+          <p class="cm-review-text">"Had to rephrase my problem twice before it clicked. Took longer than it should have, but got there eventually."</p>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="cm-dash-card">
+      <div class="cm-dash-card-title">AI Cost Breakdown</div>
+      <div class="cm-dash-card-sub">Nova token usage — 30-day period</div>
+
+      <table class="cm-cost-table">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th style="text-align:right;">Cost</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              Intent Classifier calls
+              <span class="cm-cost-tag">×1,847</span>
+            </td>
+            <td>$18.40</td>
+          </tr>
+          <tr>
+            <td>
+              Orchestrator + Eligibility
+              <span class="cm-cost-tag">×1,847</span>
+            </td>
+            <td>$62.10</td>
+          </tr>
+          <tr>
+            <td>
+              Return Classifier
+              <span class="cm-cost-tag">×1,626</span>
+            </td>
+            <td>$31.20</td>
+          </tr>
+          <tr>
+            <td>
+              Resolution Generator
+              <span class="cm-cost-tag">×1,626</span>
+            </td>
+            <td>$54.80</td>
+          </tr>
+          <tr>
+            <td>
+              Communication Agent
+              <span class="cm-cost-tag">×1,626</span>
+            </td>
+            <td>$89.60</td>
+          </tr>
+          <tr>
+            <td>
+              Escalation Agent
+              <span class="cm-cost-tag">×221</span>
+            </td>
+            <td>$22.10</td>
+          </tr>
+          <tr>
+            <td>
+              Sentiment Analyzer
+              <span class="cm-cost-tag">×1,847</span>
+            </td>
+            <td>$8.40</td>
+          </tr>
+          <tr>
+            <td>
+              Retention Agent
+              <span class="cm-cost-tag">×517</span>
+            </td>
+            <td>$19.90</td>
+          </tr>
+          <tr>
+            <td>
+              FAQ Agent
+              <span class="cm-cost-tag">×1,104</span>
+            </td>
+            <td>$36.00</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr class="cm-cost-total">
+            <td>Total (30 days)</td>
+            <td>$342.50</td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <div style="margin-top:18px;padding-top:14px;border-top:1px solid rgba(147,51,234,0.12);">
+        <div class="cm-metric-list">
+          <div class="cm-metric-row">
+            <div class="cm-metric-row-header">
+              <span class="cm-metric-row-label">Retention revenue saved</span>
+              <span class="cm-metric-row-value" style="color:#10b981;">$18,650</span>
+            </div>
+          </div>
+          <div class="cm-metric-row">
+            <div class="cm-metric-row-header">
+              <span class="cm-metric-row-label">Cost per resolved case</span>
+              <span class="cm-metric-row-value">$0.19</span>
+            </div>
+          </div>
+          <div class="cm-metric-row">
+            <div class="cm-metric-row-header">
+              <span class="cm-metric-row-label">Est. human agent cost saved</span>
+              <span class="cm-metric-row-value" style="color:#10b981;">$14,200</span>
+            </div>
+            <div class="cm-metric-track" style="margin-top:6px;"><div class="cm-metric-fill success" style="width:97%"></div></div>
+            <span class="cm-metric-sub">vs. $8.50/case manual processing at 88% volume</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<footer class="cm-footer">
+  <div class="cm-footer-inner">
+    <div class="cm-footer-bottom">
+      <p>© 2026 Cosmic Mart. All rights reserved.</p>
+      <p class="cm-footer-meta"><a href="returns.html">← Back to Returns</a></p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/mock-data.js"></script>
+<script src="js/global.js"></script>
+</body>
+</html>
