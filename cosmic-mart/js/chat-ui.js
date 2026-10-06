@@ -276,6 +276,17 @@
       }
       return;
     }
+    // "I'm ready to return this" — Nova already knows the product, skip the classifier
+    // and ask directly about the issue with the loaded product
+    if (reply === "I'm ready to return this") {
+      removeQuickReplies();
+      addMessage(reply, 'user');
+      var productName = currentOrder ? currentOrder.product_name : 'your item';
+      addMessage("What’s the issue with your " + productName + "? Choose below or describe it in your own words.", 'agent');
+      addQuickReplies(["It stopped working / it’s defective", "Wrong item received", "I changed my mind", "It arrived damaged"]);
+      return;
+    }
+
     // Other quick replies: treat as a typed user message
     removeQuickReplies();
     var input = getEl('cmReturnsInput');
