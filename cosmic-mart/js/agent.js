@@ -165,7 +165,9 @@ Check 2 - Proof of purchase: Always true for orders in the system.
 Check 3 - Category returnable: Almost all products are returnable. Only opened software/digital products are not.
 Check 4 - Market exception: Brazil has the same policy as US. UK follows EU rules (slightly extended). No exceptions for this order set.
 
-If ALL 4 checks pass, eligible is true. If any fail, eligible is false and reason explains the primary failure.`;
+If ALL 4 checks pass, eligible is true. If any fail, eligible is false and reason explains the primary failure.
+
+IMPORTANT: Keep each "detail" value to one short phrase, 8 words max. Example: "18 of 37 days (Tier 1 extended)" not a full sentence.`;
 
   const userMessage = `Context: ${JSON.stringify(context, null, 2)}`;
 
@@ -244,22 +246,24 @@ Classification: ${JSON.stringify(classification, null, 2)}`;
 
 async function runCommunicationAgent(context, classification, resolution, sentimentData) {
   var priorityNote = (sentimentData && sentimentData.frustrated)
-    ? '\n\nPRIORITY: This customer is clearly frustrated. Open with extra empathy and acknowledgment of their experience before anything else. Show genuine care — make them feel heard first, resolved second.'
+    ? '\n\nPRIORITY: Customer is frustrated. Lead with extra empathy — make them feel heard before anything else.'
     : '';
 
-  const systemPrompt = `You are the Communication Agent for Cosmic Mart. Write a warm, clear, complete customer-facing message about their return resolution.
+  const systemPrompt = `You are the Communication Agent for Cosmic Mart. Write a warm, punchy resolution message.
 
-Every message MUST include:
-1. Empathy/acknowledgment of the issue
-2. The decision (what was approved)
-3. Why it was approved (brief)
-4. What the customer needs to do next (specific next steps)
-5. The case reference number (formatted boldly as: Case #[ref])
-6. Timeline for refund/replacement
+Rules:
+- Address the customer by first name
+- ONE sentence of genuine empathy (no clichés like "we apologize for the inconvenience")
+- ONE sentence stating what was approved and why
+- ONE sentence on what happens next (timeline, no action needed, etc.)
+- Do NOT include the case reference number — it is shown separately
+- Do NOT mention the refund dollar amount more than once
+- Do NOT use markdown, headers, or bullet points
+- Do NOT add a sign-off or closing sentence
 
-Tone: Warm, professional, reassuring. Like a great customer service rep who actually wants to help.
-Format: Plain text, 3-4 short paragraphs. Do not use markdown headers. Do not use bullet points.
-Length: 100-180 words.` + priorityNote;
+Tone: Warm and direct. Like a real person, not a script.
+Format: 2 short paragraphs max.
+Length: 50-70 words MAXIMUM. Shorter is better.` + priorityNote;
 
   const userMessage = `Product: ${context.product}
 Customer tier: ${context.customer_tier}

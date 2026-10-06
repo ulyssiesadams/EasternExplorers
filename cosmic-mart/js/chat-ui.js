@@ -151,6 +151,110 @@
     if (p) p.remove();
   }
 
+  function typeMessage(text, type) {
+    return new Promise(function(resolve) {
+      var messages = getEl('cmReturnsMessages');
+      if (!messages) { resolve(null); return; }
+      var div = document.createElement('div');
+      div.className = type === 'user' ? 'cm-bubble-user' : 'cm-bubble-agent';
+      messages.appendChild(div);
+      messages.scrollTop = messages.scrollHeight;
+      var i = 0;
+      var chunkSize = 6;
+      var delay = 28;
+      function tick() {
+        if (i < text.length) {
+          i = Math.min(i + chunkSize, text.length);
+          div.textContent = text.slice(0, i);
+          messages.scrollTop = messages.scrollHeight;
+          setTimeout(tick, delay);
+        } else {
+          resolve(div);
+        }
+      }
+      setTimeout(tick, 80);
+    });
+  }
+
+  function addWhatNextStrip(trace) {
+    var messages = getEl('cmReturnsMessages');
+    if (!messages || !trace) return;
+
+    var cat = trace.classification && trace.classification.return_category;
+    var steps = [];
+
+    if (cat === 'DAMAGED_TRANSIT') {
+      steps = [
+        { icon: '📋', label: 'Carrier Claim Filed', sub: 'Done automatically' },
+        { icon: '💳', label: 'Refund Initiated', sub: 'Within 24 hours' },
+        { icon: '✅', label: 'Money Back', sub: '3–5 business days' }
+      ];
+    } else if (cat === 'DEFECTIVE') {
+      steps = [
+        { icon: '✅', label: 'Return Approved', sub: 'Done' },
+        { icon: '📧', label: 'Label Emailed', sub: 'Check your inbox' },
+        { icon: '💳', label: 'Refund or Replacement', sub: '2–5 business days' }
+      ];
+    } else if (cat === 'WRONG_ITEM') {
+      steps = [
+        { icon: '✅', label: 'Return Approved', sub: 'Done' },
+        { icon: '📧', label: 'Label Emailed', sub: 'Check your inbox' },
+        { icon: '💳', label: 'Refund Processed', sub: '3–5 business days' }
+      ];
+    } else {
+      steps = [
+        { icon: '✅', label: 'Return Approved', sub: 'Done' },
+        { icon: '📧', label: 'Label Emailed', sub: 'Check your inbox' },
+        { icon: '💳', label: 'Refund Processed', sub: '3–5 business days' }
+      ];
+    }
+
+    var strip = document.createElement('div');
+    strip.className = 'cm-whats-next';
+
+    var header = document.createElement('div');
+    header.className = 'cm-whats-next-title';
+    header.textContent = 'What happens next';
+    strip.appendChild(header);
+
+    var steps_el = document.createElement('div');
+    steps_el.className = 'cm-whats-next-steps';
+
+    steps.forEach(function(step, idx) {
+      var item = document.createElement('div');
+      item.className = 'cm-whats-next-step';
+      item.innerHTML =
+        '<div class="cm-wn-icon">' + step.icon + '</div>' +
+        '<div class="cm-wn-label">' + step.label + '</div>' +
+        '<div class="cm-wn-sub">' + step.sub + '</div>';
+      steps_el.appendChild(item);
+
+      if (idx < steps.length - 1) {
+        var sep = document.createElement('div');
+        sep.className = 'cm-wn-arrow';
+        sep.textContent = '→';
+        steps_el.appendChild(sep);
+      }
+    });
+
+    strip.appendChild(steps_el);
+    messages.appendChild(strip);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function getContextualChips(trace, resultType) {
+    if (resultType === 'escalation') return ['Contact Support'];
+    if (!trace || !trace.classification) return ['Contact Support'];
+    var cat = trace.classification.return_category;
+    var prodCat = trace.context && trace.context.product_category;
+    if (cat === 'DAMAGED_TRANSIT' || cat === 'DEFECTIVE') {
+      var shopLabel = prodCat === 'gadgets' ? 'Browse Gadgets →' : prodCat === 'fashion' ? 'Browse Fashion →' : 'Keep Shopping →';
+      return [shopLabel, 'Contact Support'];
+    }
+    if (cat === 'WRONG_ITEM') return ['Keep Shopping →', 'Contact Support'];
+    return ['Contact Support'];
+  }
+
   function addRetentionOffer(retention) {
     var messages = getEl('cmReturnsMessages');
     if (!messages || !retention) return;
@@ -413,6 +517,9 @@
   }
 
   async function handleQuickReply(reply) {
+    if (reply === 'Browse Gadgets →') { window.location.href = 'gadgets.html'; return; }
+    if (reply === 'Browse Fashion →') { window.location.href = 'fashion.html'; return; }
+    if (reply === 'Keep Shopping →') { window.location.href = 'index.html'; return; }
     if (reply === 'Contact Support') {
       var caseRef = currentCaseRef || ('CM-' + new Date().getFullYear() + '-' + (currentOrder ? currentOrder.order_id.split('-').pop() : '0000'));
       openCaseModal(caseRef, currentOrder ? currentOrder.product_name : '');
@@ -584,7 +691,7 @@
           if (msgs) { msgs.appendChild(priorityBanner); msgs.scrollTop = msgs.scrollHeight; }
         }
 
-        addMessage(result.message, 'agent');
+        await typeMessage(result.message, 'agent');
 
         if (result.resolution && result.resolution.tier_upgrade_applied && currentOrder) {
           addTierBenefitBanner(currentOrder.customer_tier, result.resolution);
@@ -592,6 +699,10 @@
 
         if (result.retention) {
           addRetentionOffer(result.retention);
+        }
+
+        if (!result.retention) {
+          addWhatNextStrip(result.trace);
         }
 
         addDecisionTrace(result.trace, result.type);
@@ -609,7 +720,7 @@
         );
 
         if (!result.retention) {
-          addQuickReplies(['Contact Support']);
+          addQuickReplies(getContextualChips(result.trace, result.type));
         }
       }
 
