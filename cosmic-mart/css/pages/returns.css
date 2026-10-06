@@ -1076,6 +1076,29 @@
   align-items: center;
 }
 
+/* ---- Priority case banner ---- */
+.cm-priority-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 9px;
+  background: rgba(234, 179, 8, 0.1);
+  border: 1px solid rgba(234, 179, 8, 0.35);
+  font-size: 12px;
+  font-weight: 500;
+  color: #f59e0b;
+  margin: 6px 0 4px;
+  animation: cm-priority-in 0.3s ease;
+}
+
+.cm-priority-icon { font-size: 14px; }
+
+@keyframes cm-priority-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 /* ---- AI Decision Trace panel ---- */
 .cm-trace-wrapper {
   margin: 10px 0 4px;

@@ -488,6 +488,15 @@
         });
 
         removeProgress();
+
+        if (result.sentiment && result.sentiment.frustrated) {
+          var priorityBanner = document.createElement('div');
+          priorityBanner.className = 'cm-priority-banner';
+          priorityBanner.innerHTML = '<span class="cm-priority-icon">⚡</span><span>Priority case detected — Nova is responding with elevated care</span>';
+          var msgs = getEl('cmReturnsMessages');
+          if (msgs) { msgs.appendChild(priorityBanner); msgs.scrollTop = msgs.scrollHeight; }
+        }
+
         addMessage(result.message, 'agent');
         addDecisionTrace(result.trace, result.type);
 

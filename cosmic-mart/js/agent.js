@@ -71,6 +71,25 @@ Tone: Warm and reassuring. Length: 60–80 words. Plain text only.`;
   return { message: reply, caseRef: caseRef };
 }
 
+async function runSentimentAnalyzer(customerMessage) {
+  const systemPrompt = `You are a sentiment analyzer for Cosmic Mart's returns portal. Detect customer frustration signals.
+
+Look for: repeated issues ("again", "third time"), strong language ("unacceptable", "terrible", "furious"), review threats ("leaving a review", "social media"), urgency ("need this now", "asap"), emotional distress.
+
+Output ONLY valid JSON, no other text:
+{"frustrated": boolean, "priority": "high" | "standard", "signals": ["signal description"] or []}
+
+Only mark "high" for clear, unmistakable frustration. Be conservative.`;
+
+  try {
+    const raw = await callClaude(systemPrompt, 'Customer message: "' + customerMessage + '"', 128);
+    const cleaned = raw.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '').trim();
+    return JSON.parse(cleaned);
+  } catch (e) {
+    return { frustrated: false, priority: 'standard', signals: [] };
+  }
+}
+
 async function runOrchestrator(customerMessage, orderData) {
   const systemPrompt = `You are the Returns Orchestrator for Cosmic Mart. Your job is to classify a customer's message as a return request and extract the relevant context from the provided order data.
 
@@ -199,7 +218,11 @@ Classification: ${JSON.stringify(classification, null, 2)}`;
   return JSON.parse(cleaned);
 }
 
-async function runCommunicationAgent(context, classification, resolution) {
+async function runCommunicationAgent(context, classification, resolution, sentimentData) {
+  var priorityNote = (sentimentData && sentimentData.frustrated)
+    ? '\n\nPRIORITY: This customer is clearly frustrated. Open with extra empathy and acknowledgment of their experience before anything else. Show genuine care — make them feel heard first, resolved second.'
+    : '';
+
   const systemPrompt = `You are the Communication Agent for Cosmic Mart. Write a warm, clear, complete customer-facing message about their return resolution.
 
 Every message MUST include:
@@ -212,7 +235,7 @@ Every message MUST include:
 
 Tone: Warm, professional, reassuring. Like a great customer service rep who actually wants to help.
 Format: Plain text, 3-4 short paragraphs. Do not use markdown headers. Do not use bullet points.
-Length: 100-180 words.`;
+Length: 100-180 words.` + priorityNote;
 
   const userMessage = `Product: ${context.product}
 Customer tier: ${context.customer_tier}
@@ -251,6 +274,8 @@ Case reference to use: ${caseRef}`;
 }
 
 async function runReturnsAgent(customerMessage, orderData, progressCallback) {
+  const sentiment = await runSentimentAnalyzer(customerMessage);
+
   if (progressCallback) progressCallback('orchestrator', 'active');
   const context = await runOrchestrator(customerMessage, orderData);
   if (progressCallback) progressCallback('orchestrator', 'done');
@@ -263,7 +288,7 @@ async function runReturnsAgent(customerMessage, orderData, progressCallback) {
     if (progressCallback) progressCallback('escalation', 'active');
     const escalation = await runEscalationAgent(context, eligibility);
     if (progressCallback) progressCallback('escalation', 'done');
-    return { type: 'escalation', message: escalation.message, caseRef: escalation.caseRef, trace: { context: context, eligibility: eligibility } };
+    return { type: 'escalation', message: escalation.message, caseRef: escalation.caseRef, sentiment: sentiment, trace: { context: context, eligibility: eligibility } };
   }
 
   if (progressCallback) progressCallback('classifier', 'active');
@@ -275,7 +300,7 @@ async function runReturnsAgent(customerMessage, orderData, progressCallback) {
   if (progressCallback) progressCallback('resolution', 'done');
 
   if (progressCallback) progressCallback('communication', 'active');
-  const message = await runCommunicationAgent(context, classification, resolution);
+  const message = await runCommunicationAgent(context, classification, resolution, sentiment);
   if (progressCallback) progressCallback('communication', 'done');
 
   return {
@@ -283,6 +308,7 @@ async function runReturnsAgent(customerMessage, orderData, progressCallback) {
     message: message,
     resolution: resolution,
     caseRef: resolution.case_ref,
+    sentiment: sentiment,
     trace: { context: context, eligibility: eligibility, classification: classification, resolution: resolution }
   };
 }
