@@ -1076,6 +1076,55 @@
   align-items: center;
 }
 
+/* ---- Loyalty tier benefit banner ---- */
+.cm-tier-banner {
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(147, 51, 234, 0.08) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  margin: 8px 0 4px;
+  animation: cm-priority-in 0.35s ease;
+}
+
+.cm-tier-banner-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.cm-tier-banner-icon { font-size: 16px; }
+
+.cm-tier-banner-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #f59e0b;
+  letter-spacing: 0.3px;
+}
+
+.cm-tier-banner-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cm-tier-banner-list li {
+  font-size: 12px;
+  color: var(--text-secondary);
+  padding-left: 14px;
+  position: relative;
+  line-height: 1.5;
+}
+
+.cm-tier-banner-list li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: #f59e0b;
+  font-size: 11px;
+}
+
 /* ---- Priority case banner ---- */
 .cm-priority-banner {
   display: flex;

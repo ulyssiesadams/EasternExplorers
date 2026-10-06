@@ -151,6 +151,31 @@
     if (p) p.remove();
   }
 
+  function addTierBenefitBanner(tier, resolution) {
+    var messages = getEl('cmReturnsMessages');
+    if (!messages) return;
+
+    var isT2 = tier && tier.indexOf('2') !== -1;
+    var benefits = [];
+    if (resolution.options && resolution.options.length) {
+      benefits.push('Upgraded to: ' + (isT2 ? 'Priority replacement + full refund' : 'Full refund (standard upgrade)'));
+    }
+    benefits.push(isT2 ? '+7 day return window · Priority shipping on replacement' : '+7 day return window extension');
+
+    var banner = document.createElement('div');
+    banner.className = 'cm-tier-banner';
+    banner.innerHTML =
+      '<div class="cm-tier-banner-header">' +
+        '<span class="cm-tier-banner-icon">⭐</span>' +
+        '<span class="cm-tier-banner-title">' + (tier || 'Loyalty Member') + ' Benefit Applied</span>' +
+      '</div>' +
+      '<ul class="cm-tier-banner-list">' +
+        benefits.map(function(b) { return '<li>' + b + '</li>'; }).join('') +
+      '</ul>';
+    messages.appendChild(banner);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
   function addDecisionTrace(trace, resultType) {
     var messages = getEl('cmReturnsMessages');
     if (!messages || !trace) return;
@@ -498,6 +523,11 @@
         }
 
         addMessage(result.message, 'agent');
+
+        if (result.resolution && result.resolution.tier_upgrade_applied && currentOrder) {
+          addTierBenefitBanner(currentOrder.customer_tier, result.resolution);
+        }
+
         addDecisionTrace(result.trace, result.type);
 
         const caseRef = result.caseRef || (result.resolution && result.resolution.case_ref);
