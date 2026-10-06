@@ -283,6 +283,53 @@
         </ol>
       </section>
 
+      <section class="cm-side-card cm-analytics-card">
+        <h3 class="cm-side-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Returns Intelligence
+          <span class="cm-analytics-live"><span class="cm-analytics-dot"></span>LIVE</span>
+        </h3>
+        <div class="cm-analytics-grid">
+          <div class="cm-analytics-stat">
+            <span class="cm-analytics-value" id="cmStatResolved">147</span>
+            <span class="cm-analytics-label">Resolved Today</span>
+            <span class="cm-analytics-delta up">+12 this hour</span>
+          </div>
+          <div class="cm-analytics-stat">
+            <span class="cm-analytics-value" id="cmStatTime">22s</span>
+            <span class="cm-analytics-label">Avg Resolution</span>
+            <span class="cm-analytics-delta up">↓ 3s faster</span>
+          </div>
+          <div class="cm-analytics-stat">
+            <span class="cm-analytics-value" id="cmStatAuto">88%</span>
+            <span class="cm-analytics-label">Auto-Resolved</span>
+            <span class="cm-analytics-delta up">+2% vs yesterday</span>
+          </div>
+          <div class="cm-analytics-stat">
+            <span class="cm-analytics-value" id="cmStatSat">4.8</span>
+            <span class="cm-analytics-label">CSAT Score</span>
+            <span class="cm-analytics-delta up">↑ 0.3 this week</span>
+          </div>
+        </div>
+        <div class="cm-analytics-bars">
+          <div class="cm-analytics-bar-row">
+            <span>Escalation rate</span>
+            <div class="cm-analytics-bar-track"><div class="cm-analytics-bar-fill" style="width:12%"></div></div>
+            <span class="cm-analytics-bar-pct">12%</span>
+          </div>
+          <div class="cm-analytics-bar-row">
+            <span>Tier upgrade rate</span>
+            <div class="cm-analytics-bar-track"><div class="cm-analytics-bar-fill accent" style="width:31%"></div></div>
+            <span class="cm-analytics-bar-pct">31%</span>
+          </div>
+          <div class="cm-analytics-bar-row">
+            <span>Retention offer accepted</span>
+            <div class="cm-analytics-bar-track"><div class="cm-analytics-bar-fill success" style="width:43%"></div></div>
+            <span class="cm-analytics-bar-pct">43%</span>
+          </div>
+        </div>
+      </section>
+
       <section class="cm-side-card">
         <h3 class="cm-side-title">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
@@ -388,6 +435,19 @@
         lookup.click();
       });
     });
+
+    // Analytics counter — increment "Resolved Today" occasionally to look live
+    (function() {
+      var el = document.getElementById('cmStatResolved');
+      if (!el) return;
+      var count = 147;
+      setInterval(function() {
+        if (Math.random() < 0.3) {
+          count++;
+          el.textContent = count;
+        }
+      }, 8000);
+    })();
 
     // Clear the visible transcript. chat-ui.js keeps its own loaded-order
     // state, so this clears the conversation only, not the looked-up order.
