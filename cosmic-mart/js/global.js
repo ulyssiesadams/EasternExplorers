@@ -35,7 +35,8 @@
       <div id="cmChatOptionsView">
         <div class="cm-global-chat-header">
           <div class="cm-global-chat-header-icon">
-            <img src="assets/logo.png" alt="Nova" style="width:38px;height:38px;">
+            <img src="assets/nova_pfp.png" alt="Nova" style="width:38px;height:38px;object-fit:cover;border-radius:50%;">
+
           </div>
           <div class="cm-global-chat-header-text">
             <h4>Ask me anything <span class="cm-global-ai-badge">✦ AI</span></h4>

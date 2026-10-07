@@ -148,6 +148,8 @@
   border: 2px solid var(--accent);
   box-shadow: 0 0 16px rgba(147, 51, 234, 0.5);
   flex-shrink: 0;
+  object-fit: cover;
+  background: #0a0a1a;
 }
 
 .cm-nova-title {
@@ -295,7 +297,7 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: url('../../assets/logo.png') center / cover no-repeat;
+  background: url('../../assets/nova_pfp.png') center / cover no-repeat;
   border: 2px solid var(--accent);
 }
 
