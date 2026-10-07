@@ -1546,3 +1546,73 @@
   color:var(--text-secondary); padding:16px 0 0;
   text-align:right;
 }
+
+/* ── Team Activity page ──────────────────────────────────────────────────────── */
+.esc-team-page {
+  max-width:1440px; margin:0 auto; padding:32px 24px 56px;
+}
+.esc-team-columns {
+  display:flex; gap:28px; align-items:flex-start;
+}
+.esc-team-feed-col { flex:6; min-width:0; }
+.esc-team-stats-col { flex:4; min-width:0; }
+.esc-feed-list { display:flex; flex-direction:column; gap:0; }
+.esc-feed-item {
+  display:flex; align-items:center; gap:12px;
+  padding:13px 0; border-bottom:1px solid rgba(147,51,234,0.08);
+  font-family:'Inter',sans-serif; font-size:0.8rem;
+}
+.esc-feed-item:last-child { border-bottom:none; }
+.esc-feed-avatar {
+  width:32px; height:32px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.75rem; font-weight:700; color:#fff; flex-shrink:0;
+}
+.esc-feed-body { flex:1; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+.esc-feed-name { font-weight:600; color:var(--text-primary); }
+.esc-feed-action { font-size:0.78rem; }
+.esc-feed-accepted { color:var(--success); }
+.esc-feed-denied   { color:var(--danger); }
+.esc-feed-note     { color:var(--accent-glow); }
+.esc-feed-escalated { color:#f59e0b; }
+.esc-feed-case {
+  font-family:'Orbitron',sans-serif; font-size:0.6rem;
+  color:var(--accent-glow); letter-spacing:0.03em;
+}
+.esc-feed-time {
+  font-family:'Inter',sans-serif; font-size:0.7rem;
+  color:rgba(148,163,184,0.6); white-space:nowrap; flex-shrink:0;
+}
+.esc-specialist-cards { display:flex; flex-direction:column; gap:14px; margin-bottom:20px; }
+.esc-specialist-card {
+  background:var(--bg-secondary); border:1px solid var(--border-purple);
+  border-radius:12px; padding:16px 18px;
+}
+.esc-specialist-header {
+  display:flex; align-items:center; gap:12px; margin-bottom:14px;
+}
+.esc-specialist-name {
+  font-family:'Inter',sans-serif; font-size:0.875rem; font-weight:700; color:var(--text-primary);
+}
+.esc-specialist-role {
+  font-family:'Inter',sans-serif; font-size:0.68rem; color:var(--text-secondary);
+  text-transform:uppercase; letter-spacing:0.04em;
+}
+.esc-specialist-stats { display:flex; gap:0; }
+.esc-spec-stat {
+  flex:1; display:flex; flex-direction:column; gap:3px; text-align:center;
+  padding:0 8px; border-right:1px solid rgba(147,51,234,0.15);
+}
+.esc-spec-stat:last-child { border-right:none; }
+.esc-spec-val {
+  font-family:'Orbitron',sans-serif; font-size:1rem; font-weight:700; color:var(--text-primary);
+}
+.esc-spec-lbl {
+  font-family:'Inter',sans-serif; font-size:0.62rem; color:var(--text-secondary);
+}
+.esc-team-total {
+  display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+  background:var(--bg-secondary); border:1px solid var(--border-purple);
+  border-radius:10px; padding:14px 18px;
+  font-family:'Inter',sans-serif; font-size:0.8rem; color:var(--text-secondary);
+}
