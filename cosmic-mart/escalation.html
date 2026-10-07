@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Escalation Queue — Cosmic Mart</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages/escalation.css">
+</head>
+<body>
+
+<nav class="cm-nav">
+  <div class="cm-nav-main">
+    <a href="index.html" class="cm-nav-logo">
+      <img src="assets/logo.png" alt="Cosmic Mart" class="cm-logo-img">
+    </a>
+    <button type="button" class="cm-nav-location">
+      <span class="cm-nav-location-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </span>
+      <span class="cm-nav-location-text">
+        <strong>Pickup or delivery?</strong>
+        <small>Earth &middot; Sector 7 &mdash; Orbital Hub</small>
+      </span>
+      <svg class="cm-nav-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <form class="cm-nav-search" role="search" onsubmit="return false;">
+      <input type="search" class="cm-nav-search-input" placeholder="Search everything across the cosmos" aria-label="Search Cosmic Mart">
+      <button type="button" class="cm-nav-search-btn" aria-label="Search">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+    </form>
+    <div class="cm-nav-actions">
+      <a href="#" class="cm-nav-action cm-nav-action-reorder">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <span class="cm-nav-action-text"><small>Reorder</small><strong>My Items</strong></span>
+      </a>
+      <a href="account.html" class="cm-nav-action">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span class="cm-nav-action-text"><small>Sign In</small><strong>Account</strong></span>
+      </a>
+      <a href="#" class="cm-nav-cart">
+        <span class="cm-nav-cart-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          <span class="cm-cart-badge">0</span>
+        </span>
+        <strong class="cm-nav-cart-total">$0.00</strong>
+      </a>
+    </div>
+  </div>
+  <div class="cm-nav-sub">
+    <button type="button" class="cm-nav-pill cm-nav-pill-solid">Departments <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+    <button type="button" class="cm-nav-pill cm-nav-pill-solid">Services <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+    <ul class="cm-nav-links">
+      <li><a href="index.html">Shop</a></li>
+      <li><a href="gadgets.html">Gadgets</a></li>
+      <li><a href="fashion.html">Fashion</a></li>
+      <li><a href="home.html">Home &amp; Lifestyle</a></li>
+    </ul>
+    <div class="cm-nav-end">
+      <a href="account.html" class="cm-nav-account">Account</a>
+      <div class="cm-nav-more" id="cmNavMore">
+        <button type="button" class="cm-nav-pill cm-nav-pill-more" id="cmMoreBtn" aria-haspopup="true" aria-expanded="false" aria-controls="cmMoreMenu">
+          More <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="cm-nav-more-menu" id="cmMoreMenu" role="menu" hidden>
+          <a href="returns.html" role="menuitem">Returns</a>
+          <a href="dashboard.html" role="menuitem" style="color:#c084fc;font-weight:600;">Returns Dashboard</a>
+          <a href="escalation.html" role="menuitem" style="color:#c084fc;font-weight:600;">Escalation Queue <span class="esc-nav-badge" id="escPendingBadge">6</span></a>
+          <a href="#" role="menuitem">New Arrivals</a>
+          <a href="#" role="menuitem">Cosmic Rewards</a>
+          <a href="#" role="menuitem">Track Order</a>
+          <a href="#" role="menuitem">Help</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main class="esc-page">
+
+  <!-- Page header -->
+  <header class="esc-page-header">
+    <h1>Escalation Queue &mdash; Returns Specialist View</h1>
+    <p>Cases requiring human review &middot; AI-assisted decision drafting</p>
+  </header>
+
+  <!-- Two-column layout -->
+  <div class="esc-columns">
+
+    <!-- Queue (left) -->
+    <div class="esc-queue-col">
+      <div class="esc-queue-label">Open Cases</div>
+      <div id="escQueue">
+        <!-- rendered by escalation.js -->
+      </div>
+    </div>
+
+    <!-- Detail panel (right) -->
+    <div class="esc-detail-col" id="escDetail">
+      <!-- rendered by escalation.js -->
+    </div>
+
+  </div>
+
+  <!-- Insights section -->
+  <section class="esc-insights">
+    <div class="esc-insights-title">Monthly Insights &mdash; Oct 2026</div>
+
+    <!-- KPI tiles -->
+    <div class="esc-kpi-row">
+
+      <div class="esc-kpi-tile">
+        <span class="esc-kpi-value">247</span>
+        <span class="esc-kpi-label">Total Cases This Month</span>
+      </div>
+
+      <div class="esc-kpi-tile">
+        <span class="esc-kpi-value" style="color:#f59e0b;">12.4%</span>
+        <span class="esc-kpi-label">Escalation Rate</span>
+      </div>
+
+      <div class="esc-kpi-tile">
+        <span class="esc-kpi-value" style="color:var(--success);">189</span>
+        <span class="esc-kpi-label">Cases Resolved (AI-Assist)</span>
+        <span class="esc-kpi-sub">76.5% resolution rate</span>
+      </div>
+
+      <div class="esc-kpi-tile">
+        <span class="esc-kpi-value">3.2 hrs</span>
+        <span class="esc-kpi-label">Avg. Resolution Time</span>
+      </div>
+
+      <div class="esc-kpi-tile">
+        <span class="esc-kpi-value" style="color:var(--accent-glow);">$31,480</span>
+        <span class="esc-kpi-label">$ Volume Under Review</span>
+      </div>
+
+    </div>
+
+    <!-- Charts -->
+    <div class="esc-charts-row">
+
+      <!-- Stacked bar: Resolution Breakdown -->
+      <div class="esc-chart-card">
+        <div class="esc-chart-title">Resolution Breakdown</div>
+        <div class="esc-stacked-wrap">
+          <div class="esc-stacked-bar">
+            <div class="esc-seg esc-seg-accepted" style="flex:62" title="Accepted: 62%">62%</div>
+            <div class="esc-seg esc-seg-denied"   style="flex:24" title="Denied: 24%">24%</div>
+            <div class="esc-seg esc-seg-pending"  style="flex:14" title="Pending: 14%">14%</div>
+          </div>
+          <div class="esc-stacked-legend">
+            <span class="esc-legend-item">
+              <span class="esc-legend-dot" style="background:var(--success);"></span>Accepted 62%
+            </span>
+            <span class="esc-legend-item">
+              <span class="esc-legend-dot" style="background:var(--danger);"></span>Denied 24%
+            </span>
+            <span class="esc-legend-item">
+              <span class="esc-legend-dot" style="background:#f59e0b;"></span>Pending 14%
+            </span>
+          </div>
+        </div>
+        <p class="esc-insight-label">Most escalations resolve within 4 hrs when case evidence is complete.</p>
+      </div>
+
+      <!-- Donut: Refund Method Split -->
+      <div class="esc-chart-card">
+        <div class="esc-chart-title">Refund Method Split</div>
+        <div class="esc-donut-wrap">
+          <div class="esc-donut" title="Store Credit 58%, Cash Refund 42%">
+            <div class="esc-donut-hole"></div>
+          </div>
+          <div class="esc-donut-legend">
+            <div class="esc-donut-legend-item">
+              <span class="esc-donut-swatch" style="background:var(--accent);"></span>
+              <div>
+                <div class="esc-donut-legend-label">Store Credit</div>
+                <div class="esc-donut-legend-pct">58%</div>
+              </div>
+            </div>
+            <div class="esc-donut-legend-item">
+              <span class="esc-donut-swatch" style="background:#475569;"></span>
+              <div>
+                <div class="esc-donut-legend-label">Cash Refund</div>
+                <div class="esc-donut-legend-pct">42%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="esc-insight-label">Tier 1 customers prefer store credit 2&times; more than Standard tier.</p>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer class="cm-footer">
+  <div class="cm-footer-inner">
+    <div class="cm-footer-bottom">
+      <p>&copy; 2026 Cosmic Mart. All rights reserved.</p>
+      <p class="cm-footer-meta"><a href="returns.html">&larr; Back to Returns</a></p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/mock-data.js"></script>
+<script src="js/global.js"></script>
+<script src="js/agent.js"></script>
+<script src="js/escalation.js"></script>
+</body>
+</html>
