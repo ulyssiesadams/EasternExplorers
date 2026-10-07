@@ -82,253 +82,173 @@
 
   </div>
 
-  <!-- Insights section -->
-  <section class="esc-insights">
-    <div class="esc-insights-title">Monthly Insights &mdash; Oct 2026</div>
-
-    <!-- Row 1: KPI tiles -->
-    <div class="esc-kpi-grid">
-      <div class="esc-kpi-tile esc-kpi-slate">
-        <span class="esc-kpi-value">247</span>
-        <span class="esc-kpi-label">Total Cases This Month</span>
-        <span class="esc-kpi-trend up">&uarr; 18 vs last month</span>
-      </div>
-      <div class="esc-kpi-tile esc-kpi-amber">
-        <span class="esc-kpi-value">12.4%</span>
-        <span class="esc-kpi-label">Escalation Rate</span>
-        <span class="esc-kpi-trend down">&darr; 1.3pp vs last month</span>
-      </div>
-      <div class="esc-kpi-tile esc-kpi-green">
-        <span class="esc-kpi-value">76.5%</span>
-        <span class="esc-kpi-label">AI Resolution Rate</span>
-        <span class="esc-kpi-trend up">&uarr; 2.1pp vs last month</span>
-      </div>
-      <div class="esc-kpi-tile esc-kpi-slate">
-        <span class="esc-kpi-value">3.2 hrs</span>
-        <span class="esc-kpi-label">Avg. Resolution Time</span>
-        <span class="esc-kpi-trend up">&darr; 0.4 hrs vs last month</span>
-      </div>
-      <div class="esc-kpi-tile esc-kpi-purple">
-        <span class="esc-kpi-value">$31,480</span>
-        <span class="esc-kpi-label">$ Volume Under Review</span>
-        <span class="esc-kpi-trend up">&uarr; $4,210 vs last month</span>
-      </div>
-      <div class="esc-kpi-tile esc-kpi-blue">
-        <span class="esc-kpi-value">4.2<span style="font-size:1rem;font-family:'Inter',sans-serif;color:var(--text-secondary);"> / 5.0</span></span>
-        <span class="esc-kpi-label">Customer CSAT Score</span>
-        <span class="esc-kpi-trend up">&uarr; 0.3 pts vs last month</span>
-      </div>
-      <div class="esc-kpi-tile esc-kpi-green">
-        <span class="esc-kpi-value">91.3%</span>
-        <span class="esc-kpi-label">SLA Compliance Rate</span>
-        <span class="esc-kpi-trend flat">&rarr; within 4-hr target</span>
-      </div>
-    </div>
-
-    <!-- Row 2: USA tile map -->
-    <div class="esc-map-section">
-      <div class="esc-map-sidebar">
-        <div class="esc-map-sidebar-title">Top 5 by Volume</div>
-        <div class="esc-map-rank-list">
-          <div class="esc-rank-item"><span class="esc-rank-num">1</span><span class="esc-rank-state">California</span><span class="esc-rank-val">1,842</span></div>
-          <div class="esc-rank-item"><span class="esc-rank-num">2</span><span class="esc-rank-state">Texas</span><span class="esc-rank-val">1,521</span></div>
-          <div class="esc-rank-item"><span class="esc-rank-num">3</span><span class="esc-rank-state">Florida</span><span class="esc-rank-val">1,287</span></div>
-          <div class="esc-rank-item"><span class="esc-rank-num">4</span><span class="esc-rank-state">New York</span><span class="esc-rank-val">1,143</span></div>
-          <div class="esc-rank-item"><span class="esc-rank-num">5</span><span class="esc-rank-state">Washington</span><span class="esc-rank-val">832</span></div>
-        </div>
-      </div>
-
-      <div class="esc-map-container">
-        <div class="esc-chart-title" style="margin-bottom:12px;">Returns Volume by State</div>
-        <div id="escMapContainer"><!-- rendered by JS --></div>
-        <div class="esc-map-scale">
-          <span class="esc-map-scale-label">Low</span>
-          <div class="esc-map-scale-bar"></div>
-          <span class="esc-map-scale-label">High</span>
-        </div>
-      </div>
-
-      <div class="esc-map-sidebar esc-map-sidebar-right">
-        <div class="esc-map-sidebar-title">Best Escalation Rate</div>
-        <div class="esc-map-rank-list">
-          <div class="esc-rank-item esc-rank-best"><span class="esc-rank-state">Montana</span><span class="esc-rank-rate">3.8%</span></div>
-          <div class="esc-rank-item esc-rank-best"><span class="esc-rank-state">Wyoming</span><span class="esc-rank-rate">4.1%</span></div>
-          <div class="esc-rank-item esc-rank-best"><span class="esc-rank-state">North Dakota</span><span class="esc-rank-rate">4.4%</span></div>
-          <div class="esc-rank-item esc-rank-best"><span class="esc-rank-state">South Dakota</span><span class="esc-rank-rate">4.9%</span></div>
-          <div class="esc-rank-item esc-rank-best"><span class="esc-rank-state">Vermont</span><span class="esc-rank-rate">5.2%</span></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Row 3: Two charts -->
-    <div class="esc-charts-row">
-
-      <!-- Line chart: Volume over time -->
-      <div class="esc-chart-card">
-        <div class="esc-chart-title">Returns Volume Over Time <span class="esc-chart-sub">— 6-month weekly view</span></div>
-        <svg class="esc-line-chart" viewBox="0 0 580 150" preserveAspectRatio="none" aria-label="Weekly returns volume chart">
-          <defs>
-            <linearGradient id="lineAreaGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#9333ea" stop-opacity="0.25"/>
-              <stop offset="100%" stop-color="#9333ea" stop-opacity="0.02"/>
-            </linearGradient>
-          </defs>
-          <!-- Grid lines -->
-          <line x1="20" y1="10"  x2="565" y2="10"  stroke="rgba(147,51,234,0.1)" stroke-width="1"/>
-          <line x1="20" y1="50"  x2="565" y2="50"  stroke="rgba(147,51,234,0.1)" stroke-width="1"/>
-          <line x1="20" y1="90"  x2="565" y2="90"  stroke="rgba(147,51,234,0.1)" stroke-width="1"/>
-          <line x1="20" y1="130" x2="565" y2="130" stroke="rgba(147,51,234,0.15)" stroke-width="1"/>
-          <!-- Y labels -->
-          <text x="14" y="14"  font-size="9" fill="#64748b" text-anchor="end" font-family="Inter,sans-serif">380</text>
-          <text x="14" y="54"  font-size="9" fill="#64748b" text-anchor="end" font-family="Inter,sans-serif">340</text>
-          <text x="14" y="94"  font-size="9" fill="#64748b" text-anchor="end" font-family="Inter,sans-serif">300</text>
-          <text x="14" y="134" font-size="9" fill="#64748b" text-anchor="end" font-family="Inter,sans-serif">260</text>
-          <!-- Area fill (historical) -->
-          <polygon points="20,88 44,102 67,75 90,59 114,113 137,85 161,122 184,99 208,58 231,44 255,88 278,72 302,105 325,91 349,53 372,38 396,66 419,81 443,49 420,130 20,130" fill="url(#lineAreaGrad)"/>
-          <!-- Historical line (May–Sep) -->
-          <polyline points="20,88 44,102 67,75 90,59 114,113 137,85 161,122 184,99 208,58 231,44 255,88 278,72 302,105 325,91 349,53 372,38 396,66 419,81 443,49" fill="none" stroke="#9333ea" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-          <!-- Current period (Oct, highlighted) -->
-          <polyline points="443,49 466,22 490,58 513,44 537,69 560,27" fill="none" stroke="#c084fc" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
-          <!-- "This week" dot -->
-          <circle cx="560" cy="27" r="4" fill="#c084fc"/>
-          <circle cx="560" cy="27" r="7" fill="none" stroke="#c084fc" stroke-opacity="0.4" stroke-width="1.5"/>
-          <!-- Month labels -->
-          <text x="20"  y="147" font-size="9" fill="#64748b" text-anchor="middle" font-family="Inter,sans-serif">May</text>
-          <text x="114" y="147" font-size="9" fill="#64748b" text-anchor="middle" font-family="Inter,sans-serif">Jun</text>
-          <text x="208" y="147" font-size="9" fill="#64748b" text-anchor="middle" font-family="Inter,sans-serif">Jul</text>
-          <text x="302" y="147" font-size="9" fill="#64748b" text-anchor="middle" font-family="Inter,sans-serif">Aug</text>
-          <text x="396" y="147" font-size="9" fill="#64748b" text-anchor="middle" font-family="Inter,sans-serif">Sep</text>
-          <text x="490" y="147" font-size="9" fill="#c084fc" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">Oct</text>
-        </svg>
-        <p class="esc-insight-label">Oct trending 14% above prior 30-day avg — driven by gadget pre-holiday returns.</p>
-      </div>
-
-      <!-- Category breakdown horizontal bars -->
-      <div class="esc-chart-card">
-        <div class="esc-chart-title">Return Category Breakdown <span class="esc-chart-sub">— this month</span></div>
-        <div class="esc-hbar-list">
-          <div class="esc-hbar-row">
-            <span class="esc-hbar-label">DEFECTIVE</span>
-            <div class="esc-hbar-track"><div class="esc-hbar-fill" style="width:34%;background:#9333ea;"></div></div>
-            <span class="esc-hbar-val">34% &middot; 84</span>
-          </div>
-          <div class="esc-hbar-row">
-            <span class="esc-hbar-label">CHANGED_MIND</span>
-            <div class="esc-hbar-track"><div class="esc-hbar-fill" style="width:28%;background:#f59e0b;"></div></div>
-            <span class="esc-hbar-val">28% &middot; 69</span>
-          </div>
-          <div class="esc-hbar-row">
-            <span class="esc-hbar-label">WRONG_ITEM</span>
-            <div class="esc-hbar-track"><div class="esc-hbar-fill" style="width:15%;background:#3b82f6;"></div></div>
-            <span class="esc-hbar-val">15% &middot; 37</span>
-          </div>
-          <div class="esc-hbar-row">
-            <span class="esc-hbar-label">DAMAGED_TRANSIT</span>
-            <div class="esc-hbar-track"><div class="esc-hbar-fill" style="width:13%;background:#ef4444;"></div></div>
-            <span class="esc-hbar-val">13% &middot; 32</span>
-          </div>
-          <div class="esc-hbar-row">
-            <span class="esc-hbar-label">DESC_MISMATCH</span>
-            <div class="esc-hbar-track"><div class="esc-hbar-fill" style="width:7%;background:#10b981;"></div></div>
-            <span class="esc-hbar-val">7% &middot; 17</span>
-          </div>
-          <div class="esc-hbar-row">
-            <span class="esc-hbar-label">OTHER</span>
-            <div class="esc-hbar-track"><div class="esc-hbar-fill" style="width:3%;background:#64748b;"></div></div>
-            <span class="esc-hbar-val">3% &middot; 8</span>
-          </div>
-        </div>
-        <p class="esc-insight-label">DEFECTIVE + DAMAGED_TRANSIT account for 47% of all escalations.</p>
-      </div>
-
-    </div>
-
-    <!-- Row 4: Three bottom cards -->
-    <div class="esc-bottom-row">
-
-      <!-- Tier breakdown -->
-      <div class="esc-bottom-card">
-        <div class="esc-chart-title">Tier Breakdown</div>
-        <table class="esc-tier-table">
-          <thead>
-            <tr><th>Tier</th><th>Cases</th><th>Esc. Rate</th><th>Avg Value</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><span class="esc-tier-badge esc-tier-1">Tier 1</span></td>
-              <td>62</td><td style="color:#f59e0b;">8.9%</td><td style="color:var(--accent-glow);">$312</td>
-            </tr>
-            <tr>
-              <td><span class="esc-tier-badge esc-tier-2">Tier 2</span></td>
-              <td>38</td><td style="color:#f59e0b;">10.4%</td><td style="color:var(--accent-glow);">$284</td>
-            </tr>
-            <tr>
-              <td><span class="esc-tier-badge esc-tier-std">Standard</span></td>
-              <td>147</td><td style="color:var(--danger);">14.1%</td><td>$143</td>
-            </tr>
-          </tbody>
-        </table>
-        <p class="esc-insight-label">Tier 1 escalation rate 37% lower than Standard — loyalty pays off.</p>
-      </div>
-
-      <!-- Top escalation reasons -->
-      <div class="esc-bottom-card">
-        <div class="esc-chart-title">Top Escalation Triggers</div>
-        <ol class="esc-trigger-list">
-          <li><span class="esc-trigger-name">Return window expired</span><span class="esc-trigger-count">91 cases</span></li>
-          <li><span class="esc-trigger-name">Missing photo evidence</span><span class="esc-trigger-count">54 cases</span></li>
-          <li><span class="esc-trigger-name">High-value item exception</span><span class="esc-trigger-count">43 cases</span></li>
-          <li><span class="esc-trigger-name">Wrong item — unverified claim</span><span class="esc-trigger-count">31 cases</span></li>
-          <li><span class="esc-trigger-name">Potential misuse flag</span><span class="esc-trigger-count">28 cases</span></li>
-        </ol>
-        <p class="esc-insight-label">Window expiry + missing evidence account for 58% of triggers.</p>
-      </div>
-
-      <!-- Agent performance -->
-      <div class="esc-bottom-card">
-        <div class="esc-chart-title">Agent Pipeline Performance</div>
-        <div class="esc-perf-list">
-          <div class="esc-perf-row">
-            <span class="esc-perf-label">Intent classifier accuracy</span>
-            <span class="esc-perf-val" style="color:var(--success);">97.2%</span>
-          </div>
-          <div class="esc-perf-row">
-            <span class="esc-perf-label">Eligibility false-positive rate</span>
-            <span class="esc-perf-val" style="color:#f59e0b;">3.1%</span>
-          </div>
-          <div class="esc-perf-row">
-            <span class="esc-perf-label">Avg tokens per resolved case</span>
-            <span class="esc-perf-val">4,820</span>
-          </div>
-          <div class="esc-perf-row">
-            <span class="esc-perf-label">AI-assisted decisions</span>
-            <span class="esc-perf-val" style="color:var(--accent-glow);">189 / 247</span>
-          </div>
-          <div class="esc-perf-row">
-            <span class="esc-perf-label">Fully automated (no human)</span>
-            <span class="esc-perf-val" style="color:var(--success);">1,626 cases</span>
-          </div>
-        </div>
-        <p class="esc-insight-label">Eligibility false-positives down 0.8pp — tuning working.</p>
-      </div>
-
-    </div>
-
-    <!-- Map tooltip (hidden, positioned by JS) -->
-    <div class="esc-map-tooltip" id="escMapTooltip" hidden>
-      <div class="esc-tooltip-state" id="escTipState"></div>
-      <div class="esc-tooltip-row"><span>Returns</span><span id="escTipReturns"></span></div>
-      <div class="esc-tooltip-row"><span>Escalations</span><span id="escTipEsc"></span></div>
-      <div class="esc-tooltip-row"><span>Top category</span><span id="escTipCat"></span></div>
-      <div class="esc-tooltip-row"><span>Avg resolution</span><span id="escTipTime"></span></div>
-    </div>
-
-  </section>
 
 </main>
 </div>
 
-<div class="portal-panel" data-panel="analytics" hidden></div>
+<div class="portal-panel" data-panel="analytics" hidden>
+  <div class="esc-analytics-page">
+    <div class="esc-analytics-header">
+      <div>
+        <h2 class="esc-analytics-title">Returns Intelligence <span style="color:var(--text-secondary);">— October 2026</span></h2>
+        <p class="esc-analytics-sub">Enterprise dashboard · Real-time data</p>
+      </div>
+      <div class="esc-period-pills">
+        <button class="esc-period-pill is-active">This Month</button>
+        <button class="esc-period-pill">Last Month</button>
+        <button class="esc-period-pill">Q3</button>
+        <button class="esc-period-pill">YTD</button>
+      </div>
+    </div>
+    <div class="esc-kpi-grid esc-kpi-grid-8">
+      <div class="esc-kpi-tile" style="border-top:3px solid #94a3b8">
+        <span class="esc-kpi-value">247</span>
+        <span class="esc-kpi-label">Total Cases</span>
+        <span class="esc-kpi-trend up">+18 vs last month</span>
+      </div>
+      <div class="esc-kpi-tile" style="border-top:3px solid #f59e0b">
+        <span class="esc-kpi-value">12.4%</span>
+        <span class="esc-kpi-label">Escalation Rate</span>
+        <span class="esc-kpi-trend up">↓ 1.2% improvement</span>
+      </div>
+      <div class="esc-kpi-tile" style="border-top:3px solid #10b981">
+        <span class="esc-kpi-value">76.5%</span>
+        <span class="esc-kpi-label">AI Resolution Rate</span>
+        <span class="esc-kpi-trend up">189 of 247 cases</span>
+      </div>
+      <div class="esc-kpi-tile" style="border-top:3px solid #6366f1">
+        <span class="esc-kpi-value">3.2 hrs</span>
+        <span class="esc-kpi-label">Avg Resolution</span>
+        <span class="esc-kpi-trend up">↓ 0.4 hrs vs last month</span>
+      </div>
+      <div class="esc-kpi-tile" style="border-top:3px solid #c084fc">
+        <span class="esc-kpi-value">$31,480</span>
+        <span class="esc-kpi-label">$ Volume</span>
+        <span class="esc-kpi-trend up">Avg $127 per case</span>
+      </div>
+      <div class="esc-kpi-tile" style="border-top:3px solid #10b981">
+        <span class="esc-kpi-value">4.3<span style="font-size:1rem;font-family:'Inter',sans-serif;color:var(--text-secondary);">/5.0</span></span>
+        <span class="esc-kpi-label">CSAT Score</span>
+        <span class="esc-kpi-trend flat">Based on 201 responses</span>
+      </div>
+      <div class="esc-kpi-tile" style="border-top:3px solid #6366f1">
+        <span class="esc-kpi-value">91.8%</span>
+        <span class="esc-kpi-label">SLA Compliance</span>
+        <span class="esc-kpi-trend up">Target: 90% &nbsp;✓ Met</span>
+      </div>
+      <div class="esc-kpi-tile" style="border-top:3px solid #f59e0b">
+        <span class="esc-kpi-value">68.2%</span>
+        <span class="esc-kpi-label">First-Contact Res.</span>
+        <span class="esc-kpi-trend up">↑ 3.1% vs last month</span>
+      </div>
+    </div>
+    <div class="esc-charts-row">
+      <div class="esc-chart-card">
+        <div class="esc-chart-title">Weekly Case Volume <span class="esc-chart-sub">— 6 weeks · Peak: 51 cases (Week 5)</span></div>
+        <svg class="esc-line-chart" viewBox="0 0 520 140" preserveAspectRatio="none" style="overflow:visible;">
+          <defs>
+            <linearGradient id="wkAreaGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#6366f1" stop-opacity="0.3"/>
+              <stop offset="100%" stop-color="#6366f1" stop-opacity="0.02"/>
+            </linearGradient>
+          </defs>
+          <line x1="30" y1="10" x2="510" y2="10"  stroke="rgba(99,102,241,0.12)" stroke-width="1"/>
+          <line x1="30" y1="42" x2="510" y2="42"  stroke="rgba(99,102,241,0.12)" stroke-width="1"/>
+          <line x1="30" y1="74" x2="510" y2="74"  stroke="rgba(99,102,241,0.12)" stroke-width="1"/>
+          <line x1="30" y1="106" x2="510" y2="106" stroke="rgba(99,102,241,0.15)" stroke-width="1"/>
+          <text x="24" y="14"  font-size="9" fill="#64748b" text-anchor="end" font-family="Inter,sans-serif">55</text>
+          <text x="24" y="46"  font-size="9" fill="#64748b" text-anchor="end" font-family="Inter,sans-serif">45</text>
+          <text x="24" y="78"  font-size="9" fill="#64748b" text-anchor="end" font-family="Inter,sans-serif">35</text>
+          <text x="24" y="110" font-size="9" fill="#64748b" text-anchor="end" font-family="Inter,sans-serif">25</text>
+          <polygon points="30,89 126,73 222,62 318,79 414,39 510,42 510,106 30,106" fill="url(#wkAreaGrad)"/>
+          <polyline points="30,89 126,73 222,62 318,79 414,39" fill="none" stroke="#6366f1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <polyline points="414,39 510,42" fill="none" stroke="#c084fc" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="510" cy="42" r="5" fill="#c084fc"/>
+          <circle cx="510" cy="42" r="9" fill="none" stroke="#c084fc" stroke-opacity="0.35" stroke-width="1.5"/>
+          <text x="30"  y="125" font-size="9" fill="#64748b" text-anchor="middle" font-family="Inter,sans-serif">Week 1</text>
+          <text x="126" y="125" font-size="9" fill="#64748b" text-anchor="middle" font-family="Inter,sans-serif">Week 2</text>
+          <text x="222" y="125" font-size="9" fill="#64748b" text-anchor="middle" font-family="Inter,sans-serif">Week 3</text>
+          <text x="318" y="125" font-size="9" fill="#64748b" text-anchor="middle" font-family="Inter,sans-serif">Week 4</text>
+          <text x="414" y="125" font-size="9" fill="#64748b" text-anchor="middle" font-family="Inter,sans-serif">Week 5</text>
+          <text x="510" y="125" font-size="9" fill="#c084fc" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">Week 6</text>
+        </svg>
+      </div>
+      <div class="esc-chart-card">
+        <div class="esc-chart-title">Return Category Breakdown <span class="esc-chart-sub">— this month</span></div>
+        <div class="esc-hbar-list">
+          <div class="esc-hbar-row"><span class="esc-hbar-label">DEFECTIVE</span><div class="esc-hbar-track"><div class="esc-hbar-fill" style="width:100%;background:#ef4444;"></div></div><span class="esc-hbar-val">78 · 38%</span></div>
+          <div class="esc-hbar-row"><span class="esc-hbar-label">WRONG_ITEM</span><div class="esc-hbar-track"><div class="esc-hbar-fill" style="width:67%;background:#f59e0b;"></div></div><span class="esc-hbar-val">52 · 25%</span></div>
+          <div class="esc-hbar-row"><span class="esc-hbar-label">CHANGED_MIND</span><div class="esc-hbar-track"><div class="esc-hbar-fill" style="width:56%;background:#8b5cf6;"></div></div><span class="esc-hbar-val">44 · 21%</span></div>
+          <div class="esc-hbar-row"><span class="esc-hbar-label">DAMAGED_TRANSIT</span><div class="esc-hbar-track"><div class="esc-hbar-fill" style="width:40%;background:#6366f1;"></div></div><span class="esc-hbar-val">31 · 15%</span></div>
+          <div class="esc-hbar-row"><span class="esc-hbar-label">SIZING</span><div class="esc-hbar-track"><div class="esc-hbar-fill" style="width:27%;background:#10b981;"></div></div><span class="esc-hbar-val">21 · 10%</span></div>
+          <div class="esc-hbar-row"><span class="esc-hbar-label">DESC_MISMATCH</span><div class="esc-hbar-track"><div class="esc-hbar-fill" style="width:15%;background:#94a3b8;"></div></div><span class="esc-hbar-val">12 · 6%</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="esc-bottom-row">
+      <div class="esc-bottom-card">
+        <div class="esc-chart-title">Tier Breakdown</div>
+        <table class="esc-tier-table">
+          <thead><tr><th>Tier</th><th>Cases</th><th>Esc. Rate</th><th>Avg $</th><th>Res. Rate</th></tr></thead>
+          <tbody>
+            <tr><td><span class="esc-tier-badge esc-tier-1">Tier 1</span></td><td>89</td><td style="color:#f59e0b;">8.4%</td><td style="color:var(--accent-glow);">$198</td><td style="color:var(--success);">84.3%</td></tr>
+            <tr><td><span class="esc-tier-badge esc-tier-2">Tier 2</span></td><td>61</td><td style="color:#f59e0b;">10.1%</td><td style="color:var(--accent-glow);">$154</td><td style="color:var(--success);">79.2%</td></tr>
+            <tr><td><span class="esc-tier-badge esc-tier-std">Standard</span></td><td>97</td><td style="color:var(--danger);">16.8%</td><td>$94</td><td style="color:#f59e0b;">68.9%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="esc-bottom-card">
+        <div class="esc-chart-title">Top Escalation Triggers</div>
+        <ol class="esc-trigger-list">
+          <li><span class="esc-trigger-name">Proof of damage not submitted</span><span class="esc-trigger-count">47 cases</span></li>
+          <li><span class="esc-trigger-name">Return window expired</span><span class="esc-trigger-count">38 cases</span></li>
+          <li><span class="esc-trigger-name">High-value item threshold</span><span class="esc-trigger-count">29 cases</span></li>
+          <li><span class="esc-trigger-name">Wrong item — unverified claim</span><span class="esc-trigger-count">24 cases</span></li>
+          <li><span class="esc-trigger-name">Changed mind — window exceeded</span><span class="esc-trigger-count">19 cases</span></li>
+        </ol>
+      </div>
+      <div class="esc-bottom-card">
+        <div class="esc-chart-title">Agent Pipeline Performance</div>
+        <div class="esc-perf-list">
+          <div class="esc-perf-row"><span class="esc-perf-label">Intent Classification Accuracy</span><span class="esc-perf-val" style="color:var(--success);">97.2%</span></div>
+          <div class="esc-perf-row"><span class="esc-perf-label">Eligibility False Positives</span><span class="esc-perf-val" style="color:var(--danger);">4.8%</span></div>
+          <div class="esc-perf-row"><span class="esc-perf-label">Avg Tokens Per Case</span><span class="esc-perf-val">1,842</span></div>
+          <div class="esc-perf-row"><span class="esc-perf-label">Fully Automated (no escalation)</span><span class="esc-perf-val" style="color:var(--success);">87.6%</span></div>
+          <div class="esc-perf-row"><span class="esc-perf-label">AI-Assisted (escalated)</span><span class="esc-perf-val" style="color:#f59e0b;">12.4%</span></div>
+          <div class="esc-perf-row"><span class="esc-perf-label">Avg API Latency</span><span class="esc-perf-val">2.3s</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="esc-charts-row">
+      <div class="esc-chart-card">
+        <div class="esc-chart-title">Resolution Breakdown <span class="esc-chart-sub">— this month</span></div>
+        <div class="esc-stacked-bar" style="gap:0;">
+          <div class="esc-seg esc-seg-accepted" style="width:56%;" title="Accepted">56%</div>
+          <div class="esc-seg esc-seg-denied"   style="width:32%;" title="Denied">32%</div>
+          <div class="esc-seg esc-seg-pending"  style="width:12%;" title="Pending">12%</div>
+        </div>
+        <div class="esc-stacked-legend">
+          <div class="esc-legend-item"><div class="esc-legend-dot" style="background:var(--success)"></div>Accepted (56%)</div>
+          <div class="esc-legend-item"><div class="esc-legend-dot" style="background:var(--danger)"></div>Denied (32%)</div>
+          <div class="esc-legend-item"><div class="esc-legend-dot" style="background:#f59e0b"></div>Pending (12%)</div>
+        </div>
+      </div>
+      <div class="esc-chart-card">
+        <div class="esc-chart-title">Refund Method Split <span class="esc-chart-sub">— accepted cases</span></div>
+        <div class="esc-stacked-bar" style="gap:0;">
+          <div class="esc-seg" style="width:48%;background:#6366f1;" title="Original Payment">48%</div>
+          <div class="esc-seg" style="width:31%;background:#8b5cf6;" title="Store Credit">31%</div>
+          <div class="esc-seg" style="width:21%;background:#10b981;" title="Replacement">21%</div>
+        </div>
+        <div class="esc-stacked-legend">
+          <div class="esc-legend-item"><div class="esc-legend-dot" style="background:#6366f1"></div>Original Payment (48%)</div>
+          <div class="esc-legend-item"><div class="esc-legend-dot" style="background:#8b5cf6"></div>Store Credit (31%)</div>
+          <div class="esc-legend-item"><div class="esc-legend-dot" style="background:#10b981"></div>Replacement (21%)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="portal-panel" data-panel="archive"   hidden></div>
 <div class="portal-panel" data-panel="team"      hidden></div>
 

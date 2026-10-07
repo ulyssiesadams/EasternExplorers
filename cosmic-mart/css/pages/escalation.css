@@ -1452,3 +1452,37 @@
 }
 .esc-empty-state p { font-size:0.85rem; line-height:1.6; }
 .esc-empty-sub strong { color:var(--accent-glow); }
+
+/* ── Analytics page ──────────────────────────────────────────────────────────── */
+.esc-analytics-page {
+  max-width:1440px; margin:0 auto; padding:32px 24px 56px;
+}
+.esc-analytics-header {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:28px; flex-wrap:wrap; gap:16px;
+}
+.esc-analytics-title {
+  font-family:'Orbitron',sans-serif; font-size:1.3rem; font-weight:700;
+  color:var(--text-primary); margin-bottom:4px;
+}
+.esc-analytics-sub {
+  font-family:'Inter',sans-serif; font-size:0.8rem; color:var(--text-secondary);
+}
+.esc-period-pills {
+  display:flex; gap:6px;
+}
+.esc-period-pill {
+  font-family:'Inter',sans-serif; font-size:0.72rem; font-weight:600;
+  color:var(--text-secondary); background:transparent;
+  border:1px solid rgba(148,163,184,0.2); border-radius:20px;
+  padding:5px 14px; cursor:pointer; transition:all 0.15s;
+}
+.esc-period-pill.is-active {
+  color:#f1f5f9; background:rgba(99,102,241,0.2); border-color:rgba(99,102,241,0.5);
+}
+.esc-kpi-grid-8 {
+  grid-template-columns:repeat(4,1fr);
+}
+@media (max-width:1100px) {
+  .esc-kpi-grid-8 { grid-template-columns:repeat(2,1fr); }
+}
