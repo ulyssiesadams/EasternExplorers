@@ -37,8 +37,17 @@
       <button class="portal-signout-btn" id="portalSignout">Sign out</button>
     </div>
   </div>
+  <nav class="portal-tabs" role="tablist">
+    <button class="portal-tab is-active" data-tab="queue"    role="tab">
+      Escalation Queue <span class="portal-tab-badge" id="tabBadgeQueue">6</span>
+    </button>
+    <button class="portal-tab"           data-tab="analytics" role="tab">Analytics</button>
+    <button class="portal-tab"           data-tab="archive"   role="tab">Archive</button>
+    <button class="portal-tab"           data-tab="team"      role="tab">Team Activity</button>
+  </nav>
 </header>
 
+<div class="portal-panel" data-panel="queue">
 <main class="esc-page">
 
   <!-- Page header -->
@@ -309,6 +318,11 @@
   </section>
 
 </main>
+</div>
+
+<div class="portal-panel" data-panel="analytics" hidden></div>
+<div class="portal-panel" data-panel="archive"   hidden></div>
+<div class="portal-panel" data-panel="team"      hidden></div>
 
 <footer class="cm-footer">
   <div class="cm-footer-inner">

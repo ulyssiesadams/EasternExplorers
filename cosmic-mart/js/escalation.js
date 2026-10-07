@@ -747,4 +747,15 @@ document.addEventListener('DOMContentLoaded', function () {
       window.location.href = 'login.html';
     });
   }
+
+  document.querySelectorAll('.portal-tab').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.portal-tab').forEach(function(t){ t.classList.remove('is-active'); });
+      btn.classList.add('is-active');
+      var tab = btn.dataset.tab;
+      document.querySelectorAll('.portal-panel').forEach(function(p){
+        p.hidden = p.dataset.panel !== tab;
+      });
+    });
+  });
 });
