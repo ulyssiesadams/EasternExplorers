@@ -3,7 +3,7 @@ const ESCALATION_CASES = [
   {
     id: 'ESC-2026-0001',
     timestamp: '2026-10-06T09:14:22Z',
-    customer: { name: 'Alex Chen', tier: 'Tier 1', orderId: 'ORD-2026-4471' },
+    customer: { name: 'Alex Chen', tier: 'Tier 1', orderId: 'ORD-2026-4471', email: 'alex.chen@email.com' },
     order: {
       product: 'NovaSound Pro Wireless Headphones',
       sku: 'CM-G008',
@@ -31,7 +31,7 @@ const ESCALATION_CASES = [
   {
     id: 'ESC-2026-0002',
     timestamp: '2026-10-06T10:32:07Z',
-    customer: { name: 'Jordan Lee', tier: 'Standard', orderId: 'ORD-2026-2744' },
+    customer: { name: 'Jordan Lee', tier: 'Standard', orderId: 'ORD-2026-2744', email: 'jordan.lee@email.com' },
     order: {
       product: 'OrbitTab X2 Tablet',
       sku: 'CM-G012',
@@ -59,7 +59,7 @@ const ESCALATION_CASES = [
   {
     id: 'ESC-2026-0003',
     timestamp: '2026-10-06T11:05:44Z',
-    customer: { name: 'Priya Sharma', tier: 'Standard', orderId: 'ORD-2026-3381' },
+    customer: { name: 'Priya Sharma', tier: 'Standard', orderId: 'ORD-2026-3381', email: 'priya.sharma@email.com' },
     order: {
       product: 'LunaFlow Silk Wrap Dress',
       sku: 'CM-F004',
@@ -87,7 +87,7 @@ const ESCALATION_CASES = [
   {
     id: 'ESC-2026-0004',
     timestamp: '2026-10-06T12:18:33Z',
-    customer: { name: 'Marcus Thompson', tier: 'Standard', orderId: 'ORD-2026-5102' },
+    customer: { name: 'Marcus Thompson', tier: 'Standard', orderId: 'ORD-2026-5102', email: 'marcus.thompson@email.com' },
     order: {
       product: 'StellarChef Pro Air Fryer',
       sku: 'CM-H006',
@@ -115,7 +115,7 @@ const ESCALATION_CASES = [
   {
     id: 'ESC-2026-0005',
     timestamp: '2026-10-06T13:45:19Z',
-    customer: { name: 'Sam Rivera', tier: 'Tier 2', orderId: 'ORD-2026-6073' },
+    customer: { name: 'Sam Rivera', tier: 'Tier 2', orderId: 'ORD-2026-6073', email: 'sam.rivera@email.com' },
     order: {
       product: 'NexusStrike Pro Gaming Mouse',
       sku: 'CM-G019',
@@ -143,7 +143,7 @@ const ESCALATION_CASES = [
   {
     id: 'ESC-2026-0006',
     timestamp: '2026-10-06T14:52:08Z',
-    customer: { name: 'Casey Wu', tier: 'Tier 1', orderId: 'ORD-2026-7214' },
+    customer: { name: 'Casey Wu', tier: 'Tier 1', orderId: 'ORD-2026-7214', email: 'casey.wu@email.com' },
     order: {
       product: 'OrbitalTime X Smart Watch',
       sku: 'CM-G003',
@@ -170,8 +170,17 @@ const ESCALATION_CASES = [
   }
 ];
 
+// ── Incentive config ───────────────────────────────────────────────────────────
+var INCENTIVES = [
+  { label: '+ 10% off next order',    clause: 'As a gesture of goodwill, please use code CARE10 at checkout for 10% off your next order.' },
+  { label: '+ Free shipping',         clause: 'Your next order will ship free — code SHIPFREE will be auto-applied at checkout.' },
+  { label: '+ Priority support',      clause: "We've flagged your account for priority support on your next contact with us." },
+  { label: '+ Extended return window', clause: 'As a one-time courtesy, your next purchase will carry a 45-day return window.' }
+];
+
 // ── State ─────────────────────────────────────────────────────────────────────
 var selectedCaseId = ESCALATION_CASES[0].id;
+var activeIncentives = {}; // caseId -> Set of incentive indices currently toggled on
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function getPendingCount() {
@@ -188,9 +197,8 @@ function updatePendingBadge() {
 
 function formatTimestamp(iso) {
   var d = new Date(iso);
-  var month = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-  var time = d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-  return month + ' · ' + time;
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) +
+    ' · ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 }
 
 function tierClass(tier) {
@@ -201,7 +209,7 @@ function tierClass(tier) {
 
 function statusPillClass(status) {
   if (status === 'ACCEPTED') return 'esc-pill-accepted';
-  if (status === 'DENIED') return 'esc-pill-denied';
+  if (status === 'DENIED')   return 'esc-pill-denied';
   return 'esc-pill-pending';
 }
 
@@ -219,17 +227,50 @@ function escHtml(str) {
     .replace(/"/g, '&quot;');
 }
 
+// Light markdown pass: **bold** + newlines → HTML (safe to call after escHtml)
+function markdownToHtml(text) {
+  var escaped = escHtml(text);
+  // Strip letterhead lines before "Dear …"
+  var lines = escaped.split('\n');
+  var dearIdx = -1;
+  for (var i = 0; i < lines.length; i++) {
+    if (/^Dear\b/i.test(lines[i].trim())) { dearIdx = i; break; }
+  }
+  if (dearIdx > 0) { escaped = lines.slice(dearIdx).join('\n'); }
+
+  return escaped
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\n\n/g, '</p><p class="esc-letter-para">')
+    .replace(/\n/g, '<br>');
+}
+
+// ── Toast ─────────────────────────────────────────────────────────────────────
+function showToast(msg) {
+  var toast = document.getElementById('escToast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'escToast';
+    toast.className = 'esc-toast';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = msg;
+  toast.classList.add('is-visible');
+  clearTimeout(toast._timer);
+  toast._timer = setTimeout(function () { toast.classList.remove('is-visible'); }, 3500);
+}
+
 // ── Queue ─────────────────────────────────────────────────────────────────────
 function renderQueue() {
   var el = document.getElementById('escQueue');
   if (!el) return;
   el.innerHTML = ESCALATION_CASES.map(function (c) {
-    var isSelected = c.id === selectedCaseId;
-    var shortReason = c.agentOutputs.escalationReason.length > 82
+    var short = c.agentOutputs.escalationReason.length > 82
       ? c.agentOutputs.escalationReason.slice(0, 82) + '…'
       : c.agentOutputs.escalationReason;
-    return '<div class="esc-queue-card' + (isSelected ? ' is-selected' : '') + (c.status !== 'PENDING' ? ' is-resolved' : '') + '"' +
-      ' data-id="' + escHtml(c.id) + '" role="button" tabindex="0" aria-label="Case ' + escHtml(c.id) + '">' +
+    return '<div class="esc-queue-card' +
+        (c.id === selectedCaseId ? ' is-selected' : '') +
+        (c.status !== 'PENDING' ? ' is-resolved' : '') + '"' +
+        ' data-id="' + escHtml(c.id) + '" role="button" tabindex="0">' +
       '<div class="esc-queue-card-top">' +
         '<span class="esc-case-id">' + escHtml(c.id) + '</span>' +
         '<span class="esc-status-pill ' + statusPillClass(c.status) + '">' + escHtml(c.status) + '</span>' +
@@ -239,7 +280,7 @@ function renderQueue() {
         '<span class="esc-tier-badge ' + tierClass(c.customer.tier) + '">' + escHtml(c.customer.tier) + '</span>' +
       '</div>' +
       '<div class="esc-queue-product">' + escHtml(c.order.product) + '</div>' +
-      '<div class="esc-queue-reason">' + escHtml(shortReason) + '</div>' +
+      '<div class="esc-queue-reason">' + escHtml(short) + '</div>' +
       '<div class="esc-queue-time">' + escHtml(formatTimestamp(c.timestamp)) + '</div>' +
     '</div>';
   }).join('');
@@ -258,6 +299,115 @@ function selectCase(id) {
   renderDetail();
 }
 
+// ── Letter block ──────────────────────────────────────────────────────────────
+function renderLetterBlock(c) {
+  if (c.isLoading) {
+    return '<p class="esc-letter-loading"><span class="esc-spinner"></span>Drafting response via AI…</p>';
+  }
+  if (!c.generatedLetter) return '';
+
+  var rendered = markdownToHtml(c.generatedLetter);
+
+  return '<div class="esc-letter-meta-row">' +
+      '<span class="esc-ai-chip">✶ AI-drafted</span>' +
+    '</div>' +
+    '<blockquote class="esc-letter-body"><p class="esc-letter-para">' + rendered + '</p></blockquote>' +
+    '<div class="esc-letter-actions">' +
+      '<button class="esc-copy-btn" id="escCopyBtn-' + escHtml(c.id) + '">Copy to clipboard</button>' +
+      '<button class="esc-edit-btn" id="escEditBtn-' + escHtml(c.id) + '">✎ Edit &amp; Send</button>' +
+    '</div>';
+}
+
+function bindLetterButtons(c) {
+  var copyBtn = document.getElementById('escCopyBtn-' + c.id);
+  if (copyBtn) {
+    copyBtn.addEventListener('click', function () {
+      navigator.clipboard.writeText(c.generatedLetter || '').catch(function () {});
+      showToast('Letter copied to clipboard');
+    });
+  }
+  var editBtn = document.getElementById('escEditBtn-' + c.id);
+  if (editBtn) {
+    editBtn.addEventListener('click', function () { enterEditMode(c.id); });
+  }
+}
+
+// ── Edit & Send mode ──────────────────────────────────────────────────────────
+function enterEditMode(caseId) {
+  var c = ESCALATION_CASES.find(function (x) { return x.id === caseId; });
+  if (!c || !c.generatedLetter) return;
+
+  if (!activeIncentives[caseId]) { activeIncentives[caseId] = new Set(); }
+  var active = activeIncentives[caseId];
+
+  var pillsHtml = INCENTIVES.map(function (inc, idx) {
+    var isActive = active.has(idx);
+    return '<button class="esc-incentive-pill' + (isActive ? ' is-active' : '') + '"' +
+      ' data-idx="' + idx + '">' + escHtml(inc.label) + '</button>';
+  }).join('');
+
+  var card = document.getElementById('escLetterCard-' + caseId);
+  if (!card) return;
+
+  card.innerHTML =
+    '<div class="esc-letter-meta-row">' +
+      '<span class="esc-ai-chip">✶ AI-drafted</span>' +
+    '</div>' +
+    '<div class="esc-incentive-row">' + pillsHtml + '</div>' +
+    '<textarea class="esc-edit-textarea" id="escTextarea-' + escHtml(caseId) + '" rows="10" spellcheck="true">' +
+      escHtml(buildEditableText(c, active)) +
+    '</textarea>' +
+    '<div class="esc-send-row">' +
+      '<button class="esc-send-btn" id="escSendBtn-' + escHtml(caseId) + '">Send to ' + escHtml(c.customer.email) + '</button>' +
+    '</div>';
+
+  // Incentive pill toggles
+  card.querySelectorAll('.esc-incentive-pill').forEach(function (pill) {
+    pill.addEventListener('click', function () {
+      var idx = parseInt(pill.dataset.idx, 10);
+      if (active.has(idx)) {
+        active.delete(idx);
+        pill.classList.remove('is-active');
+      } else {
+        active.add(idx);
+        pill.classList.add('is-active');
+      }
+      var ta = document.getElementById('escTextarea-' + caseId);
+      if (ta) { ta.value = buildEditableText(c, active); }
+    });
+  });
+
+  // Send button
+  var sendBtn = document.getElementById('escSendBtn-' + caseId);
+  if (sendBtn) {
+    sendBtn.addEventListener('click', function () {
+      var ta = document.getElementById('escTextarea-' + caseId);
+      if (ta) { c.generatedLetter = ta.value; }
+      showToast('✓ Email sent to ' + c.customer.email);
+    });
+  }
+}
+
+function buildEditableText(c, active) {
+  var base = c.generatedLetter.trim();
+  // Strip any letterhead before "Dear"
+  var lines = base.split('\n');
+  var dearIdx = -1;
+  for (var i = 0; i < lines.length; i++) {
+    if (/^Dear\b/i.test(lines[i].trim())) { dearIdx = i; break; }
+  }
+  if (dearIdx > 0) { base = lines.slice(dearIdx).join('\n'); }
+
+  if (active.size > 0) {
+    var clauses = [];
+    INCENTIVES.forEach(function (inc, idx) {
+      if (active.has(idx)) { clauses.push(inc.clause); }
+    });
+    base = base + '\n\n' + clauses.join('\n');
+  }
+  return base;
+}
+
 // ── Detail Panel ──────────────────────────────────────────────────────────────
 function renderDetail() {
   var el = document.getElementById('escDetail');
@@ -265,21 +415,16 @@ function renderDetail() {
   var c = ESCALATION_CASES.find(function (x) { return x.id === selectedCaseId; });
   if (!c) { el.innerHTML = ''; return; }
 
-  var isPending = c.status === 'PENDING';
+  var isPending  = c.status === 'PENDING';
   var isAccepted = c.status === 'ACCEPTED';
+
   var failedRulesHtml = c.agentOutputs.eligibilityFailedRules.map(function (r) {
     return '<span class="esc-rule-chip">' + escHtml(r) + '</span>';
   }).join('');
 
-  var letterHtml = '';
-  if (c.isLoading) {
-    letterHtml = '<p class="esc-letter-loading"><span class="esc-spinner"></span>Drafting response via AI…</p>';
-  } else if (c.generatedLetter) {
-    letterHtml = '<blockquote class="esc-letter-body">' + escHtml(c.generatedLetter).replace(/\n/g, '<br>') + '</blockquote>' +
-      '<button class="esc-copy-btn" id="escCopyBtn-' + escHtml(c.id) + '">Copy to clipboard</button>';
-  } else if (!isPending) {
-    letterHtml = '<p class="esc-letter-loading"><span class="esc-spinner"></span>Drafting response via AI…</p>';
-  }
+  var outcomeIcon = isAccepted
+    ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
+    : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
 
   el.innerHTML =
     '<div class="esc-detail-inner">' +
@@ -351,7 +496,7 @@ function renderDetail() {
       ? '<section class="esc-detail-section esc-actions-section" id="escActionsSection-' + escHtml(c.id) + '">' +
           '<div class="esc-action-btns">' +
             '<button class="esc-btn-accept" id="escAcceptBtn-' + escHtml(c.id) + '" data-id="' + escHtml(c.id) + '">✓ ACCEPT RETURN</button>' +
-            '<button class="esc-btn-deny" id="escDenyBtn-' + escHtml(c.id) + '" data-id="' + escHtml(c.id) + '">✗ DENY RETURN</button>' +
+            '<button class="esc-btn-deny"   id="escDenyBtn-'   + escHtml(c.id) + '" data-id="' + escHtml(c.id) + '">✗ DENY RETURN</button>' +
           '</div>' +
           '<p class="esc-action-hint">AI will draft a professional response based on this case report.</p>' +
         '</section>'
@@ -361,10 +506,11 @@ function renderDetail() {
     (!isPending
       ? '<section class="esc-detail-section">' +
           '<div class="esc-outcome-banner ' + (isAccepted ? 'esc-outcome-accepted' : 'esc-outcome-denied') + '">' +
-            (isAccepted ? '✓ Return Accepted' : '✗ Return Denied') +
+            outcomeIcon +
+            (isAccepted ? 'Return Accepted' : 'Return Denied') +
           '</div>' +
           '<div class="esc-letter-card" id="escLetterCard-' + escHtml(c.id) + '">' +
-            letterHtml +
+            renderLetterBlock(c) +
           '</div>' +
         '</section>'
       : '') +
@@ -373,21 +519,11 @@ function renderDetail() {
 
   // Bind action buttons
   var acceptBtn = document.getElementById('escAcceptBtn-' + c.id);
-  if (acceptBtn) {
-    acceptBtn.addEventListener('click', function () { handleDecision(c.id, 'ACCEPTED'); });
-  }
+  if (acceptBtn) { acceptBtn.addEventListener('click', function () { handleDecision(c.id, 'ACCEPTED'); }); }
   var denyBtn = document.getElementById('escDenyBtn-' + c.id);
-  if (denyBtn) {
-    denyBtn.addEventListener('click', function () { handleDecision(c.id, 'DENIED'); });
-  }
+  if (denyBtn) { denyBtn.addEventListener('click', function () { handleDecision(c.id, 'DENIED'); }); }
 
-  // Bind copy button if letter already rendered
-  var copyBtn = document.getElementById('escCopyBtn-' + c.id);
-  if (copyBtn && c.generatedLetter) {
-    copyBtn.addEventListener('click', function () {
-      navigator.clipboard.writeText(c.generatedLetter).catch(function () {});
-    });
-  }
+  bindLetterButtons(c);
 }
 
 // ── AI Decision ───────────────────────────────────────────────────────────────
@@ -404,8 +540,8 @@ async function handleDecision(caseId, decision) {
   renderDetail();
 
   var systemPrompt = decision === 'ACCEPTED'
-    ? 'You are a senior returns specialist at Cosmic Mart. Draft a professional, empathetic 1–2 paragraph acceptance letter for a return escalation. Address the customer by first name. Reference the specific product, the reason for original denial, and explain clearly why the exception is being approved. Close with next steps for the return. Tone: warm but formal.'
-    : 'You are a senior returns specialist at Cosmic Mart. Draft a professional, empathetic 1–2 paragraph denial letter for a return escalation. Address the customer by first name. Reference the specific product and the failed eligibility rules by name. Explain clearly why the exception cannot be approved. Offer an alternative (store credit, extended warranty claim, or manufacturer contact). Tone: firm but respectful.';
+    ? 'You are a senior returns specialist at Cosmic Mart. Draft a professional, empathetic 1–2 paragraph acceptance letter for a return escalation. Address the customer by first name. Reference the specific product, the reason for original denial, and explain clearly why the exception is being approved. Close with next steps for the return. Tone: warm but formal. Do not include any letterhead or header — begin directly with "Dear [Name],".'
+    : 'You are a senior returns specialist at Cosmic Mart. Draft a professional, empathetic 1–2 paragraph denial letter for a return escalation. Address the customer by first name. Reference the specific product and the failed eligibility rules by name. Explain clearly why the exception cannot be approved. Offer an alternative (store credit, extended warranty claim, or manufacturer contact). Tone: firm but respectful. Do not include any letterhead or header — begin directly with "Dear [Name],".';
 
   var userMessage = 'Escalation case report: ' + JSON.stringify({
     caseNarrative: c.caseNarrative,
@@ -425,18 +561,10 @@ async function handleDecision(caseId, decision) {
   c.generatedLetter = letter;
   c.isLoading = false;
 
-  // Update letter card whether or not this case is still selected
   var letterCard = document.getElementById('escLetterCard-' + caseId);
   if (letterCard) {
-    letterCard.innerHTML =
-      '<blockquote class="esc-letter-body">' + escHtml(letter).replace(/\n/g, '<br>') + '</blockquote>' +
-      '<button class="esc-copy-btn" id="escCopyBtn-' + escHtml(caseId) + '">Copy to clipboard</button>';
-    var copyBtn = document.getElementById('escCopyBtn-' + caseId);
-    if (copyBtn) {
-      copyBtn.addEventListener('click', function () {
-        navigator.clipboard.writeText(letter).catch(function () {});
-      });
-    }
+    letterCard.innerHTML = renderLetterBlock(c);
+    bindLetterButtons(c);
   }
 }
 
