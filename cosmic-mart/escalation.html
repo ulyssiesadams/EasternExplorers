@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="css/global.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/pages/escalation.css">
-  <style>:root { --nav-height: 56px; }</style>
+  <style>:root { --nav-height: 92px; }</style>
 </head>
 <body>
 
@@ -38,12 +38,12 @@
     </div>
   </div>
   <nav class="portal-tabs" role="tablist">
-    <button class="portal-tab is-active" data-tab="queue"    role="tab">
+    <button class="portal-tab is-active" data-tab="queue"     role="tab" aria-selected="true">
       Escalation Queue <span class="portal-tab-badge" id="tabBadgeQueue">6</span>
     </button>
-    <button class="portal-tab"           data-tab="analytics" role="tab">Analytics</button>
-    <button class="portal-tab"           data-tab="archive"   role="tab">Archive</button>
-    <button class="portal-tab"           data-tab="team"      role="tab">Team Activity</button>
+    <button class="portal-tab"           data-tab="analytics" role="tab" aria-selected="false">Analytics</button>
+    <button class="portal-tab"           data-tab="archive"   role="tab" aria-selected="false">Archive</button>
+    <button class="portal-tab"           data-tab="team"      role="tab" aria-selected="false">Team Activity</button>
   </nav>
 </header>
 
@@ -93,7 +93,7 @@
         <h2 class="esc-analytics-title">Returns Intelligence <span style="color:var(--text-secondary);">— October 2026</span></h2>
         <p class="esc-analytics-sub">Enterprise dashboard · Real-time data</p>
       </div>
-      <div class="esc-period-pills">
+      <div class="esc-period-pills" id="escPeriodPills">
         <button class="esc-period-pill is-active">This Month</button>
         <button class="esc-period-pill">Last Month</button>
         <button class="esc-period-pill">Q3</button>
@@ -107,14 +107,14 @@
         <span class="esc-kpi-trend up">+18 vs last month</span>
       </div>
       <div class="esc-kpi-tile" style="border-top:3px solid #f59e0b">
-        <span class="esc-kpi-value">12.4%</span>
+        <span class="esc-kpi-value">12.6%</span>
         <span class="esc-kpi-label">Escalation Rate</span>
-        <span class="esc-kpi-trend up">↓ 1.2% improvement</span>
+        <span class="esc-kpi-trend up">↓ 1.2% · 31 of 247 cases</span>
       </div>
       <div class="esc-kpi-tile" style="border-top:3px solid #10b981">
-        <span class="esc-kpi-value">76.5%</span>
+        <span class="esc-kpi-value">87.4%</span>
         <span class="esc-kpi-label">AI Resolution Rate</span>
-        <span class="esc-kpi-trend up">189 of 247 cases</span>
+        <span class="esc-kpi-trend up">216 of 247 cases</span>
       </div>
       <div class="esc-kpi-tile" style="border-top:3px solid #6366f1">
         <span class="esc-kpi-value">3.2 hrs</span>
@@ -145,7 +145,7 @@
     <div class="esc-charts-row">
       <div class="esc-chart-card">
         <div class="esc-chart-title">Weekly Case Volume <span class="esc-chart-sub">— 6 weeks · Peak: 51 cases (Week 5)</span></div>
-        <svg class="esc-line-chart" viewBox="0 0 520 140" preserveAspectRatio="none" style="overflow:visible;">
+        <svg class="esc-line-chart" viewBox="0 0 520 140" style="overflow:visible;">
           <defs>
             <linearGradient id="wkAreaGrad" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stop-color="#6366f1" stop-opacity="0.3"/>
@@ -176,15 +176,46 @@
       <div class="esc-chart-card">
         <div class="esc-chart-title">Return Category Breakdown <span class="esc-chart-sub">— this month</span></div>
         <div class="esc-hbar-list">
-          <div class="esc-hbar-row"><span class="esc-hbar-label">DEFECTIVE</span><div class="esc-hbar-track"><div class="esc-hbar-fill" style="width:100%;background:#ef4444;"></div></div><span class="esc-hbar-val">78 · 38%</span></div>
-          <div class="esc-hbar-row"><span class="esc-hbar-label">WRONG_ITEM</span><div class="esc-hbar-track"><div class="esc-hbar-fill" style="width:67%;background:#f59e0b;"></div></div><span class="esc-hbar-val">52 · 25%</span></div>
-          <div class="esc-hbar-row"><span class="esc-hbar-label">CHANGED_MIND</span><div class="esc-hbar-track"><div class="esc-hbar-fill" style="width:56%;background:#8b5cf6;"></div></div><span class="esc-hbar-val">44 · 21%</span></div>
-          <div class="esc-hbar-row"><span class="esc-hbar-label">DAMAGED_TRANSIT</span><div class="esc-hbar-track"><div class="esc-hbar-fill" style="width:40%;background:#6366f1;"></div></div><span class="esc-hbar-val">31 · 15%</span></div>
-          <div class="esc-hbar-row"><span class="esc-hbar-label">SIZING</span><div class="esc-hbar-track"><div class="esc-hbar-fill" style="width:27%;background:#10b981;"></div></div><span class="esc-hbar-val">21 · 10%</span></div>
-          <div class="esc-hbar-row"><span class="esc-hbar-label">DESC_MISMATCH</span><div class="esc-hbar-track"><div class="esc-hbar-fill" style="width:15%;background:#94a3b8;"></div></div><span class="esc-hbar-val">12 · 6%</span></div>
+          <div class="esc-hbar-row"><span class="esc-hbar-label">DEFECTIVE</span><div class="esc-hbar-track"><div class="esc-hbar-fill" style="width:100%;background:#ef4444;"></div></div><span class="esc-hbar-val">94 · 38%</span></div>
+          <div class="esc-hbar-row"><span class="esc-hbar-label">WRONG_ITEM</span><div class="esc-hbar-track"><div class="esc-hbar-fill" style="width:57%;background:#f59e0b;"></div></div><span class="esc-hbar-val">54 · 22%</span></div>
+          <div class="esc-hbar-row"><span class="esc-hbar-label">CHANGED_MIND</span><div class="esc-hbar-track"><div class="esc-hbar-fill" style="width:52%;background:#8b5cf6;"></div></div><span class="esc-hbar-val">49 · 20%</span></div>
+          <div class="esc-hbar-row"><span class="esc-hbar-label">DAMAGED_TRANSIT</span><div class="esc-hbar-track"><div class="esc-hbar-fill" style="width:34%;background:#6366f1;"></div></div><span class="esc-hbar-val">32 · 13%</span></div>
+          <div class="esc-hbar-row"><span class="esc-hbar-label">DESC_MISMATCH</span><div class="esc-hbar-track"><div class="esc-hbar-fill" style="width:19%;background:#94a3b8;"></div></div><span class="esc-hbar-val">18 · 7%</span></div>
         </div>
       </div>
     </div>
+    <div class="esc-map-section">
+      <div class="esc-map-sidebar">
+        <div class="esc-map-sidebar-title">Top by Volume</div>
+        <div class="esc-map-rank-list">
+          <div class="esc-rank-item"><span class="esc-rank-num">1</span><span class="esc-rank-state">CA</span><span class="esc-rank-val">1,842</span></div>
+          <div class="esc-rank-item"><span class="esc-rank-num">2</span><span class="esc-rank-state">TX</span><span class="esc-rank-val">1,521</span></div>
+          <div class="esc-rank-item"><span class="esc-rank-num">3</span><span class="esc-rank-state">FL</span><span class="esc-rank-val">1,287</span></div>
+          <div class="esc-rank-item"><span class="esc-rank-num">4</span><span class="esc-rank-state">NY</span><span class="esc-rank-val">1,143</span></div>
+          <div class="esc-rank-item"><span class="esc-rank-num">5</span><span class="esc-rank-state">IL</span><span class="esc-rank-val">743</span></div>
+        </div>
+      </div>
+      <div class="esc-map-container">
+        <div class="esc-chart-title" style="margin-bottom:12px;">Returns by State <span class="esc-chart-sub">— hover any state for details</span></div>
+        <div id="escMapContainer"></div>
+        <div class="esc-map-scale">
+          <span class="esc-map-scale-label">Low</span>
+          <div class="esc-map-scale-bar"></div>
+          <span class="esc-map-scale-label">High</span>
+        </div>
+      </div>
+      <div class="esc-map-sidebar">
+        <div class="esc-map-sidebar-title">Top Esc. Rate</div>
+        <div class="esc-map-rank-list esc-rank-best">
+          <div class="esc-rank-item"><span class="esc-rank-num">1</span><span class="esc-rank-state">WA</span><span class="esc-rank-rate">14.2%</span></div>
+          <div class="esc-rank-item"><span class="esc-rank-num">2</span><span class="esc-rank-state">CA</span><span class="esc-rank-rate">12.5%</span></div>
+          <div class="esc-rank-item"><span class="esc-rank-num">3</span><span class="esc-rank-state">NY</span><span class="esc-rank-rate">11.8%</span></div>
+          <div class="esc-rank-item"><span class="esc-rank-num">4</span><span class="esc-rank-state">IL</span><span class="esc-rank-rate">10.8%</span></div>
+          <div class="esc-rank-item"><span class="esc-rank-num">5</span><span class="esc-rank-state">MA</span><span class="esc-rank-rate">10.4%</span></div>
+        </div>
+      </div>
+    </div>
+
     <div class="esc-bottom-row">
       <div class="esc-bottom-card">
         <div class="esc-chart-title">Tier Breakdown</div>
@@ -200,11 +231,11 @@
       <div class="esc-bottom-card">
         <div class="esc-chart-title">Top Escalation Triggers</div>
         <ol class="esc-trigger-list">
-          <li><span class="esc-trigger-name">Proof of damage not submitted</span><span class="esc-trigger-count">47 cases</span></li>
-          <li><span class="esc-trigger-name">Return window expired</span><span class="esc-trigger-count">38 cases</span></li>
-          <li><span class="esc-trigger-name">High-value item threshold</span><span class="esc-trigger-count">29 cases</span></li>
-          <li><span class="esc-trigger-name">Wrong item — unverified claim</span><span class="esc-trigger-count">24 cases</span></li>
-          <li><span class="esc-trigger-name">Changed mind — window exceeded</span><span class="esc-trigger-count">19 cases</span></li>
+          <li><span class="esc-trigger-name">Proof of damage not submitted</span><span class="esc-trigger-count">9 cases</span></li>
+          <li><span class="esc-trigger-name">Return window expired</span><span class="esc-trigger-count">7 cases</span></li>
+          <li><span class="esc-trigger-name">High-value item threshold</span><span class="esc-trigger-count">6 cases</span></li>
+          <li><span class="esc-trigger-name">Wrong item — unverified claim</span><span class="esc-trigger-count">5 cases</span></li>
+          <li><span class="esc-trigger-name">Changed mind — window exceeded</span><span class="esc-trigger-count">4 cases</span></li>
         </ol>
       </div>
       <div class="esc-bottom-card">
@@ -213,8 +244,8 @@
           <div class="esc-perf-row"><span class="esc-perf-label">Intent Classification Accuracy</span><span class="esc-perf-val" style="color:var(--success);">97.2%</span></div>
           <div class="esc-perf-row"><span class="esc-perf-label">Eligibility False Positives</span><span class="esc-perf-val" style="color:var(--danger);">4.8%</span></div>
           <div class="esc-perf-row"><span class="esc-perf-label">Avg Tokens Per Case</span><span class="esc-perf-val">1,842</span></div>
-          <div class="esc-perf-row"><span class="esc-perf-label">Fully Automated (no escalation)</span><span class="esc-perf-val" style="color:var(--success);">87.6%</span></div>
-          <div class="esc-perf-row"><span class="esc-perf-label">AI-Assisted (escalated)</span><span class="esc-perf-val" style="color:#f59e0b;">12.4%</span></div>
+          <div class="esc-perf-row"><span class="esc-perf-label">Fully Automated (no escalation)</span><span class="esc-perf-val" style="color:var(--success);">87.4%</span></div>
+          <div class="esc-perf-row"><span class="esc-perf-label">AI-Assisted (escalated)</span><span class="esc-perf-val" style="color:#f59e0b;">12.6%</span></div>
           <div class="esc-perf-row"><span class="esc-perf-label">Avg API Latency</span><span class="esc-perf-val">2.3s</span></div>
         </div>
       </div>
@@ -254,46 +285,46 @@
     <div class="esc-archive-header">
       <div>
         <h2 class="esc-analytics-title">Case Archive</h2>
-        <p class="esc-analytics-sub">Historical escalation records — last 90 days</p>
+        <p class="esc-analytics-sub">Resolved escalation records — Q3 2026</p>
       </div>
     </div>
     <div class="esc-archive-controls">
-      <input class="esc-archive-search" type="text" placeholder="Search by case ID, customer, or product…" />
+      <input class="esc-archive-search" id="escArchiveSearch" type="search" placeholder="Search by case ID, customer, or product…" aria-label="Search archive" />
       <div class="esc-filter-pills">
-        <button class="esc-filter-pill is-active">All</button>
-        <button class="esc-filter-pill">Accepted</button>
-        <button class="esc-filter-pill">Denied</button>
-        <button class="esc-filter-pill">Last 30 days</button>
-        <button class="esc-filter-pill">All time</button>
+        <button class="esc-filter-pill is-active" data-filter="all">All</button>
+        <button class="esc-filter-pill" data-filter="ACCEPTED">Accepted</button>
+        <button class="esc-filter-pill" data-filter="DENIED">Denied</button>
+        <button class="esc-filter-pill" data-filter="recent">Last 30 days</button>
       </div>
     </div>
     <div class="esc-archive-table-wrap">
-      <table class="esc-archive-table">
+      <table class="esc-archive-table" id="escArchiveTable">
         <thead>
           <tr><th>Case ID</th><th>Date</th><th>Customer</th><th>Product</th><th>Reason</th><th>Decision</th><th>$ Value</th><th>Resolved By</th></tr>
         </thead>
         <tbody>
-          <tr><td class="esc-arch-id">ESC-2026-0089</td><td>Jul 8, 2026</td><td>Natalie Brooks</td><td>OrbitalTime X Smart Watch</td><td>DEFECTIVE</td><td><span class="esc-status-pill esc-pill-accepted">ACCEPTED</span></td><td>$319</td><td>Jordan Hayes</td></tr>
-          <tr><td class="esc-arch-id">ESC-2026-0091</td><td>Jul 10, 2026</td><td>Omar Hassan</td><td>NovaSound Pro Headphones</td><td>DAMAGED_TRANSIT</td><td><span class="esc-status-pill esc-pill-denied">DENIED</span></td><td>$249</td><td>Maya Patel</td></tr>
-          <tr><td class="esc-arch-id">ESC-2026-0094</td><td>Jul 15, 2026</td><td>Sophie Klein</td><td>LunaFlow Silk Wrap Dress</td><td>CHANGED_MIND</td><td><span class="esc-status-pill esc-pill-accepted">ACCEPTED</span></td><td>$89</td><td>Chris Okonkwo</td></tr>
-          <tr><td class="esc-arch-id">ESC-2026-0098</td><td>Jul 19, 2026</td><td>Rafael Torres</td><td>NexusStrike Pro Gaming Mouse</td><td>DEFECTIVE</td><td><span class="esc-status-pill esc-pill-accepted">ACCEPTED</span></td><td>$179</td><td>Jordan Hayes</td></tr>
-          <tr><td class="esc-arch-id">ESC-2026-0103</td><td>Jul 24, 2026</td><td>Aisha Johnson</td><td>StellarChef Pro Air Fryer</td><td>WRONG_ITEM</td><td><span class="esc-status-pill esc-pill-accepted">ACCEPTED</span></td><td>$129</td><td>Maya Patel</td></tr>
-          <tr><td class="esc-arch-id">ESC-2026-0110</td><td>Aug 2, 2026</td><td>Dmitri Volkov</td><td>OrbitTab X2 Tablet</td><td>RETURN_WINDOW</td><td><span class="esc-status-pill esc-pill-denied">DENIED</span></td><td>$389</td><td>Chris Okonkwo</td></tr>
-          <tr><td class="esc-arch-id">ESC-2026-0114</td><td>Aug 7, 2026</td><td>Camille Dubois</td><td>CosmoBlend Pro Juicer</td><td>DEFECTIVE</td><td><span class="esc-status-pill esc-pill-accepted">ACCEPTED</span></td><td>$149</td><td>Jordan Hayes</td></tr>
-          <tr><td class="esc-arch-id">ESC-2026-0119</td><td>Aug 12, 2026</td><td>Kwame Asante</td><td>StarBud Pro Wireless Earbuds</td><td>DEFECTIVE</td><td><span class="esc-status-pill esc-pill-denied">DENIED</span></td><td>$189</td><td>Maya Patel</td></tr>
-          <tr><td class="esc-arch-id">ESC-2026-0125</td><td>Aug 18, 2026</td><td>Isabella Chen</td><td>NovaSleep Smart Pillow</td><td>DESCRIPTION_MISMATCH</td><td><span class="esc-status-pill esc-pill-accepted">ACCEPTED</span></td><td>$79</td><td>Chris Okonkwo</td></tr>
-          <tr><td class="esc-arch-id">ESC-2026-0131</td><td>Aug 25, 2026</td><td>Ethan Park</td><td>VelocityRun Pro Sneakers</td><td>SIZING</td><td><span class="esc-status-pill esc-pill-denied">DENIED</span></td><td>$139</td><td>Jordan Hayes</td></tr>
-          <tr><td class="esc-arch-id">ESC-2026-0140</td><td>Sep 3, 2026</td><td>Zara Williams</td><td>QuantumPad Wireless Charger</td><td>WRONG_ITEM</td><td><span class="esc-status-pill esc-pill-accepted">ACCEPTED</span></td><td>$59</td><td>Maya Patel</td></tr>
-          <tr><td class="esc-arch-id">ESC-2026-0147</td><td>Sep 9, 2026</td><td>Marco Rossi</td><td>NexusStrike Pro Gaming Mouse</td><td>DEFECTIVE</td><td><span class="esc-status-pill esc-pill-accepted">ACCEPTED</span></td><td>$179</td><td>Chris Okonkwo</td></tr>
-          <tr><td class="esc-arch-id">ESC-2026-0155</td><td>Sep 16, 2026</td><td>Priya Nair</td><td>OrbitalTime X Smart Watch</td><td>CHANGED_MIND</td><td><span class="esc-status-pill esc-pill-denied">DENIED</span></td><td>$319</td><td>Jordan Hayes</td></tr>
-          <tr><td class="esc-arch-id">ESC-2026-0162</td><td>Sep 22, 2026</td><td>Tyler Morgan</td><td>StellarChef Pro Air Fryer</td><td>DAMAGED_TRANSIT</td><td><span class="esc-status-pill esc-pill-accepted">ACCEPTED</span></td><td>$129</td><td>Maya Patel</td></tr>
-          <tr><td class="esc-arch-id">ESC-2026-0170</td><td>Sep 29, 2026</td><td>Lena Fischer</td><td>NovaSound Pro Headphones</td><td>DEFECTIVE</td><td><span class="esc-status-pill esc-pill-accepted">ACCEPTED</span></td><td>$249</td><td>Chris Okonkwo</td></tr>
+          <tr data-date="2026-07-08" data-decision="ACCEPTED"><td class="esc-arch-id">ESC-2026-0089</td><td>Jul 8, 2026</td><td>Natalie Brooks</td><td>OrbitWatch Smartwatch</td><td>DEFECTIVE</td><td><span class="esc-status-pill esc-pill-accepted">ACCEPTED</span></td><td>$249</td><td>Jordan Hayes</td></tr>
+          <tr data-date="2026-07-10" data-decision="DENIED"><td class="esc-arch-id">ESC-2026-0091</td><td>Jul 10, 2026</td><td>Omar Hassan</td><td>AstroSound Portable Speaker</td><td>DAMAGED_TRANSIT</td><td><span class="esc-status-pill esc-pill-denied">DENIED</span></td><td>$129</td><td>Maya Patel</td></tr>
+          <tr data-date="2026-07-15" data-decision="ACCEPTED"><td class="esc-arch-id">ESC-2026-0094</td><td>Jul 15, 2026</td><td>Sophie Klein</td><td>Orbital Puffer Jacket</td><td>CHANGED_MIND</td><td><span class="esc-status-pill esc-pill-accepted">ACCEPTED</span></td><td>$199</td><td>Chris Okonkwo</td></tr>
+          <tr data-date="2026-07-19" data-decision="ACCEPTED"><td class="esc-arch-id">ESC-2026-0098</td><td>Jul 19, 2026</td><td>Rafael Torres</td><td>StarLink Gaming Headset</td><td>DEFECTIVE</td><td><span class="esc-status-pill esc-pill-accepted">ACCEPTED</span></td><td>$159</td><td>Jordan Hayes</td></tr>
+          <tr data-date="2026-07-24" data-decision="ACCEPTED"><td class="esc-arch-id">ESC-2026-0103</td><td>Jul 24, 2026</td><td>Aisha Johnson</td><td>NebulaBlend Pro Blender</td><td>WRONG_ITEM</td><td><span class="esc-status-pill esc-pill-accepted">ACCEPTED</span></td><td>$129</td><td>Maya Patel</td></tr>
+          <tr data-date="2026-08-02" data-decision="DENIED"><td class="esc-arch-id">ESC-2026-0110</td><td>Aug 2, 2026</td><td>Dmitri Volkov</td><td>NovaPad X Tablet</td><td>CHANGED_MIND</td><td><span class="esc-status-pill esc-pill-denied">DENIED</span></td><td>$449</td><td>Chris Okonkwo</td></tr>
+          <tr data-date="2026-08-07" data-decision="ACCEPTED"><td class="esc-arch-id">ESC-2026-0114</td><td>Aug 7, 2026</td><td>Camille Dubois</td><td>AstroCast Diffuser Set</td><td>DEFECTIVE</td><td><span class="esc-status-pill esc-pill-accepted">ACCEPTED</span></td><td>$49</td><td>Jordan Hayes</td></tr>
+          <tr data-date="2026-08-12" data-decision="DENIED"><td class="esc-arch-id">ESC-2026-0119</td><td>Aug 12, 2026</td><td>Kwame Asante</td><td>StarBud Pro Wireless Headphones</td><td>DEFECTIVE</td><td><span class="esc-status-pill esc-pill-denied">DENIED</span></td><td>$189</td><td>Maya Patel</td></tr>
+          <tr data-date="2026-08-18" data-decision="ACCEPTED"><td class="esc-arch-id">ESC-2026-0125</td><td>Aug 18, 2026</td><td>Isabella Chen</td><td>OrbitPillow Memory Foam Set</td><td>DESCRIPTION_MISMATCH</td><td><span class="esc-status-pill esc-pill-accepted">ACCEPTED</span></td><td>$119</td><td>Chris Okonkwo</td></tr>
+          <tr data-date="2026-08-25" data-decision="DENIED"><td class="esc-arch-id">ESC-2026-0131</td><td>Aug 25, 2026</td><td>Ethan Park</td><td>AstroRunner Sneakers</td><td>CHANGED_MIND</td><td><span class="esc-status-pill esc-pill-denied">DENIED</span></td><td>$149</td><td>Jordan Hayes</td></tr>
+          <tr data-date="2026-09-03" data-decision="ACCEPTED"><td class="esc-arch-id">ESC-2026-0140</td><td>Sep 3, 2026</td><td>Zara Williams</td><td>QuantumCharge 100W Charging Hub</td><td>WRONG_ITEM</td><td><span class="esc-status-pill esc-pill-accepted">ACCEPTED</span></td><td>$79</td><td>Maya Patel</td></tr>
+          <tr data-date="2026-09-09" data-decision="ACCEPTED"><td class="esc-arch-id">ESC-2026-0147</td><td>Sep 9, 2026</td><td>Marco Rossi</td><td>NebulaKey Mechanical Keyboard</td><td>DEFECTIVE</td><td><span class="esc-status-pill esc-pill-accepted">ACCEPTED</span></td><td>$199</td><td>Chris Okonkwo</td></tr>
+          <tr data-date="2026-09-16" data-decision="DENIED"><td class="esc-arch-id">ESC-2026-0155</td><td>Sep 16, 2026</td><td>Priya Nair</td><td>CosmicCam 4K Action Camera</td><td>CHANGED_MIND</td><td><span class="esc-status-pill esc-pill-denied">DENIED</span></td><td>$299</td><td>Jordan Hayes</td></tr>
+          <tr data-date="2026-09-22" data-decision="ACCEPTED"><td class="esc-arch-id">ESC-2026-0162</td><td>Sep 22, 2026</td><td>Tyler Morgan</td><td>CosmicComfort Weighted Blanket</td><td>DAMAGED_TRANSIT</td><td><span class="esc-status-pill esc-pill-accepted">ACCEPTED</span></td><td>$89</td><td>Maya Patel</td></tr>
+          <tr data-date="2026-09-29" data-decision="ACCEPTED"><td class="esc-arch-id">ESC-2026-0170</td><td>Sep 29, 2026</td><td>Lena Fischer</td><td>StarLight Desk Lamp</td><td>DEFECTIVE</td><td><span class="esc-status-pill esc-pill-accepted">ACCEPTED</span></td><td>$69</td><td>Chris Okonkwo</td></tr>
         </tbody>
       </table>
+      <p class="esc-queue-empty" id="escArchiveEmpty" hidden>No cases match your search.</p>
     </div>
     <div class="esc-archive-footer">
-      Showing 15 of 247 cases this quarter &nbsp;·&nbsp;
-      <a href="#" onclick="return false;" style="color:var(--accent-glow);">Export CSV</a>
+      <span id="escArchiveCount">Showing 15 of 15 archived cases</span> &nbsp;·&nbsp;
+      <button type="button" class="esc-archive-export" id="escArchiveExport">Export CSV</button>
     </div>
   </div>
 </div>
@@ -336,7 +367,7 @@
           </div>
         </div>
         <div class="esc-team-total">
-          <span>13 cases resolved</span><span>·</span><span>$1,842 processed</span><span>·</span><span>3.4 hr avg</span><span>·</span><span style="color:#f59e0b;">4.4★ avg CSAT</span>
+          <span>13 cases resolved</span><span>·</span><span>$1,842 processed</span><span>·</span><span>3.3 hr avg</span><span>·</span><span style="color:#f59e0b;">4.4★ avg CSAT</span>
         </div>
       </div>
     </div>
@@ -351,6 +382,14 @@
     </div>
   </div>
 </footer>
+
+<div id="escMapTooltip" class="esc-map-tooltip" hidden>
+  <div class="esc-tooltip-state" id="escTipState"></div>
+  <div class="esc-tooltip-row"><span>Returns</span><span id="escTipReturns"></span></div>
+  <div class="esc-tooltip-row"><span>Escalations</span><span id="escTipEsc"></span></div>
+  <div class="esc-tooltip-row"><span>Top Category</span><span id="escTipCat"></span></div>
+  <div class="esc-tooltip-row"><span>Avg Resolution</span><span id="escTipTime"></span></div>
+</div>
 
 <div id="caseCloseOverlay" class="close-overlay" hidden aria-live="assertive">
   <div class="close-overlay-card">

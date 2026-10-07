@@ -1232,14 +1232,14 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  height: 56px;
+  height: auto;
 }
 
 .portal-header-inner {
   max-width: 1440px;
   margin: 0 auto;
   padding: 0 24px;
-  height: 100%;
+  height: 56px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1341,8 +1341,6 @@
 }
 
 /* ── Tab navigation ──────────────────────────────────────────────────────────── */
-.portal-header { height: auto; }
-
 .portal-tabs {
   display: flex; gap: 0;
   border-top: 1px solid rgba(99,102,241,0.15);
@@ -1400,6 +1398,10 @@
 .esc-closed-name { color:var(--text-primary); flex:1; font-size:0.78rem; }
 .esc-closed-product { color:var(--text-secondary); font-size:0.72rem; flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .esc-closed-time { color:rgba(148,163,184,0.6); font-size:0.68rem; white-space:nowrap; }
+.esc-queue-empty {
+  font-family:'Inter',sans-serif; font-size:0.8rem; color:var(--text-secondary);
+  text-align:center; padding:20px 0;
+}
 
 /* ── Case close overlay ──────────────────────────────────────────────────────── */
 .close-overlay {
@@ -1408,6 +1410,8 @@
   z-index:9999; backdrop-filter:blur(4px);
   animation:co-fadein 0.2s ease;
 }
+/* display:flex above would otherwise beat the UA [hidden] rule */
+.close-overlay[hidden] { display:none; animation:none; }
 @keyframes co-fadein { from{opacity:0} to{opacity:1} }
 .close-overlay-card {
   background:#131e30; border:1px solid rgba(16,185,129,0.4);
@@ -1541,6 +1545,11 @@
   font-family:'Orbitron',sans-serif; font-size:0.6rem;
   color:var(--accent-glow); white-space:nowrap;
 }
+.esc-archive-export {
+  font:inherit; color:var(--accent-glow); background:none; border:none;
+  padding:0; cursor:pointer; text-decoration:underline;
+}
+.esc-archive-export:hover { color:var(--text-primary); }
 .esc-archive-footer {
   font-family:'Inter',sans-serif; font-size:0.78rem;
   color:var(--text-secondary); padding:16px 0 0;

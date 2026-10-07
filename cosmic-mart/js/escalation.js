@@ -197,9 +197,12 @@ function getPendingCount() {
   return ESCALATION_CASES.filter(function (c) { return c.status === 'PENDING'; }).length;
 }
 
+// A case is "closed" only once its letter has been sent, not when a decision is picked.
+function isClosed(c) { return c.closed === true; }
+
 function updateQueueCounts() {
-  var open   = ESCALATION_CASES.filter(function(c){ return c.status==='PENDING'; }).length;
-  var closed = ESCALATION_CASES.filter(function(c){ return c.status!=='PENDING'; }).length;
+  var closed = ESCALATION_CASES.filter(isClosed).length;
+  var open   = ESCALATION_CASES.length - closed;
   var ocEl = document.getElementById('openCount');
   var ccEl = document.getElementById('closedCount');
   if(ocEl) ocEl.textContent = open;
@@ -209,11 +212,6 @@ function updateQueueCounts() {
 }
 
 function updatePendingBadge() {
-  var badge = document.getElementById('escPendingBadge');
-  if (!badge) return;
-  var count = getPendingCount();
-  badge.textContent = count;
-  badge.style.display = count > 0 ? 'inline-flex' : 'none';
   updateQueueCounts();
 }
 
@@ -285,7 +283,12 @@ function showToast(msg) {
 function renderQueue() {
   var el = document.getElementById('escQueue');
   if (!el) return;
-  el.innerHTML = ESCALATION_CASES.map(function (c) {
+  var openCases = ESCALATION_CASES.filter(function (c) { return !isClosed(c); });
+  if (openCases.length === 0) {
+    el.innerHTML = '<p class="esc-queue-empty">Queue clear — no open cases.</p>';
+    return;
+  }
+  el.innerHTML = openCases.map(function (c) {
     var short = c.agentOutputs.escalationReason.length > 82
       ? c.agentOutputs.escalationReason.slice(0, 82) + '…'
       : c.agentOutputs.escalationReason;
@@ -324,9 +327,9 @@ function selectCase(id) {
 function renderClosedQueue() {
   var el = document.getElementById('escClosedQueue');
   if(!el) return;
-  var closed = ESCALATION_CASES.filter(function(c){ return c.status !== 'PENDING'; });
+  var closed = ESCALATION_CASES.filter(isClosed);
   if(closed.length === 0) {
-    el.innerHTML = '<p style="font-family:Inter,sans-serif;font-size:0.8rem;color:var(--text-secondary);text-align:center;padding:20px 0;">No resolved cases yet.</p>';
+    el.innerHTML = '<p class="esc-queue-empty">No resolved cases yet.</p>';
     return;
   }
   el.innerHTML = closed.map(function(c){
@@ -359,34 +362,51 @@ function showEmptyQueue() {
 }
 
 function triggerCaseClose(caseObj, decision) {
+  if (isClosed(caseObj)) return;
+  caseObj.closed = true;
+
   var overlay = document.getElementById('caseCloseOverlay');
-  document.getElementById('closeOverlayCaseId').textContent = caseObj.id;
-  document.getElementById('closeOverlayMeta').textContent =
-    caseObj.customer.name + ' · ' + caseObj.order.product + ' · ' +
-    (decision === 'ACCEPTED' ? '✓ Accepted' : '✗ Denied');
+  if (!overlay) {
+    updateQueueCounts();
+    renderClosedQueue();
+    animateCardOut(caseObj.id, function () {
+      var next = ESCALATION_CASES.find(function(c){ return !isClosed(c); });
+      if (next) { selectCase(next.id); }
+      else { selectedCaseId = null; renderQueue(); showEmptyQueue(); }
+    });
+    return;
+  }
+
+  var idEl   = document.getElementById('closeOverlayCaseId');
+  var metaEl = document.getElementById('closeOverlayMeta');
+  if (idEl)   idEl.textContent   = caseObj.id;
+  if (metaEl) metaEl.textContent = (decision === 'ACCEPTED' ? '✓ Accepted' : '✗ Denied') +
+    ' · Email sent to ' + caseObj.customer.email;
+
   overlay.hidden = false;
 
   setTimeout(function(){
     overlay.hidden = true;
-    animateCardOut(caseObj.id);
     updateQueueCounts();
     renderClosedQueue();
-    var next = ESCALATION_CASES.find(function(c){ return c.status==='PENDING' && c.id!==caseObj.id; });
-    if(next){ selectCase(next.id); }
-    else { renderDetail(); showEmptyQueue(); }
+    animateCardOut(caseObj.id, function () {
+      var next = ESCALATION_CASES.find(function(c){ return !isClosed(c); });
+      if (next) { selectCase(next.id); }
+      else { selectedCaseId = null; renderQueue(); showEmptyQueue(); }
+    });
   }, 1800);
 }
 
-function animateCardOut(id) {
+function animateCardOut(id, done) {
   var card = document.querySelector('.esc-queue-card[data-id="' + id + '"]');
-  if(!card) return;
+  if(!card) { done(); return; }
   card.style.transition = 'all 0.4s ease';
   card.style.background = 'rgba(16,185,129,0.15)';
   card.style.borderColor = '#10b981';
   setTimeout(function(){
     card.style.opacity = '0';
     card.style.transform = 'translateX(-12px)';
-    setTimeout(function(){ renderQueue(); updateQueueCounts(); }, 350);
+    setTimeout(done, 350);
   }, 200);
 }
 
@@ -472,6 +492,7 @@ function enterEditMode(caseId) {
   var sendBtn = document.getElementById('escSendBtn-' + caseId);
   if (sendBtn) {
     sendBtn.addEventListener('click', function () {
+      sendBtn.disabled = true;
       var ta = document.getElementById('escTextarea-' + caseId);
       if (ta) { c.generatedLetter = ta.value; }
       triggerCaseClose(c, c.status);
@@ -809,6 +830,10 @@ function positionTooltip(e) {
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function () {
+  // Ensure overlay starts hidden regardless of any prior state
+  var overlayEl = document.getElementById('caseCloseOverlay');
+  if (overlayEl) overlayEl.hidden = true;
+
   renderQueue();
   renderDetail();
   updatePendingBadge();
@@ -831,8 +856,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
   document.querySelectorAll('.portal-tab').forEach(function(btn){
     btn.addEventListener('click', function(){
-      document.querySelectorAll('.portal-tab').forEach(function(t){ t.classList.remove('is-active'); });
+      document.querySelectorAll('.portal-tab').forEach(function(t){
+        t.classList.remove('is-active');
+        t.setAttribute('aria-selected', 'false');
+      });
       btn.classList.add('is-active');
+      btn.setAttribute('aria-selected', 'true');
       var tab = btn.dataset.tab;
       document.querySelectorAll('.portal-panel').forEach(function(p){
         p.hidden = p.dataset.panel !== tab;
@@ -851,4 +880,68 @@ document.addEventListener('DOMContentLoaded', function () {
   });
   renderClosedQueue();
   updateQueueCounts();
+
+  document.querySelectorAll('#escPeriodPills .esc-period-pill').forEach(function (pill) {
+    pill.addEventListener('click', function () {
+      document.querySelectorAll('#escPeriodPills .esc-period-pill').forEach(function (p) { p.classList.remove('is-active'); });
+      pill.classList.add('is-active');
+    });
+  });
+
+  initArchive();
 });
+
+// ── Archive search / filter / export ──────────────────────────────────────────
+var ARCHIVE_RECENT_CUTOFF = '2026-09-07'; // 30 days before the demo build date
+
+function initArchive() {
+  var table = document.getElementById('escArchiveTable');
+  if (!table) return;
+  var rows    = Array.prototype.slice.call(table.querySelectorAll('tbody tr'));
+  var search  = document.getElementById('escArchiveSearch');
+  var countEl = document.getElementById('escArchiveCount');
+  var emptyEl = document.getElementById('escArchiveEmpty');
+  var filter  = 'all';
+
+  function apply() {
+    var q = search.value.trim().toLowerCase();
+    var shown = 0;
+    rows.forEach(function (r) {
+      var matchesFilter =
+        filter === 'all' ||
+        (filter === 'recent' ? r.dataset.date >= ARCHIVE_RECENT_CUTOFF : r.dataset.decision === filter);
+      var matchesQuery = !q || r.textContent.toLowerCase().indexOf(q) !== -1;
+      r.hidden = !(matchesFilter && matchesQuery);
+      if (!r.hidden) shown++;
+    });
+    countEl.textContent = 'Showing ' + shown + ' of ' + rows.length + ' archived cases';
+    emptyEl.hidden = shown > 0;
+  }
+
+  search.addEventListener('input', apply);
+  document.querySelectorAll('.esc-filter-pill').forEach(function (pill) {
+    pill.addEventListener('click', function () {
+      document.querySelectorAll('.esc-filter-pill').forEach(function (p) { p.classList.remove('is-active'); });
+      pill.classList.add('is-active');
+      filter = pill.dataset.filter;
+      apply();
+    });
+  });
+
+  document.getElementById('escArchiveExport').addEventListener('click', function () {
+    var header = Array.prototype.map.call(table.querySelectorAll('thead th'), function (th) { return th.textContent; });
+    var lines = [header].concat(rows.filter(function (r) { return !r.hidden; }).map(function (r) {
+      return Array.prototype.map.call(r.cells, function (td) { return td.textContent.trim(); });
+    })).map(function (cells) {
+      return cells.map(function (v) { return '"' + v.replace(/"/g, '""') + '"'; }).join(',');
+    });
+    var blob = new Blob([lines.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'cosmic-mart-escalation-archive.csv';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(a.href);
+  });
+}
