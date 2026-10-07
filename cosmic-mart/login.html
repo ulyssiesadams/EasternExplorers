@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign In — CM Ops Employee Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/pages/login.css">
+  <style>
+    @keyframes lp-shake {
+      0%,100% { transform: translateX(0); }
+      20%      { transform: translateX(-6px); }
+      40%      { transform: translateX(6px); }
+      60%      { transform: translateX(-4px); }
+      80%      { transform: translateX(4px); }
+    }
+    .lp-card.is-shaking { animation: lp-shake 0.4s ease; }
+  </style>
+</head>
+<body>
+
+<div class="lp-brand">
+  <div class="lp-brand-icon">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      <polyline points="9 12 11 14 15 10"/>
+    </svg>
+  </div>
+  <strong class="lp-brand-title">CM Ops</strong>
+  <span class="lp-brand-sub">Employee Portal</span>
+</div>
+
+<div class="lp-card" id="lpCard">
+  <h2 class="lp-card-title">Sign in to your account</h2>
+  <p class="lp-card-sub">Access is restricted to authorized personnel.</p>
+
+  <span class="lp-suggestions-label">Quick sign-in</span>
+  <div class="lp-suggestions">
+
+    <button type="button" class="lp-suggest-btn"
+            data-email="j.hayes@cosmicmart.com"
+            data-pass="Ops2026!"
+            data-dest="escalation.html">
+      <span class="lp-suggest-role role-employee">Returns Specialist</span>
+      <span class="lp-suggest-name">Jordan Hayes</span>
+      <span class="lp-suggest-email">j.hayes@cosmicmart.com</span>
+    </button>
+
+    <button type="button" class="lp-suggest-btn"
+            data-email="alex.chen@cosmicmart.com"
+            data-pass="CosmicShop1!"
+            data-dest="index.html">
+      <span class="lp-suggest-role role-customer">Customer Account</span>
+      <span class="lp-suggest-name">Alex Chen</span>
+      <span class="lp-suggest-email">alex.chen@cosmicmart.com</span>
+    </button>
+
+  </div>
+
+  <div class="lp-divider">or</div>
+
+  <form id="lpForm" onsubmit="return false;">
+    <div class="lp-field">
+      <label for="lpEmail">Email Address</label>
+      <input type="email" id="lpEmail" autocomplete="email" placeholder="you@cosmicmart.com"/>
+    </div>
+    <div class="lp-field">
+      <label for="lpPass">Password</label>
+      <input type="password" id="lpPass" autocomplete="current-password" placeholder="••••••••"/>
+    </div>
+    <div id="lpError" class="lp-error">Invalid credentials. Use the quick sign-in above.</div>
+    <button type="submit" class="lp-submit">Sign In →</button>
+  </form>
+
+  <p class="lp-footer-note">© 2026 Cosmic Mart Operations · <a href="index.html">Return to store</a></p>
+</div>
+
+<script>
+  var ACCOUNTS = [
+    { email: 'j.hayes@cosmicmart.com',   pass: 'Ops2026!',     dest: 'escalation.html', role: 'specialist', name: 'Jordan Hayes' },
+    { email: 'alex.chen@cosmicmart.com',  pass: 'CosmicShop1!', dest: 'index.html',      role: 'customer',   name: 'Alex Chen'   }
+  ];
+
+  // Quick-fill suggestion buttons
+  document.querySelectorAll('.lp-suggest-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.getElementById('lpEmail').value = btn.dataset.email;
+      document.getElementById('lpPass').value  = btn.dataset.pass;
+      document.querySelectorAll('.lp-suggest-btn').forEach(function (b) { b.classList.remove('is-active'); });
+      btn.classList.add('is-active');
+      document.getElementById('lpError').classList.remove('is-visible');
+      document.querySelector('.lp-submit').focus();
+    });
+  });
+
+  // Form submit
+  document.getElementById('lpForm').addEventListener('submit', function () {
+    var email = document.getElementById('lpEmail').value.trim().toLowerCase();
+    var pass  = document.getElementById('lpPass').value;
+    var match = null;
+    for (var i = 0; i < ACCOUNTS.length; i++) {
+      if (ACCOUNTS[i].email.toLowerCase() === email && ACCOUNTS[i].pass === pass) {
+        match = ACCOUNTS[i];
+        break;
+      }
+    }
+    if (match) {
+      sessionStorage.setItem('portalUser', JSON.stringify({
+        email: match.email,
+        role:  match.role,
+        name:  match.name,
+        dest:  match.dest
+      }));
+      window.location.href = match.dest;
+    } else {
+      var errEl = document.getElementById('lpError');
+      errEl.classList.add('is-visible');
+      document.getElementById('lpPass').value = '';
+      var card = document.getElementById('lpCard');
+      card.classList.add('is-shaking');
+      setTimeout(function () { card.classList.remove('is-shaking'); }, 400);
+    }
+  });
+</script>
+</body>
+</html>

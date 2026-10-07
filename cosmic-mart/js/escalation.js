@@ -1,3 +1,13 @@
+// ── Auth Guard ────────────────────────────────────────────────────────────────
+(function () {
+  var user = null;
+  try { user = JSON.parse(sessionStorage.getItem('portalUser') || 'null'); } catch (e) {}
+  if (!user || user.role !== 'specialist') {
+    window.location.replace('login.html');
+  }
+  window.PORTAL_USER = user;
+}());
+
 // ── Mock Data ─────────────────────────────────────────────────────────────────
 const ESCALATION_CASES = [
   {
@@ -722,4 +732,19 @@ document.addEventListener('DOMContentLoaded', function () {
   renderDetail();
   updatePendingBadge();
   renderMap();
+
+  // Populate portal header from session
+  var u = window.PORTAL_USER;
+  var nameEl   = document.getElementById('portalUserName');
+  var avatarEl = document.getElementById('portalAvatar');
+  if (nameEl   && u) nameEl.textContent   = u.name || 'Specialist';
+  if (avatarEl && u && u.name) avatarEl.textContent = u.name.charAt(0).toUpperCase();
+
+  var signout = document.getElementById('portalSignout');
+  if (signout) {
+    signout.addEventListener('click', function () {
+      sessionStorage.removeItem('portalUser');
+      window.location.href = 'login.html';
+    });
+  }
 });

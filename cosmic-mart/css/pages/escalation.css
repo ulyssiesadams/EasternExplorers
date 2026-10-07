@@ -1224,3 +1224,118 @@
 .esc-perf-row:last-child { border-bottom: none; }
 .esc-perf-label { color: var(--text-secondary); }
 .esc-perf-val   { font-weight: 600; color: var(--text-primary); text-align: right; }
+
+/* ── Portal Header (replaces cm-nav on escalation.html) ───────────────────── */
+.portal-header {
+  background: #131e30;
+  border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 56px;
+}
+
+.portal-header-inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.portal-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.portal-brand-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.portal-brand-text strong {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  letter-spacing: 0.02em;
+  font-family: 'Inter', sans-serif;
+}
+
+.portal-brand-text span {
+  font-size: 0.65rem;
+  color: #8b99b5;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-family: 'Inter', sans-serif;
+}
+
+.portal-user-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.portal-user-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+}
+
+.portal-user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.portal-user-name {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  font-family: 'Inter', sans-serif;
+}
+
+.portal-user-role {
+  display: block;
+  font-size: 0.65rem;
+  color: #8b99b5;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-family: 'Inter', sans-serif;
+}
+
+.portal-signout-btn {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #8b99b5;
+  background: transparent;
+  border: 1px solid rgba(139, 153, 181, 0.2);
+  border-radius: 6px;
+  padding: 5px 12px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.portal-signout-btn:hover {
+  color: #f1f5f9;
+  border-color: rgba(139, 153, 181, 0.5);
+}

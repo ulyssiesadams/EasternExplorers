@@ -625,6 +625,18 @@ section[id] {
   color: #4b5563;
 }
 
+.cm-footer-portal a {
+  font-size: 0.72rem;
+  color: rgba(148, 163, 184, 0.45);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  transition: color 0.15s;
+}
+
+.cm-footer-portal a:hover {
+  color: rgba(148, 163, 184, 0.8);
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
   .cm-nav-location,

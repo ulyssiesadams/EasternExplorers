@@ -1,0 +1,268 @@
+/* ===== CM OPS EMPLOYEE PORTAL — LOGIN PAGE ===== */
+
+:root {
+  --lp-bg:         #0d1117;
+  --lp-surface:    #161b22;
+  --lp-border:     rgba(99, 102, 241, 0.2);
+  --lp-indigo:     #6366f1;
+  --lp-indigo-dk:  #4f46e5;
+  --lp-text:       #f1f5f9;
+  --lp-muted:      #8b99b5;
+  --lp-error:      #ef4444;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  min-height: 100vh;
+  background: var(--lp-bg);
+  font-family: 'Inter', sans-serif;
+  color: var(--lp-text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+/* ---- Brand lockup above card ---- */
+.lp-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.lp-brand-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--lp-indigo), var(--lp-indigo-dk));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 28px rgba(99, 102, 241, 0.45);
+}
+
+.lp-brand-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--lp-text);
+}
+
+.lp-brand-sub {
+  font-size: 0.72rem;
+  color: var(--lp-muted);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+/* ---- Login card ---- */
+.lp-card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--lp-surface);
+  border: 1px solid var(--lp-border);
+  border-radius: 18px;
+  padding: 32px;
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.5);
+}
+
+.lp-card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--lp-text);
+  margin-bottom: 6px;
+}
+
+.lp-card-sub {
+  font-size: 0.8rem;
+  color: var(--lp-muted);
+  margin-bottom: 24px;
+  line-height: 1.55;
+}
+
+/* ---- Quick sign-in suggestions ---- */
+.lp-suggestions-label {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--lp-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+
+.lp-suggestions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.lp-suggest-btn {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+  background: rgba(99, 102, 241, 0.06);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.lp-suggest-btn:hover {
+  border-color: rgba(99, 102, 241, 0.5);
+  background: rgba(99, 102, 241, 0.12);
+}
+
+.lp-suggest-btn.is-active {
+  border-color: var(--lp-indigo);
+  background: rgba(99, 102, 241, 0.15);
+}
+
+.lp-suggest-role {
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 2px 7px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 2px;
+}
+
+.lp-suggest-role.role-employee {
+  background: rgba(99, 102, 241, 0.22);
+  color: #818cf8;
+}
+
+.lp-suggest-role.role-customer {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+}
+
+.lp-suggest-name {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--lp-text);
+}
+
+.lp-suggest-email {
+  display: block;
+  font-size: 0.68rem;
+  color: var(--lp-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---- Divider ---- */
+.lp-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  font-size: 0.7rem;
+  color: var(--lp-muted);
+}
+
+.lp-divider::before,
+.lp-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(99, 102, 241, 0.15);
+}
+
+/* ---- Form fields ---- */
+.lp-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.lp-field label {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--lp-muted);
+  letter-spacing: 0.02em;
+}
+
+.lp-field input {
+  padding: 11px 14px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  color: var(--lp-text);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.lp-field input:focus {
+  outline: none;
+  border-color: var(--lp-indigo);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.lp-field input::placeholder {
+  color: rgba(139, 153, 181, 0.35);
+}
+
+/* ---- Error message ---- */
+.lp-error {
+  font-size: 0.78rem;
+  color: var(--lp-error);
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 7px;
+  padding: 9px 12px;
+  margin-bottom: 14px;
+  display: none;
+}
+
+.lp-error.is-visible { display: block; }
+
+/* ---- Submit button ---- */
+.lp-submit {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 9px;
+  background: linear-gradient(135deg, var(--lp-indigo), var(--lp-indigo-dk));
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s, box-shadow 0.15s;
+}
+
+.lp-submit:hover {
+  opacity: 0.9;
+  box-shadow: 0 0 22px rgba(99, 102, 241, 0.5);
+}
+
+/* ---- Footer note ---- */
+.lp-footer-note {
+  margin-top: 20px;
+  font-size: 0.69rem;
+  color: rgba(139, 153, 181, 0.45);
+  text-align: center;
+  line-height: 1.6;
+}
+
+.lp-footer-note a {
+  color: rgba(139, 153, 181, 0.65);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.lp-footer-note a:hover { color: var(--lp-muted); }

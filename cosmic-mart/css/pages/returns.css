@@ -2057,3 +2057,34 @@
   font-size: 12px;
   padding: 10px 16px;
 }
+
+/* ---- Unified send/lookup button ---- */
+#cmReturnsSend {
+  flex-shrink: 0;
+  padding: 9px 18px;
+  border: none;
+  border-radius: 9px;
+  background: var(--accent);
+  color: var(--text-primary);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+#cmReturnsSend:hover {
+  background: var(--accent-hover);
+  box-shadow: 0 0 14px rgba(147, 51, 234, 0.5);
+}
+
+#cmSendLabel {
+  transition: opacity 0.15s;
+}
+
+/* "Try:" shortcuts row — between chat messages and the unified bar */
+#cmOrderTry {
+  margin-top: 0;
+  margin-bottom: 10px;
+}

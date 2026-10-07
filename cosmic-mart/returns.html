@@ -181,38 +181,23 @@
         <!-- Chat transcript (chat-ui.js appends bubbles, typing + progress here) -->
         <div class="cm-chat-messages" id="cmReturnsMessages"></div>
 
-        <!-- Order lookup -->
-        <div class="cm-order-panel">
-          <span class="cm-order-panel-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-          </span>
-          <div class="cm-order-panel-body">
-            <label class="cm-order-panel-label" for="cmOrderInput">Order ID</label>
-            <div class="cm-order-panel-row">
-              <input type="text" id="cmOrderInput" placeholder="Enter Order ID (e.g. ORD-2026-4471)" autocomplete="off"/>
-              <button type="button" class="cm-lookup-btn" id="cmLookupBtn">
-                Look Up Order
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-              </button>
-            </div>
-            <p class="cm-order-try">Try:
-              <button type="button" class="cm-order-sample" data-order="ORD-2026-4471">ORD-2026-4471</button>,
-              <button type="button" class="cm-order-sample" data-order="ORD-2026-3892">ORD-2026-3892</button>,
-              <button type="button" class="cm-order-sample" data-order="ORD-2026-2744">ORD-2026-2744</button>,
-              <button type="button" class="cm-order-sample" data-order="ORD-2026-5190">ORD-2026-5190</button>
-            </p>
-          </div>
-        </div>
+        <!-- Sample shortcuts — visible in STATE A (order lookup), hidden in STATE B (chat) -->
+        <p class="cm-order-try" id="cmOrderTry">Try:
+          <button type="button" class="cm-order-sample" data-order="ORD-2026-4471">ORD-2026-4471</button>,
+          <button type="button" class="cm-order-sample" data-order="ORD-2026-3892">ORD-2026-3892</button>,
+          <button type="button" class="cm-order-sample" data-order="ORD-2026-2744">ORD-2026-2744</button>,
+          <button type="button" class="cm-order-sample" data-order="ORD-2026-5190">ORD-2026-5190</button>
+        </p>
 
-        <!-- Message composer -->
+        <!-- Unified input bar: STATE A = order lookup, STATE B = message send -->
         <div class="cm-chat-input">
           <span class="cm-chat-attach" aria-hidden="true">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
           </span>
-          <input type="text" id="cmReturnsInput" placeholder="Describe your issue (or enter an order first)..." disabled autocomplete="off"/>
-          <button type="button" id="cmReturnsSend" disabled>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-            Send
+          <input type="text" id="cmReturnsInput" placeholder="Enter your Order ID (e.g. ORD-2026-4471)..." autocomplete="off"/>
+          <button type="button" id="cmReturnsSend">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            <span id="cmSendLabel">Look Up</span>
           </button>
         </div>
       </section>
@@ -382,6 +367,7 @@
     <div class="cm-footer-bottom">
       <p>© 2026 Cosmic Mart. All rights reserved.</p>
       <p class="cm-footer-meta"><a href="index.html">← Back to Home</a></p>
+      <p class="cm-footer-portal"><a href="login.html">Employee Portal</a></p>
     </div>
   </div>
 </footer>
@@ -433,31 +419,16 @@
 <script src="js/chat-ui.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    // "Try:" shortcuts fill the order field and run the lookup
+    // "Try:" shortcuts fill the unified bar and trigger a lookup
     document.querySelectorAll('.cm-order-sample').forEach(function (btn) {
       btn.addEventListener('click', function () {
-        const input = document.getElementById('cmOrderInput');
-        const lookup = document.getElementById('cmLookupBtn');
-        if (!input || !lookup) return;
+        var input = document.getElementById('cmReturnsInput');
+        var send = document.getElementById('cmReturnsSend');
+        if (!input || !send) return;
         input.value = btn.getAttribute('data-order');
-        lookup.click();
+        send.click();
       });
     });
-
-    // Clear the visible transcript. chat-ui.js keeps its own loaded-order
-    // state, so this clears the conversation only, not the looked-up order.
-    const clearBtn = document.getElementById('cmClearChat');
-    if (clearBtn) {
-      clearBtn.addEventListener('click', function () {
-        const messages = document.getElementById('cmReturnsMessages');
-        if (!messages) return;
-        messages.textContent = '';
-        const greeting = document.createElement('div');
-        greeting.className = 'cm-bubble-agent';
-        greeting.textContent = 'Hi! I can help you with your return. Please enter your order ID to get started.';
-        messages.appendChild(greeting);
-      });
-    }
   });
 </script>
 </body>

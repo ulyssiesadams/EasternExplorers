@@ -1,5 +1,6 @@
 (function () {
   let currentOrder = null;
+  let orderLoaded = false;
   let chatActive = false;
   let clarificationCount = 0;
   let currentCaseRef = null;
@@ -26,7 +27,7 @@
 
   function getEl(id) { return document.getElementById(id); }
 
-  const WELCOME = 'Welcome to the Cosmic Mart Returns Center. To get started, enter your Order ID above and click "Look Up Order". I\'ll guide you through the rest.';
+  const WELCOME = 'Welcome to the Cosmic Mart Returns Center. Enter your Order ID in the bar below to get started.';
 
   // Each stage drives a sidebar row + optionally an in-chat strip step.
   const STAGES = {
@@ -90,6 +91,34 @@
      'cmSubWindow','cmSubTier','cmSubResType','cmSubCaseRef'].forEach(function(id) {
       setSubstep(id, null);
     });
+  }
+
+  function setBarState(state) {
+    orderLoaded = (state === 'B');
+    var label = getEl('cmSendLabel');
+    var input = getEl('cmReturnsInput');
+    var tryRow = getEl('cmOrderTry');
+    if (state === 'A') {
+      if (label) label.textContent = 'Look Up';
+      if (input) input.placeholder = 'Enter your Order ID (e.g. ORD-2026-4471)...';
+      if (tryRow) tryRow.style.display = '';
+    } else {
+      if (label) label.textContent = 'Send';
+      if (input) input.placeholder = 'Describe your issue...';
+      if (tryRow) tryRow.style.display = 'none';
+    }
+  }
+
+  function handleBarAction() {
+    var input = getEl('cmReturnsInput');
+    if (!input) return;
+    var text = input.value.trim();
+    if (!text) return;
+    if (!orderLoaded) {
+      loadOrder(text.toUpperCase());
+    } else {
+      handleSend();
+    }
   }
 
   function addMessage(text, type) {
@@ -921,11 +950,7 @@
       chatHistory.push({ role: 'assistant', content: greeting });
       addQuickReplies(['How do I start a return?', 'What info do I need?', 'How long does a return take?', 'I\'m ready to return this']);
       chatActive = true;
-
-      const chatInput = getEl('cmReturnsInput');
-      const sendBtn = getEl('cmReturnsSend');
-      if (chatInput) chatInput.disabled = false;
-      if (sendBtn) sendBtn.disabled = false;
+      setBarState('B');
     }
 
     return true;
@@ -1095,9 +1120,8 @@
     }
 
     const input = getEl('cmReturnsInput');
-    const sendBtn = getEl('cmReturnsSend');
-    if (input) { input.value = ''; input.disabled = true; }
-    if (sendBtn) sendBtn.disabled = true;
+    if (input) input.value = '';
+    setBarState('A');
 
     resetStages();
     addMessage(WELCOME, 'agent');
@@ -1106,33 +1130,14 @@
   function initReturnsChat(preloadOrderId) {
     const sendBtn = getEl('cmReturnsSend');
     const input = getEl('cmReturnsInput');
-    const lookupBtn = getEl('cmLookupBtn');
-    const orderInput = getEl('cmOrderInput');
 
     if (sendBtn) {
-      sendBtn.addEventListener('click', handleSend);
+      sendBtn.addEventListener('click', handleBarAction);
     }
 
     if (input) {
       input.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter') handleSend();
-      });
-      input.disabled = true;
-    }
-
-    if (sendBtn) sendBtn.disabled = true;
-
-    if (lookupBtn && orderInput) {
-      lookupBtn.addEventListener('click', function () {
-        const id = orderInput.value.trim().toUpperCase();
-        if (id) loadOrder(id);
-      });
-
-      orderInput.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter') {
-          const id = orderInput.value.trim().toUpperCase();
-          if (id) loadOrder(id);
-        }
+        if (e.key === 'Enter') handleBarAction();
       });
     }
 
