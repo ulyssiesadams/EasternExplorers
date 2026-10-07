@@ -61,10 +61,18 @@
 
     <!-- Queue (left) -->
     <div class="esc-queue-col">
-      <div class="esc-queue-label">Open Cases</div>
+      <div class="esc-queue-tabs">
+        <button class="esc-qtab is-active" data-qtab="open">
+          Open <span id="openCount">6</span>
+        </button>
+        <button class="esc-qtab" data-qtab="closed">
+          Closed <span id="closedCount">0</span>
+        </button>
+      </div>
       <div id="escQueue">
         <!-- rendered by escalation.js -->
       </div>
+      <div id="escClosedQueue" hidden></div>
     </div>
 
     <!-- Detail panel (right) -->

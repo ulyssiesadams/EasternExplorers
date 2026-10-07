@@ -1366,3 +1366,37 @@
   font-size:0.6rem; font-weight:700;
   padding:1px 6px; border-radius:20px; line-height:1.6;
 }
+
+/* ── Queue sub-tabs ──────────────────────────────────────────────────────────── */
+.esc-queue-tabs {
+  display:flex; gap:0; margin-bottom:14px;
+  border-bottom:1px solid var(--border-purple);
+}
+.esc-qtab {
+  flex:1; font-family:'Inter',sans-serif; font-size:0.75rem; font-weight:600;
+  color:var(--text-secondary); background:transparent; border:none;
+  padding:8px 0; cursor:pointer; border-bottom:2px solid transparent;
+  transition:color 0.15s, border-color 0.15s;
+}
+.esc-qtab span {
+  display:inline-flex; align-items:center; justify-content:center;
+  min-width:18px; height:18px; padding:0 5px;
+  background:rgba(147,51,234,0.2); border-radius:20px;
+  font-size:0.6rem; font-weight:700; margin-left:5px;
+}
+.esc-qtab.is-active { color:var(--text-primary); border-bottom-color:var(--accent); }
+.esc-qtab.is-active span { background:var(--accent); color:#fff; }
+
+/* Closed queue rows */
+.esc-closed-row {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 0; border-bottom:1px solid rgba(147,51,234,0.08);
+  font-family:'Inter',sans-serif; font-size:0.78rem;
+}
+.esc-closed-row:last-child { border-bottom:none; }
+.esc-closed-id {
+  font-family:'Orbitron',sans-serif; font-size:0.6rem; color:var(--accent-glow); width:110px; flex-shrink:0;
+}
+.esc-closed-name { color:var(--text-primary); flex:1; font-size:0.78rem; }
+.esc-closed-product { color:var(--text-secondary); font-size:0.72rem; flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.esc-closed-time { color:rgba(148,163,184,0.6); font-size:0.68rem; white-space:nowrap; }

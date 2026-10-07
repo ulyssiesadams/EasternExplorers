@@ -197,12 +197,24 @@ function getPendingCount() {
   return ESCALATION_CASES.filter(function (c) { return c.status === 'PENDING'; }).length;
 }
 
+function updateQueueCounts() {
+  var open   = ESCALATION_CASES.filter(function(c){ return c.status==='PENDING'; }).length;
+  var closed = ESCALATION_CASES.filter(function(c){ return c.status!=='PENDING'; }).length;
+  var ocEl = document.getElementById('openCount');
+  var ccEl = document.getElementById('closedCount');
+  if(ocEl) ocEl.textContent = open;
+  if(ccEl) ccEl.textContent = closed;
+  var tb = document.getElementById('tabBadgeQueue');
+  if(tb){ tb.textContent = open; tb.style.display = open>0?'':'none'; }
+}
+
 function updatePendingBadge() {
   var badge = document.getElementById('escPendingBadge');
   if (!badge) return;
   var count = getPendingCount();
   badge.textContent = count;
   badge.style.display = count > 0 ? 'inline-flex' : 'none';
+  updateQueueCounts();
 }
 
 function formatTimestamp(iso) {
@@ -307,6 +319,26 @@ function selectCase(id) {
   selectedCaseId = id;
   renderQueue();
   renderDetail();
+}
+
+function renderClosedQueue() {
+  var el = document.getElementById('escClosedQueue');
+  if(!el) return;
+  var closed = ESCALATION_CASES.filter(function(c){ return c.status !== 'PENDING'; });
+  if(closed.length === 0) {
+    el.innerHTML = '<p style="font-family:Inter,sans-serif;font-size:0.8rem;color:var(--text-secondary);text-align:center;padding:20px 0;">No resolved cases yet.</p>';
+    return;
+  }
+  el.innerHTML = closed.map(function(c){
+    var pillClass = c.status === 'ACCEPTED' ? 'esc-pill-accepted' : 'esc-pill-denied';
+    return '<div class="esc-closed-row">' +
+      '<span class="esc-closed-id">' + escHtml(c.id) + '</span>' +
+      '<span class="esc-closed-name">' + escHtml(c.customer.name) + '</span>' +
+      '<span class="esc-closed-product">' + escHtml(c.order.product) + '</span>' +
+      '<span class="esc-status-pill ' + pillClass + '">' + escHtml(c.status) + '</span>' +
+      '<span class="esc-closed-time">' + escHtml(formatTimestamp(c.timestamp)) + '</span>' +
+    '</div>';
+  }).join('');
 }
 
 // ── Letter block ──────────────────────────────────────────────────────────────
@@ -758,4 +790,16 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
   });
+
+  document.querySelectorAll('.esc-qtab').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.esc-qtab').forEach(function(t){ t.classList.remove('is-active'); });
+      btn.classList.add('is-active');
+      var isOpen = btn.dataset.qtab === 'open';
+      document.getElementById('escQueue').hidden       = !isOpen;
+      document.getElementById('escClosedQueue').hidden = isOpen;
+    });
+  });
+  renderClosedQueue();
+  updateQueueCounts();
 });
