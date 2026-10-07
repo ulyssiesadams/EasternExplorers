@@ -341,6 +341,55 @@ function renderClosedQueue() {
   }).join('');
 }
 
+function showEmptyQueue() {
+  var el = document.getElementById('escDetail');
+  if(!el) return;
+  el.innerHTML =
+    '<div class="esc-empty-state">' +
+      '<svg width="64" height="64" viewBox="0 0 24 24" fill="none" ' +
+           'stroke="rgba(16,185,129,0.5)" stroke-width="1.5" ' +
+           'stroke-linecap="round" stroke-linejoin="round">' +
+        '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>' +
+        '<polyline points="22 4 12 14.01 9 11.01"/>' +
+      '</svg>' +
+      '<h3>No open cases</h3>' +
+      '<p>Great work — all escalations have been resolved.</p>' +
+      '<p class="esc-empty-sub">Check the <strong>Closed</strong> tab to review resolved cases.</p>' +
+    '</div>';
+}
+
+function triggerCaseClose(caseObj, decision) {
+  var overlay = document.getElementById('caseCloseOverlay');
+  document.getElementById('closeOverlayCaseId').textContent = caseObj.id;
+  document.getElementById('closeOverlayMeta').textContent =
+    caseObj.customer.name + ' · ' + caseObj.order.product + ' · ' +
+    (decision === 'ACCEPTED' ? '✓ Accepted' : '✗ Denied');
+  overlay.hidden = false;
+
+  setTimeout(function(){
+    overlay.hidden = true;
+    animateCardOut(caseObj.id);
+    updateQueueCounts();
+    renderClosedQueue();
+    var next = ESCALATION_CASES.find(function(c){ return c.status==='PENDING' && c.id!==caseObj.id; });
+    if(next){ selectCase(next.id); }
+    else { renderDetail(); showEmptyQueue(); }
+  }, 1800);
+}
+
+function animateCardOut(id) {
+  var card = document.querySelector('.esc-queue-card[data-id="' + id + '"]');
+  if(!card) return;
+  card.style.transition = 'all 0.4s ease';
+  card.style.background = 'rgba(16,185,129,0.15)';
+  card.style.borderColor = '#10b981';
+  setTimeout(function(){
+    card.style.opacity = '0';
+    card.style.transform = 'translateX(-12px)';
+    setTimeout(function(){ renderQueue(); updateQueueCounts(); }, 350);
+  }, 200);
+}
+
 // ── Letter block ──────────────────────────────────────────────────────────────
 function renderLetterBlock(c) {
   if (c.isLoading) {
@@ -425,7 +474,7 @@ function enterEditMode(caseId) {
     sendBtn.addEventListener('click', function () {
       var ta = document.getElementById('escTextarea-' + caseId);
       if (ta) { c.generatedLetter = ta.value; }
-      showToast('✓ Email sent to ' + c.customer.email);
+      triggerCaseClose(c, c.status);
     });
   }
 }
