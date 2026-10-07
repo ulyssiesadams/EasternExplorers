@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Escalation Queue — Cosmic Mart</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages/escalation.css">
+</head>
+<body>
+
+<nav class="cm-nav">
+  <div class="cm-nav-main">
+    <a href="index.html" class="cm-nav-logo">
+      <img src="assets/logo.png" alt="Cosmic Mart" class="cm-logo-img">
+    </a>
+    <button type="button" class="cm-nav-location">
+      <span class="cm-nav-location-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </span>
+      <span class="cm-nav-location-text">
+        <strong>Pickup or delivery?</strong>
+        <small>Earth &middot; Sector 7 &mdash; Orbital Hub</small>
+      </span>
+      <svg class="cm-nav-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <form class="cm-nav-search" role="search" onsubmit="return false;">
+      <input type="search" class="cm-nav-search-input" placeholder="Search everything across the cosmos" aria-label="Search Cosmic Mart">
+      <button type="button" class="cm-nav-search-btn" aria-label="Search">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+    </form>
+    <div class="cm-nav-actions">
+      <a href="#" class="cm-nav-action cm-nav-action-reorder">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <span class="cm-nav-action-text"><small>Reorder</small><strong>My Items</strong></span>
+      </a>
+      <a href="account.html" class="cm-nav-action">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span class="cm-nav-action-text"><small>Sign In</small><strong>Account</strong></span>
+      </a>
+      <a href="#" class="cm-nav-cart">
+        <span class="cm-nav-cart-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          <span class="cm-cart-badge">0</span>
+        </span>
+        <strong class="cm-nav-cart-total">$0.00</strong>
+      </a>
+    </div>
+  </div>
+  <div class="cm-nav-sub">
+    <button type="button" class="cm-nav-pill cm-nav-pill-solid">Departments <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+    <button type="button" class="cm-nav-pill cm-nav-pill-solid">Services <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+    <ul class="cm-nav-links">
+      <li><a href="index.html">Shop</a></li>
+      <li><a href="gadgets.html">Gadgets</a></li>
+      <li><a href="fashion.html">Fashion</a></li>
+      <li><a href="home.html">Home &amp; Lifestyle</a></li>
+    </ul>
+    <div class="cm-nav-end">
+      <a href="account.html" class="cm-nav-account">Account</a>
+      <div class="cm-nav-more" id="cmNavMore">
+        <button type="button" class="cm-nav-pill cm-nav-pill-more" id="cmMoreBtn" aria-haspopup="true" aria-expanded="false" aria-controls="cmMoreMenu">
+          More <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="cm-nav-more-menu" id="cmMoreMenu" role="menu" hidden>
+          <a href="returns.html" role="menuitem">Returns</a>
+          <a href="dashboard.html" role="menuitem" style="color:#c084fc;font-weight:600;">Returns Dashboard</a>
+          <a href="escalation.html" role="menuitem" style="color:#c084fc;font-weight:600;">Escalation Queue <span class="esc-nav-badge" id="escPendingBadge">6</span></a>
+          <a href="#" role="menuitem">New Arrivals</a>
+          <a href="#" role="menuitem">Cosmic Rewards</a>
+          <a href="#" role="menuitem">Track Order</a>
+          <a href="#" role="menuitem">Help</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main class="esc-page">
+
+  <!-- Page header -->
+  <header class="esc-page-header">
+    <h1>Escalation Queue &mdash; Returns Specialist View</h1>
+    <p>Cases requiring human review &middot; AI-assisted decision drafting</p>
+  </header>
+
+  <!-- Two-column layout -->
+  <div class="esc-columns">
+
+    <!-- Queue (left) -->
+    <div class="esc-queue-col">
+      <div class="esc-queue-label">Open Cases</div>
+      <div id="escQueue">
+        <!-- rendered by escalation.js -->
+      </div>
+    </div>
+
+    <!-- Detail panel (right) -->
+    <div class="esc-detail-col" id="escDetail">
+      <!-- rendered by escalation.js -->
+    </div>
+
+  </div>
+
+  <!-- Insights section -->
+  <section class="esc-insights">
+    <div class="esc-insights-title">Monthly Insights &mdash; Oct 2026</div>
+
+    <!-- Row 1: KPI tiles -->
+    <div class="esc-kpi-grid">
+      <div class="esc-kpi-tile esc-kpi-slate">
+        <span class="esc-kpi-value">247</span>
+        <span class="esc-kpi-label">Total Cases This Month</span>
+        <span class="esc-kpi-trend up">&uarr; 18 vs last month</span>
+      </div>
+      <div class="esc-kpi-tile esc-kpi-amber">
+        <span class="esc-kpi-value">12.4%</span>
+        <span class="esc-kpi-label">Escalation Rate</span>
+        <span class="esc-kpi-trend down">&darr; 1.3pp vs last month</span>
+      </div>
+      <div class="esc-kpi-tile esc-kpi-green">
+        <span class="esc-kpi-value">76.5%</span>
+        <span class="esc-kpi-label">AI Resolution Rate</span>
+        <span class="esc-kpi-trend up">&uarr; 2.1pp vs last month</span>
+      </div>
+      <div class="esc-kpi-tile esc-kpi-slate">
+        <span class="esc-kpi-value">3.2 hrs</span>
+        <span class="esc-kpi-label">Avg. Resolution Time</span>
+        <span class="esc-kpi-trend up">&darr; 0.4 hrs vs last month</span>
+      </div>
+      <div class="esc-kpi-tile esc-kpi-purple">
+        <span class="esc-kpi-value">$31,480</span>
+        <span class="esc-kpi-label">$ Volume Under Review</span>
+        <span class="esc-kpi-trend up">&uarr; $4,210 vs last month</span>
+      </div>
+      <div class="esc-kpi-tile esc-kpi-blue">
+        <span class="esc-kpi-value">4.2<span style="font-size:1rem;font-family:'Inter',sans-serif;color:var(--text-secondary);"> / 5.0</span></span>
+        <span class="esc-kpi-label">Customer CSAT Score</span>
+        <span class="esc-kpi-trend up">&uarr; 0.3 pts vs last month</span>
+      </div>
+      <div class="esc-kpi-tile esc-kpi-green">
+        <span class="esc-kpi-value">91.3%</span>
+        <span class="esc-kpi-label">SLA Compliance Rate</span>
+        <span class="esc-kpi-trend flat">&rarr; within 4-hr target</span>
+      </div>
+    </div>
+
+    <!-- Row 2: USA tile map -->
+    <div class="esc-map-section">
+      <div class="esc-map-sidebar">
+        <div class="esc-map-sidebar-title">Top 5 by Volume</div>
+        <div class="esc-map-rank-list">
+          <div class="esc-rank-item"><span class="esc-rank-num">1</span><span class="esc-rank-state">California</span><span class="esc-rank-val">1,842</span></div>
+          <div class="esc-rank-item"><span class="esc-rank-num">2</span><span class="esc-rank-state">Texas</span><span class="esc-rank-val">1,521</span></div>
+          <div class="esc-rank-item"><span class="esc-rank-num">3</span><span class="esc-rank-state">Florida</span><span class="esc-rank-val">1,287</span></div>
+          <div class="esc-rank-item"><span class="esc-rank-num">4</span><span class="esc-rank-state">New York</span><span class="esc-rank-val">1,143</span></div>
+          <div class="esc-rank-item"><span class="esc-rank-num">5</span><span class="esc-rank-state">Washington</span><span class="esc-rank-val">832</span></div>
+        </div>
+      </div>
+
+      <div class="esc-map-container">
+        <div class="esc-chart-title" style="margin-bottom:12px;">Returns Volume by State</div>
+        <div id="escMapContainer"><!-- rendered by JS --></div>
+        <div class="esc-map-scale">
+          <span class="esc-map-scale-label">Low</span>
+          <div class="esc-map-scale-bar"></div>
+          <span class="esc-map-scale-label">High</span>
+        </div>
+      </div>
+
+      <div class="esc-map-sidebar esc-map-sidebar-right">
+        <div class="esc-map-sidebar-title">Best Escalation Rate</div>
+        <div class="esc-map-rank-list">
+          <div class="esc-rank-item esc-rank-best"><span class="esc-rank-state">Montana</span><span class="esc-rank-rate">3.8%</span></div>
+          <div class="esc-rank-item esc-rank-best"><span class="esc-rank-state">Wyoming</span><span class="esc-rank-rate">4.1%</span></div>
+          <div class="esc-rank-item esc-rank-best"><span class="esc-rank-state">North Dakota</span><span class="esc-rank-rate">4.4%</span></div>
+          <div class="esc-rank-item esc-rank-best"><span class="esc-rank-state">South Dakota</span><span class="esc-rank-rate">4.9%</span></div>
+          <div class="esc-rank-item esc-rank-best"><span class="esc-rank-state">Vermont</span><span class="esc-rank-rate">5.2%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 3: Two charts -->
+    <div class="esc-charts-row">
+
+      <!-- Line chart: Volume over time -->
+      <div class="esc-chart-card">
+        <div class="esc-chart-title">Returns Volume Over Time <span class="esc-chart-sub">— 6-month weekly view</span></div>
+        <svg class="esc-line-chart" viewBox="0 0 580 150" preserveAspectRatio="none" aria-label="Weekly returns volume chart">
+          <defs>
+            <linearGradient id="lineAreaGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#9333ea" stop-opacity="0.25"/>
+              <stop offset="100%" stop-color="#9333ea" stop-opacity="0.02"/>
+            </linearGradient>
+          </defs>
+          <!-- Grid lines -->
+          <line x1="20" y1="10"  x2="565" y2="10"  stroke="rgba(147,51,234,0.1)" stroke-width="1"/>
+          <line x1="20" y1="50"  x2="565" y2="50"  stroke="rgba(147,51,234,0.1)" stroke-width="1"/>
+          <line x1="20" y1="90"  x2="565" y2="90"  stroke="rgba(147,51,234,0.1)" stroke-width="1"/>
+          <line x1="20" y1="130" x2="565" y2="130" stroke="rgba(147,51,234,0.15)" stroke-width="1"/>
+          <!-- Y labels -->
+          <text x="14" y="14"  font-size="9" fill="#64748b" text-anchor="end" font-family="Inter,sans-serif">380</text>
+          <text x="14" y="54"  font-size="9" fill="#64748b" text-anchor="end" font-family="Inter,sans-serif">340</text>
+          <text x="14" y="94"  font-size="9" fill="#64748b" text-anchor="end" font-family="Inter,sans-serif">300</text>
+          <text x="14" y="134" font-size="9" fill="#64748b" text-anchor="end" font-family="Inter,sans-serif">260</text>
+          <!-- Area fill (historical) -->
+          <polygon points="20,88 44,102 67,75 90,59 114,113 137,85 161,122 184,99 208,58 231,44 255,88 278,72 302,105 325,91 349,53 372,38 396,66 419,81 443,49 420,130 20,130" fill="url(#lineAreaGrad)"/>
+          <!-- Historical line (May–Sep) -->
+          <polyline points="20,88 44,102 67,75 90,59 114,113 137,85 161,122 184,99 208,58 231,44 255,88 278,72 302,105 325,91 349,53 372,38 396,66 419,81 443,49" fill="none" stroke="#9333ea" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+          <!-- Current period (Oct, highlighted) -->
+          <polyline points="443,49 466,22 490,58 513,44 537,69 560,27" fill="none" stroke="#c084fc" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+          <!-- "This week" dot -->
+          <circle cx="560" cy="27" r="4" fill="#c084fc"/>
+          <circle cx="560" cy="27" r="7" fill="none" stroke="#c084fc" stroke-opacity="0.4" stroke-width="1.5"/>
+          <!-- Month labels -->
+          <text x="20"  y="147" font-size="9" fill="#64748b" text-anchor="middle" font-family="Inter,sans-serif">May</text>
+          <text x="114" y="147" font-size="9" fill="#64748b" text-anchor="middle" font-family="Inter,sans-serif">Jun</text>
+          <text x="208" y="147" font-size="9" fill="#64748b" text-anchor="middle" font-family="Inter,sans-serif">Jul</text>
+          <text x="302" y="147" font-size="9" fill="#64748b" text-anchor="middle" font-family="Inter,sans-serif">Aug</text>
+          <text x="396" y="147" font-size="9" fill="#64748b" text-anchor="middle" font-family="Inter,sans-serif">Sep</text>
+          <text x="490" y="147" font-size="9" fill="#c084fc" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">Oct</text>
+        </svg>
+        <p class="esc-insight-label">Oct trending 14% above prior 30-day avg — driven by gadget pre-holiday returns.</p>
+      </div>
+
+      <!-- Category breakdown horizontal bars -->
+      <div class="esc-chart-card">
+        <div class="esc-chart-title">Return Category Breakdown <span class="esc-chart-sub">— this month</span></div>
+        <div class="esc-hbar-list">
+          <div class="esc-hbar-row">
+            <span class="esc-hbar-label">DEFECTIVE</span>
+            <div class="esc-hbar-track"><div class="esc-hbar-fill" style="width:34%;background:#9333ea;"></div></div>
+            <span class="esc-hbar-val">34% &middot; 84</span>
+          </div>
+          <div class="esc-hbar-row">
+            <span class="esc-hbar-label">CHANGED_MIND</span>
+            <div class="esc-hbar-track"><div class="esc-hbar-fill" style="width:28%;background:#f59e0b;"></div></div>
+            <span class="esc-hbar-val">28% &middot; 69</span>
+          </div>
+          <div class="esc-hbar-row">
+            <span class="esc-hbar-label">WRONG_ITEM</span>
+            <div class="esc-hbar-track"><div class="esc-hbar-fill" style="width:15%;background:#3b82f6;"></div></div>
+            <span class="esc-hbar-val">15% &middot; 37</span>
+          </div>
+          <div class="esc-hbar-row">
+            <span class="esc-hbar-label">DAMAGED_TRANSIT</span>
+            <div class="esc-hbar-track"><div class="esc-hbar-fill" style="width:13%;background:#ef4444;"></div></div>
+            <span class="esc-hbar-val">13% &middot; 32</span>
+          </div>
+          <div class="esc-hbar-row">
+            <span class="esc-hbar-label">DESC_MISMATCH</span>
+            <div class="esc-hbar-track"><div class="esc-hbar-fill" style="width:7%;background:#10b981;"></div></div>
+            <span class="esc-hbar-val">7% &middot; 17</span>
+          </div>
+          <div class="esc-hbar-row">
+            <span class="esc-hbar-label">OTHER</span>
+            <div class="esc-hbar-track"><div class="esc-hbar-fill" style="width:3%;background:#64748b;"></div></div>
+            <span class="esc-hbar-val">3% &middot; 8</span>
+          </div>
+        </div>
+        <p class="esc-insight-label">DEFECTIVE + DAMAGED_TRANSIT account for 47% of all escalations.</p>
+      </div>
+
+    </div>
+
+    <!-- Row 4: Three bottom cards -->
+    <div class="esc-bottom-row">
+
+      <!-- Tier breakdown -->
+      <div class="esc-bottom-card">
+        <div class="esc-chart-title">Tier Breakdown</div>
+        <table class="esc-tier-table">
+          <thead>
+            <tr><th>Tier</th><th>Cases</th><th>Esc. Rate</th><th>Avg Value</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="esc-tier-badge esc-tier-1">Tier 1</span></td>
+              <td>62</td><td style="color:#f59e0b;">8.9%</td><td style="color:var(--accent-glow);">$312</td>
+            </tr>
+            <tr>
+              <td><span class="esc-tier-badge esc-tier-2">Tier 2</span></td>
+              <td>38</td><td style="color:#f59e0b;">10.4%</td><td style="color:var(--accent-glow);">$284</td>
+            </tr>
+            <tr>
+              <td><span class="esc-tier-badge esc-tier-std">Standard</span></td>
+              <td>147</td><td style="color:var(--danger);">14.1%</td><td>$143</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="esc-insight-label">Tier 1 escalation rate 37% lower than Standard — loyalty pays off.</p>
+      </div>
+
+      <!-- Top escalation reasons -->
+      <div class="esc-bottom-card">
+        <div class="esc-chart-title">Top Escalation Triggers</div>
+        <ol class="esc-trigger-list">
+          <li><span class="esc-trigger-name">Return window expired</span><span class="esc-trigger-count">91 cases</span></li>
+          <li><span class="esc-trigger-name">Missing photo evidence</span><span class="esc-trigger-count">54 cases</span></li>
+          <li><span class="esc-trigger-name">High-value item exception</span><span class="esc-trigger-count">43 cases</span></li>
+          <li><span class="esc-trigger-name">Wrong item — unverified claim</span><span class="esc-trigger-count">31 cases</span></li>
+          <li><span class="esc-trigger-name">Potential misuse flag</span><span class="esc-trigger-count">28 cases</span></li>
+        </ol>
+        <p class="esc-insight-label">Window expiry + missing evidence account for 58% of triggers.</p>
+      </div>
+
+      <!-- Agent performance -->
+      <div class="esc-bottom-card">
+        <div class="esc-chart-title">Agent Pipeline Performance</div>
+        <div class="esc-perf-list">
+          <div class="esc-perf-row">
+            <span class="esc-perf-label">Intent classifier accuracy</span>
+            <span class="esc-perf-val" style="color:var(--success);">97.2%</span>
+          </div>
+          <div class="esc-perf-row">
+            <span class="esc-perf-label">Eligibility false-positive rate</span>
+            <span class="esc-perf-val" style="color:#f59e0b;">3.1%</span>
+          </div>
+          <div class="esc-perf-row">
+            <span class="esc-perf-label">Avg tokens per resolved case</span>
+            <span class="esc-perf-val">4,820</span>
+          </div>
+          <div class="esc-perf-row">
+            <span class="esc-perf-label">AI-assisted decisions</span>
+            <span class="esc-perf-val" style="color:var(--accent-glow);">189 / 247</span>
+          </div>
+          <div class="esc-perf-row">
+            <span class="esc-perf-label">Fully automated (no human)</span>
+            <span class="esc-perf-val" style="color:var(--success);">1,626 cases</span>
+          </div>
+        </div>
+        <p class="esc-insight-label">Eligibility false-positives down 0.8pp — tuning working.</p>
+      </div>
+
+    </div>
+
+    <!-- Map tooltip (hidden, positioned by JS) -->
+    <div class="esc-map-tooltip" id="escMapTooltip" hidden>
+      <div class="esc-tooltip-state" id="escTipState"></div>
+      <div class="esc-tooltip-row"><span>Returns</span><span id="escTipReturns"></span></div>
+      <div class="esc-tooltip-row"><span>Escalations</span><span id="escTipEsc"></span></div>
+      <div class="esc-tooltip-row"><span>Top category</span><span id="escTipCat"></span></div>
+      <div class="esc-tooltip-row"><span>Avg resolution</span><span id="escTipTime"></span></div>
+    </div>
+
+  </section>
+
+</main>
+
+<footer class="cm-footer">
+  <div class="cm-footer-inner">
+    <div class="cm-footer-bottom">
+      <p>&copy; 2026 Cosmic Mart. All rights reserved.</p>
+      <p class="cm-footer-meta"><a href="returns.html">&larr; Back to Returns</a></p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/mock-data.js"></script>
+<script src="js/global.js"></script>
+<script src="js/agent.js"></script>
+<script src="js/escalation.js"></script>
+</body>
+</html>
