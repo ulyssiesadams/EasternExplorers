@@ -568,9 +568,158 @@ async function handleDecision(caseId, decision) {
   }
 }
 
+// ── USA Tile Map ──────────────────────────────────────────────────────────────
+var STATE_DATA = [
+  // Row 0
+  { abbr:'ME', name:'Maine',         col:11, row:0, returns:71,  escRate:6.1, topCat:'CHANGED_MIND',  avgRes:'3.8 hrs' },
+  // Row 1
+  { abbr:'VT', name:'Vermont',       col:10, row:1, returns:58,  escRate:5.2, topCat:'CHANGED_MIND',  avgRes:'3.5 hrs' },
+  { abbr:'NH', name:'New Hampshire', col:11, row:1, returns:65,  escRate:5.8, topCat:'DEFECTIVE',     avgRes:'3.6 hrs' },
+  // Row 2
+  { abbr:'WA', name:'Washington',    col:0,  row:2, returns:832, escRate:14.2,topCat:'DEFECTIVE',     avgRes:'2.8 hrs' },
+  { abbr:'MT', name:'Montana',       col:1,  row:2, returns:49,  escRate:3.8, topCat:'WRONG_ITEM',    avgRes:'4.1 hrs' },
+  { abbr:'ND', name:'North Dakota',  col:2,  row:2, returns:87,  escRate:4.4, topCat:'CHANGED_MIND',  avgRes:'4.3 hrs' },
+  { abbr:'MN', name:'Minnesota',     col:3,  row:2, returns:276, escRate:7.2, topCat:'DEFECTIVE',     avgRes:'3.2 hrs' },
+  { abbr:'WI', name:'Wisconsin',     col:5,  row:2, returns:265, escRate:7.8, topCat:'DEFECTIVE',     avgRes:'3.1 hrs' },
+  { abbr:'MI', name:'Michigan',      col:6,  row:2, returns:421, escRate:9.1, topCat:'DEFECTIVE',     avgRes:'2.9 hrs' },
+  { abbr:'NY', name:'New York',      col:8,  row:2, returns:1143,escRate:11.8,topCat:'DEFECTIVE',     avgRes:'2.6 hrs' },
+  { abbr:'MA', name:'Massachusetts', col:9,  row:2, returns:487, escRate:10.4,topCat:'DEFECTIVE',     avgRes:'2.7 hrs' },
+  { abbr:'RI', name:'Rhode Island',  col:10, row:2, returns:34,  escRate:6.4, topCat:'CHANGED_MIND',  avgRes:'3.9 hrs' },
+  // Row 3
+  { abbr:'OR', name:'Oregon',        col:0,  row:3, returns:298, escRate:8.7, topCat:'DEFECTIVE',     avgRes:'3.0 hrs' },
+  { abbr:'ID', name:'Idaho',         col:1,  row:3, returns:44,  escRate:5.5, topCat:'WRONG_ITEM',    avgRes:'4.0 hrs' },
+  { abbr:'WY', name:'Wyoming',       col:2,  row:3, returns:54,  escRate:4.1, topCat:'CHANGED_MIND',  avgRes:'4.2 hrs' },
+  { abbr:'SD', name:'South Dakota',  col:3,  row:3, returns:82,  escRate:4.9, topCat:'CHANGED_MIND',  avgRes:'4.1 hrs' },
+  { abbr:'IA', name:'Iowa',          col:4,  row:3, returns:154, escRate:6.9, topCat:'DEFECTIVE',     avgRes:'3.4 hrs' },
+  { abbr:'IL', name:'Illinois',      col:5,  row:3, returns:743, escRate:10.8,topCat:'DEFECTIVE',     avgRes:'2.8 hrs' },
+  { abbr:'IN', name:'Indiana',       col:6,  row:3, returns:342, escRate:8.9, topCat:'DEFECTIVE',     avgRes:'3.0 hrs' },
+  { abbr:'OH', name:'Ohio',          col:7,  row:3, returns:698, escRate:9.7, topCat:'DEFECTIVE',     avgRes:'2.9 hrs' },
+  { abbr:'PA', name:'Pennsylvania',  col:8,  row:3, returns:721, escRate:9.4, topCat:'DEFECTIVE',     avgRes:'2.9 hrs' },
+  { abbr:'NJ', name:'New Jersey',    col:9,  row:3, returns:521, escRate:10.1,topCat:'DEFECTIVE',     avgRes:'2.7 hrs' },
+  { abbr:'CT', name:'Connecticut',   col:10, row:3, returns:112, escRate:7.3, topCat:'CHANGED_MIND',  avgRes:'3.3 hrs' },
+  { abbr:'DE', name:'Delaware',      col:11, row:3, returns:78,  escRate:6.8, topCat:'WRONG_ITEM',    avgRes:'3.5 hrs' },
+  // Row 4
+  { abbr:'CA', name:'California',    col:0,  row:4, returns:1842,escRate:12.5,topCat:'DEFECTIVE',     avgRes:'2.9 hrs' },
+  { abbr:'NV', name:'Nevada',        col:1,  row:4, returns:287, escRate:8.2, topCat:'DEFECTIVE',     avgRes:'3.1 hrs' },
+  { abbr:'CO', name:'Colorado',      col:2,  row:4, returns:432, escRate:9.3, topCat:'DEFECTIVE',     avgRes:'2.9 hrs' },
+  { abbr:'NE', name:'Nebraska',      col:3,  row:4, returns:165, escRate:6.7, topCat:'CHANGED_MIND',  avgRes:'3.5 hrs' },
+  { abbr:'MO', name:'Missouri',      col:4,  row:4, returns:365, escRate:8.5, topCat:'DEFECTIVE',     avgRes:'3.0 hrs' },
+  { abbr:'KY', name:'Kentucky',      col:5,  row:4, returns:218, escRate:7.9, topCat:'DEFECTIVE',     avgRes:'3.2 hrs' },
+  { abbr:'WV', name:'West Virginia', col:6,  row:4, returns:98,  escRate:6.2, topCat:'WRONG_ITEM',    avgRes:'3.7 hrs' },
+  { abbr:'VA', name:'Virginia',      col:7,  row:4, returns:498, escRate:9.6, topCat:'DEFECTIVE',     avgRes:'2.9 hrs' },
+  { abbr:'MD', name:'Maryland',      col:8,  row:4, returns:398, escRate:9.0, topCat:'DEFECTIVE',     avgRes:'2.8 hrs' },
+  { abbr:'DE2',name:'',              col:9,  row:4, returns:0,   escRate:0,   topCat:'',              avgRes:'' }, // spacer
+  // Row 5
+  { abbr:'UT', name:'Utah',          col:1,  row:5, returns:176, escRate:7.1, topCat:'DEFECTIVE',     avgRes:'3.3 hrs' },
+  { abbr:'AZ', name:'Arizona',       col:2,  row:5, returns:543, escRate:9.8, topCat:'DEFECTIVE',     avgRes:'2.9 hrs' },
+  { abbr:'KS', name:'Kansas',        col:3,  row:5, returns:143, escRate:6.5, topCat:'CHANGED_MIND',  avgRes:'3.6 hrs' },
+  { abbr:'AR', name:'Arkansas',      col:4,  row:5, returns:198, escRate:7.4, topCat:'DEFECTIVE',     avgRes:'3.3 hrs' },
+  { abbr:'TN', name:'Tennessee',     col:5,  row:5, returns:387, escRate:8.8, topCat:'DEFECTIVE',     avgRes:'3.0 hrs' },
+  { abbr:'NC', name:'North Carolina',col:6,  row:5, returns:654, escRate:9.5, topCat:'DEFECTIVE',     avgRes:'2.9 hrs' },
+  { abbr:'SC', name:'South Carolina',col:7,  row:5, returns:243, escRate:7.6, topCat:'CHANGED_MIND',  avgRes:'3.2 hrs' },
+  // Row 6
+  { abbr:'NM', name:'New Mexico',    col:2,  row:6, returns:121, escRate:6.3, topCat:'WRONG_ITEM',    avgRes:'3.6 hrs' },
+  { abbr:'OK', name:'Oklahoma',      col:3,  row:6, returns:187, escRate:7.0, topCat:'DEFECTIVE',     avgRes:'3.4 hrs' },
+  { abbr:'LA', name:'Louisiana',     col:4,  row:6, returns:212, escRate:7.5, topCat:'DEFECTIVE',     avgRes:'3.2 hrs' },
+  { abbr:'MS', name:'Mississippi',   col:5,  row:6, returns:132, escRate:6.4, topCat:'WRONG_ITEM',    avgRes:'3.5 hrs' },
+  { abbr:'AL', name:'Alabama',       col:6,  row:6, returns:231, escRate:7.8, topCat:'DEFECTIVE',     avgRes:'3.1 hrs' },
+  { abbr:'GA', name:'Georgia',       col:7,  row:6, returns:687, escRate:9.9, topCat:'DEFECTIVE',     avgRes:'2.8 hrs' },
+  // Row 7
+  { abbr:'TX', name:'Texas',         col:3,  row:7, returns:1521,escRate:9.8, topCat:'DEFECTIVE',     avgRes:'3.1 hrs' },
+  { abbr:'FL', name:'Florida',       col:7,  row:7, returns:1287,escRate:8.9, topCat:'DEFECTIVE',     avgRes:'3.0 hrs' },
+  // Row 8
+  { abbr:'AK', name:'Alaska',        col:0,  row:8, returns:21,  escRate:5.0, topCat:'WRONG_ITEM',    avgRes:'4.5 hrs' },
+  { abbr:'HI', name:'Hawaii',        col:1,  row:8, returns:38,  escRate:5.4, topCat:'DEFECTIVE',     avgRes:'4.2 hrs' }
+];
+
+var MAP_COLORS = ['#1a0d3d','#2d1b69','#4c1d95','#6d28d9','#9333ea'];
+var MAP_THRESHOLDS = [100, 250, 500, 1000];
+
+function getMapColor(returns) {
+  if (returns <= 0) return 'transparent';
+  for (var i = 0; i < MAP_THRESHOLDS.length; i++) {
+    if (returns < MAP_THRESHOLDS[i]) return MAP_COLORS[i];
+  }
+  return MAP_COLORS[4];
+}
+
+function renderMap() {
+  var container = document.getElementById('escMapContainer');
+  if (!container) return;
+
+  var TILE = 48;
+  var GAP  = 3;
+  var STEP = TILE + GAP;
+  var COLS = 12;
+  var ROWS = 9;
+  var W = COLS * STEP;
+  var H = ROWS * STEP;
+
+  var svgParts = ['<svg class="esc-tile-map" viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg">'];
+
+  STATE_DATA.forEach(function (s) {
+    if (!s.abbr || s.abbr === 'DE2') return;
+    var x = s.col * STEP;
+    var y = s.row * STEP;
+    var fill = getMapColor(s.returns);
+    var textColor = s.returns >= 250 ? '#fff' : (s.returns >= 100 ? '#e2d9f3' : '#94a3b8');
+    var returns = s.returns > 0 ? s.returns.toLocaleString() : '—';
+    svgParts.push(
+      '<g class="esc-map-tile" data-abbr="' + s.abbr + '">' +
+        '<rect x="' + x + '" y="' + y + '" width="' + TILE + '" height="' + TILE + '"' +
+          ' rx="4" fill="' + fill + '" stroke="rgba(147,51,234,0.2)" stroke-width="1"/>' +
+        '<text x="' + (x + TILE/2) + '" y="' + (y + TILE/2 - 5) + '"' +
+          ' text-anchor="middle" dominant-baseline="middle" font-size="10" font-weight="700"' +
+          ' font-family="Inter,sans-serif" fill="' + textColor + '">' + s.abbr + '</text>' +
+        '<text x="' + (x + TILE/2) + '" y="' + (y + TILE/2 + 9) + '"' +
+          ' text-anchor="middle" dominant-baseline="middle" font-size="8"' +
+          ' font-family="Inter,sans-serif" fill="' + textColor + '" opacity="0.75">' +
+          (s.returns >= 100 ? (s.returns >= 1000 ? (s.returns/1000).toFixed(1)+'k' : s.returns) : '') +
+        '</text>' +
+      '</g>'
+    );
+  });
+
+  svgParts.push('</svg>');
+  container.innerHTML = svgParts.join('');
+
+  // Tooltip
+  var tooltip = document.getElementById('escMapTooltip');
+  container.querySelectorAll('.esc-map-tile').forEach(function (tile) {
+    tile.addEventListener('mouseenter', function (e) {
+      var abbr = tile.dataset.abbr;
+      var s = STATE_DATA.find(function (x) { return x.abbr === abbr; });
+      if (!s || !s.name || !tooltip) return;
+      document.getElementById('escTipState').textContent = s.name + ' (' + s.abbr + ')';
+      document.getElementById('escTipReturns').textContent = s.returns.toLocaleString();
+      document.getElementById('escTipEsc').textContent = Math.round(s.returns * s.escRate / 100) + '  (' + s.escRate + '%)';
+      document.getElementById('escTipCat').textContent = s.topCat;
+      document.getElementById('escTipTime').textContent = s.avgRes;
+      tooltip.removeAttribute('hidden');
+      positionTooltip(e);
+    });
+    tile.addEventListener('mousemove', positionTooltip);
+    tile.addEventListener('mouseleave', function () {
+      if (tooltip) tooltip.setAttribute('hidden', '');
+    });
+  });
+}
+
+function positionTooltip(e) {
+  var tooltip = document.getElementById('escMapTooltip');
+  if (!tooltip) return;
+  var x = e.clientX + 14;
+  var y = e.clientY - 10;
+  if (x + 220 > window.innerWidth) { x = e.clientX - 230; }
+  if (y + 160 > window.innerHeight) { y = e.clientY - 170; }
+  tooltip.style.left = x + 'px';
+  tooltip.style.top  = y + 'px';
+}
+
 // ── Init ──────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function () {
   renderQueue();
   renderDetail();
   updatePendingBadge();
+  renderMap();
 });
