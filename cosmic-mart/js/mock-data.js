@@ -78,6 +78,20 @@ window.mockData = {
       purchase_date: '2026-08-25',
       days_since_purchase: 41,
       order_status: 'Delivered'
+    },
+    'ORD-2026-5190': {
+      order_id: 'ORD-2026-5190',
+      customer_id: 'CST-33904',
+      customer_name: 'Riley Park',
+      customer_tier: 'Cosmic Rewards Tier 2',
+      market: 'US',
+      product_id: 'CM-G002',
+      product_name: 'NovaPad X Tablet',
+      product_category: 'gadgets',
+      purchase_price: 599.00,
+      purchase_date: '2026-09-24',
+      days_since_purchase: 12,
+      order_status: 'Delivered'
     }
   }
 };

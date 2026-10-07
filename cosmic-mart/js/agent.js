@@ -282,12 +282,12 @@ Purchase price: $${context.purchase_price}`;
   return reply;
 }
 
-async function runEscalationAgent(context, eligibility) {
+async function runEscalationAgent(context, eligibility, classification) {
   const systemPrompt = `You are the Escalation Agent for Cosmic Mart. The customer's return does not qualify for automatic resolution. Write a warm, professional message for the customer explaining why their case is being escalated to a specialist.
 
 The message should:
 1. Thank the customer for reaching out
-2. Explain the specific reason this case needs specialist review (e.g. outside return window)
+2. Explain the specific reason this case needs specialist review (e.g. outside return window, high-value item requiring manual authorization)
 3. Assure them a specialist has ALL their order details
 4. Provide the case reference number as: Case #[ref]
 5. Give a realistic expected response timeframe (4 hours for standard, 24 hours for complex)
@@ -297,12 +297,17 @@ Length: 80-120 words. Plain text.`;
 
   const failedCheck = eligibility.checks_passed ? eligibility.checks_passed.find(c => !c.passed) : null;
   const caseRef = 'CM-' + new Date().getFullYear() + '-' + context.order_id.split('-').pop();
+  const classificationLine = classification
+    ? '\nReturn classification: ' + classification.return_category + ' (' + classification.operational_flag + ')'
+    : '';
 
   const userMessage = `Customer: ${context.customer_name || 'Customer'}
 Product: ${context.product}
+Order ID: ${context.order_id}
+Purchase price: $${context.purchase_price}
 Days since purchase: ${context.days_since_purchase}
 Failed check: ${failedCheck ? failedCheck.check + ' - ' + failedCheck.detail : eligibility.reason}
-Case reference to use: ${caseRef}`;
+Case reference to use: ${caseRef}${classificationLine}`;
 
   const reply = await callClaude(systemPrompt, userMessage);
   return { message: reply, caseRef: caseRef };
@@ -355,15 +360,47 @@ async function runReturnsAgent(customerMessage, orderData, progressCallback) {
   await pause(900);
   cb('sub-tier', 'done');
   cb('eligibility', 'done');
+
+  // HIGH_VALUE_ITEM — deterministic override, not delegated to the LLM eligibility checker
+  if (context.purchase_price > 500 && eligibility.eligible) {
+    eligibility = {
+      eligible: false,
+      reason: 'HIGH_VALUE_ITEM: $' + context.purchase_price + ' exceeds autonomous resolution threshold',
+      checks_passed: eligibility.checks_passed,
+      high_value_flag: true
+    };
+  }
+
   cb('case:eligibility', null, eligibility);
   await pause(350);
 
   if (!eligibility.eligible) {
+    var escClassification = null;
+
+    if (eligibility.high_value_flag) {
+      cb('classifier', 'active');
+      var [escClassification] = await Promise.all([runReturnClassifier(context, customerMessage), pause(1600)]);
+      cb('classifier', 'done');
+      cb('case:classification', null, escClassification);
+      await pause(350);
+    }
+
     cb('escalation', 'active');
-    const escalation = await runEscalationAgent(context, eligibility);
+    const escalation = await runEscalationAgent(context, eligibility, escClassification);
     cb('escalation', 'done');
-    cb('case:escalation', null, { caseRef: escalation.caseRef, reason: eligibility.reason });
-    return { type: 'escalation', message: escalation.message, caseRef: escalation.caseRef, sentiment: sentiment, trace: { context: context, eligibility: eligibility } };
+    cb('case:escalation', null, {
+      caseRef: escalation.caseRef,
+      reason: eligibility.reason,
+      order: {
+        order_id: context.order_id,
+        product: context.product,
+        price: context.purchase_price,
+        days: context.days_since_purchase,
+        customer: context.customer_name
+      },
+      classification: escClassification
+    });
+    return { type: 'escalation', message: escalation.message, caseRef: escalation.caseRef, sentiment: sentiment, trace: { context: context, eligibility: eligibility, classification: escClassification } };
   }
 
   // ── Classifier ──

@@ -279,10 +279,21 @@
     } else if (section === 'escalation') {
       addThinkingMessage('This case needs specialist review. Escalating now — I\'ll make sure your details are passed along.');
       caseDraftSectionHeader('ESCALATION');
-      staggerLines([
+      var escLines = [
         ['Case reference', data.caseRef || '—', 'highlight'],
         ['Reason',         data.reason || 'Specialist review required', 'fail']
-      ]);
+      ];
+      if (data.order) {
+        escLines.push(['Order ID',            data.order.order_id || '—']);
+        escLines.push(['Product',             data.order.product || '—']);
+        escLines.push(['Purchase price',      '$' + (data.order.price || '—')]);
+        escLines.push(['Days since purchase', (data.order.days || '—') + ' days']);
+      }
+      if (data.classification) {
+        escLines.push(['Return category',   data.classification.return_category || '—']);
+        escLines.push(['Operational flag',  data.classification.operational_flag || '—']);
+      }
+      staggerLines(escLines);
       setTimeout(function() {
         var titleEl = getEl('cmCaseDraftTitle');
         if (titleEl) titleEl.textContent = 'Case file — ' + (data.caseRef || 'escalated');
@@ -290,7 +301,7 @@
         if (spinner) spinner.style.display = 'none';
         caseDraftSectionHeader('STATUS');
         caseDraftLine('Resolution', '→ ESCALATED TO SPECIALIST', 'highlight');
-      }, 800);
+      }, escLines.length * 150 + 600);
     }
   }
 
@@ -525,6 +536,20 @@
       });
       eligSec.appendChild(checkList);
       body.appendChild(eligSec);
+    }
+
+    // Price threshold flag (HIGH_VALUE_ITEM escalation path only)
+    if (trace.eligibility && trace.eligibility.high_value_flag) {
+      var hvSec = document.createElement('div');
+      hvSec.className = 'cm-trace-section';
+      var price = trace.context && trace.context.purchase_price ? '$' + trace.context.purchase_price : '—';
+      hvSec.innerHTML = '<div class="cm-trace-section-header">' +
+        '<span class="cm-trace-agent-name">Price Threshold Check</span>' +
+        '<span class="cm-trace-result fail">✗ Price point too high</span></div>' +
+        '<div class="cm-trace-row"><span>Purchase price</span><span>' + price + '</span></div>' +
+        '<div class="cm-trace-row"><span>Threshold</span><span>$500</span></div>' +
+        '<div class="cm-trace-row"><span>Action</span><span>Requires specialist authorization</span></div>';
+      body.appendChild(hvSec);
     }
 
     // Classification section (resolution only)
