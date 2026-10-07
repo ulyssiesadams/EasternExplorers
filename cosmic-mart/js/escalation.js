@@ -177,6 +177,95 @@ const ESCALATION_CASES = [
     generatedLetter: null,
     hardcodedAccept: 'Dear Casey,\n\nThank you for contacting Cosmic Mart about your OrbitalTime X Smart Watch (ORD-2026-7214). After specialist review, we are approving your return request.\n\nWe understand there has been confusion about the item received. We are issuing a return authorization and prepaid return label. Upon receipt and inspection, a full refund of $319.00 will be processed within 3–5 business days. We appreciate your patience during this review.\n\nWarm regards,\nCosmic Mart Returns Team',
     hardcodedDeny: 'Dear Casey,\n\nThank you for reaching out about your OrbitalTime X Smart Watch (ORD-2026-7214). After careful specialist review, we are unable to approve the return exception at this time.\n\nOur order records confirm that the OrbitalTime X Smart Watch (SKU: CM-G003) was the item ordered, fulfilled, and delivered to your address. The wrong-item claim cannot be verified against these records. If you believe there has been a genuine error, please photograph the item received and email returns@cosmicmart.com with your order number for expedited review by a senior specialist.\n\nRespectfully,\nCosmic Mart Returns Team'
+  },
+
+  // ── Pre-resolved cases (start closed so the Closed tab is pre-populated) ─────
+  {
+    id: 'ESC-2026-0007',
+    timestamp: '2026-10-05T08:22:14Z',
+    customer: { name: 'Sarah Kim', tier: 'Tier 2', orderId: 'ORD-2026-3892', email: 'sarah.kim@email.com' },
+    order: {
+      product: 'NovaPad Pro Tablet',
+      sku: 'CM-G022',
+      price: 349.00,
+      purchaseDate: '2026-09-20',
+      returnWindowDays: 30,
+      category: 'Gadgets'
+    },
+    agentOutputs: {
+      intent: 'RETURN',
+      sentiment: 'FRUSTRATED',
+      orchestratorContext: 'Customer reports intermittent display flickering and unresponsive touch panels from the first week of use, consistent with a manufacturing defect.',
+      eligibilityDecision: 'INELIGIBLE',
+      eligibilityFailedRules: ['PROOF_OF_DEFECT_REQUIRED', 'PHOTO_EVIDENCE_NOT_SUBMITTED'],
+      returnCategory: 'DEFECTIVE',
+      escalationReason: 'Defective-on-arrival claim from Tier 2 customer; photo evidence not submitted but customer description is specific and credible — specialist approval needed.'
+    },
+    caseNarrative: 'Sarah Kim (Tier 2) purchased a NovaPad Pro Tablet on Sep 20 for $349 and reports the display flickered intermittently and touch input became unresponsive within the first week of use. The eligibility checker flagged the return ineligible for missing photo evidence. Given the specific and credible defect description and Sarah\'s Tier 2 status, the case was escalated and approved after specialist review.',
+    status: 'ACCEPTED',
+    isLoading: false,
+    closed: true,
+    generatedLetter: 'Dear Sarah,\n\nThank you for contacting Cosmic Mart regarding your NovaPad Pro Tablet (ORD-2026-3892). After specialist review, we are pleased to approve your return exception.\n\nYour description of intermittent display flickering and unresponsive touch panels from the first week of use is consistent with a manufacturing defect. As a valued Tier 2 member, your satisfaction is our priority. A prepaid return label has been emailed to you, and a full refund of $349.00 will be processed within 3–5 business days of receipt.\n\nWe sincerely apologize for the inconvenience.\n\nWarm regards,\nCosmic Mart Returns Team',
+    hardcodedAccept: '',
+    hardcodedDeny: ''
+  },
+  {
+    id: 'ESC-2026-0008',
+    timestamp: '2026-10-05T11:47:33Z',
+    customer: { name: 'Daniel Park', tier: 'Standard', orderId: 'ORD-2026-2215', email: 'daniel.park@email.com' },
+    order: {
+      product: 'AstroRunner Sneakers',
+      sku: 'CM-F011',
+      price: 149.00,
+      purchaseDate: '2026-09-05',
+      returnWindowDays: 14,
+      category: 'Fashion'
+    },
+    agentOutputs: {
+      intent: 'RETURN',
+      sentiment: 'NEUTRAL',
+      orchestratorContext: 'Customer changed their mind about the sneakers 30 days after purchase — well past the 14-day fashion return window with no exceptional circumstances.',
+      eligibilityDecision: 'INELIGIBLE',
+      eligibilityFailedRules: ['RETURN_WINDOW_EXPIRED', 'CHANGED_MIND_POLICY_NOT_MET', 'STANDARD_TIER_NO_EXTENSION'],
+      returnCategory: 'CHANGED_MIND',
+      escalationReason: 'Fashion return window exceeded by 16 days with a change-of-mind reason and no loyalty tier extension — requires specialist sign-off to deny formally.'
+    },
+    caseNarrative: 'Daniel Park (Standard tier) purchased AstroRunner Sneakers on Sep 5 for $149 and is requesting a return 30 days later, citing a change of mind. The 14-day fashion return window expired 16 days ago, and as a Standard tier member Daniel has no loyalty extension. No exceptional circumstances were identified. Escalated for specialist review and formal denial.',
+    status: 'DENIED',
+    isLoading: false,
+    closed: true,
+    generatedLetter: 'Dear Daniel,\n\nThank you for reaching out about your AstroRunner Sneakers (ORD-2026-2215). After specialist review, we are unable to approve this return exception at this time.\n\nYour request arrives 16 days past our 14-day fashion return window with a change-of-mind reason, and as a Standard tier member no loyalty extension applies. We encourage you to explore our Cosmic Rewards program, which provides extended return windows and priority support for future purchases.\n\nWe appreciate your understanding.\n\nRespectfully,\nCosmic Mart Returns Team',
+    hardcodedAccept: '',
+    hardcodedDeny: ''
+  },
+  {
+    id: 'ESC-2026-0009',
+    timestamp: '2026-10-05T14:03:58Z',
+    customer: { name: 'Keisha Brown', tier: 'Tier 1', orderId: 'ORD-2026-5517', email: 'keisha.brown@email.com' },
+    order: {
+      product: 'NebulaBlend Pro Blender',
+      sku: 'CM-H003',
+      price: 129.00,
+      purchaseDate: '2026-09-28',
+      returnWindowDays: 21,
+      category: 'Home & Lifestyle'
+    },
+    agentOutputs: {
+      intent: 'RETURN',
+      sentiment: 'DISTRESSED',
+      orchestratorContext: 'Customer received a completely different item — a compact travel kettle — instead of the blender ordered. Customer is distressed and item is still in original packaging.',
+      eligibilityDecision: 'INELIGIBLE',
+      eligibilityFailedRules: ['PHOTO_EVIDENCE_REQUIRED', 'WRONG_ITEM_CLAIM_UNVERIFIED'],
+      returnCategory: 'WRONG_ITEM',
+      escalationReason: 'Clear fulfillment error with a distressed Tier 1 customer; photo evidence pending but wrong-item description is specific — urgent specialist approval warranted.'
+    },
+    caseNarrative: 'Keisha Brown (Tier 1) ordered a NebulaBlend Pro Blender on Sep 28 for $129 and received a compact travel kettle instead. The item is still sealed in its original packaging. The eligibility checker flagged the return ineligible for missing photo evidence. Given the unambiguous fulfillment error, the customer\'s distress, and her Tier 1 status, the case was escalated and approved immediately.',
+    status: 'ACCEPTED',
+    isLoading: false,
+    closed: true,
+    generatedLetter: 'Dear Keisha,\n\nThank you for contacting Cosmic Mart regarding your NebulaBlend Pro Blender order (ORD-2026-5517). We sincerely apologize for this fulfillment error.\n\nReceiving the wrong item is completely unacceptable, and we are approving your return immediately — no additional documentation required. A prepaid return label for the incorrect item is on its way to your email, and a replacement NebulaBlend Pro Blender will be dispatched within 2 business days. As a Tier 1 member, we have also applied code CARE10 to your account for 10% off your next order as a goodwill gesture.\n\nThank you for your continued loyalty to Cosmic Mart.\n\nWarm regards,\nCosmic Mart Returns Team',
+    hardcodedAccept: '',
+    hardcodedDeny: ''
   }
 ];
 
@@ -321,6 +410,7 @@ function renderQueue() {
 function selectCase(id) {
   selectedCaseId = id;
   renderQueue();
+  renderClosedQueue();
   renderDetail();
 }
 
@@ -334,14 +424,29 @@ function renderClosedQueue() {
   }
   el.innerHTML = closed.map(function(c){
     var pillClass = c.status === 'ACCEPTED' ? 'esc-pill-accepted' : 'esc-pill-denied';
-    return '<div class="esc-closed-row">' +
-      '<span class="esc-closed-id">' + escHtml(c.id) + '</span>' +
-      '<span class="esc-closed-name">' + escHtml(c.customer.name) + '</span>' +
-      '<span class="esc-closed-product">' + escHtml(c.order.product) + '</span>' +
-      '<span class="esc-status-pill ' + pillClass + '">' + escHtml(c.status) + '</span>' +
-      '<span class="esc-closed-time">' + escHtml(formatTimestamp(c.timestamp)) + '</span>' +
+    return '<div class="esc-queue-card is-resolved' +
+        (c.id === selectedCaseId ? ' is-selected' : '') +
+        '" data-id="' + escHtml(c.id) + '" role="button" tabindex="0">' +
+      '<div class="esc-queue-card-top">' +
+        '<span class="esc-case-id">' + escHtml(c.id) + '</span>' +
+        '<span class="esc-status-pill ' + pillClass + '">' + escHtml(c.status) + '</span>' +
+      '</div>' +
+      '<div class="esc-queue-customer">' +
+        '<strong>' + escHtml(c.customer.name) + '</strong>' +
+        '<span class="esc-tier-badge ' + tierClass(c.customer.tier) + '">' + escHtml(c.customer.tier) + '</span>' +
+      '</div>' +
+      '<div class="esc-queue-product">' + escHtml(c.order.product) + '</div>' +
+      '<div class="esc-queue-reason">' + escHtml('$' + c.order.price.toFixed(2) + ' · ' + c.agentOutputs.returnCategory) + '</div>' +
+      '<div class="esc-queue-time">' + escHtml(formatTimestamp(c.timestamp)) + '</div>' +
     '</div>';
   }).join('');
+
+  el.querySelectorAll('.esc-queue-card').forEach(function(card) {
+    card.addEventListener('click', function() { selectCase(card.dataset.id); });
+    card.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectCase(card.dataset.id); }
+    });
+  });
 }
 
 function showEmptyQueue() {
@@ -419,14 +524,16 @@ function renderLetterBlock(c) {
 
   var rendered = markdownToHtml(c.generatedLetter);
 
+  var actionsHtml = '<button class="esc-copy-btn" id="escCopyBtn-' + escHtml(c.id) + '">Copy to clipboard</button>';
+  if (!c.closed) {
+    actionsHtml += '<button class="esc-edit-btn" id="escEditBtn-' + escHtml(c.id) + '">✎ Edit &amp; Send</button>';
+  }
+
   return '<div class="esc-letter-meta-row">' +
       '<span class="esc-ai-chip">✶ AI-drafted</span>' +
     '</div>' +
     '<blockquote class="esc-letter-body"><p class="esc-letter-para">' + rendered + '</p></blockquote>' +
-    '<div class="esc-letter-actions">' +
-      '<button class="esc-copy-btn" id="escCopyBtn-' + escHtml(c.id) + '">Copy to clipboard</button>' +
-      '<button class="esc-edit-btn" id="escEditBtn-' + escHtml(c.id) + '">✎ Edit &amp; Send</button>' +
-    '</div>';
+    '<div class="esc-letter-actions">' + actionsHtml + '</div>';
 }
 
 function bindLetterButtons(c) {
